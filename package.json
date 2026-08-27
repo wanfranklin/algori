@@ -1,0 +1,42 @@
+{
+  "name": "algori-core",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Core da linguagem de programação Algori — tokenizer, parser e interpretador para código em português",
+  "license": "GPL-3.0-or-later",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/src/index.js",
+      "types": "./dist/src/index.d.ts"
+    }
+  },
+  "files": [
+    "dist/src",
+    "types",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "build:cli": "bun build src/cli.ts --compile --outfile dist/cli.js",
+    "build:exe": "bun build src/cli.ts --compile --outfile dist/algori",
+    "lint": "oxlint src/",
+    "test": "vitest run"
+  },
+  "keywords": [
+    "algori",
+    "linguagem-de-programacao",
+    "portugues",
+    "pseudocodigo",
+    "educacao",
+    "interpretador"
+  ],
+  "devDependencies": {
+    "@types/node": "^26.3.0",
+    "oxlint": "^1.75.0",
+    "typescript": "~6.0.2",
+    "vitest": "^4.1.11"
+  }
+}

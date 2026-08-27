@@ -1,0 +1,15 @@
+Package: algori
+Version: 1.0.0
+Section: utils
+Priority: optional
+Architecture: amd64
+Depends: libc6 (>= 2.14)
+Maintainer: Wanfranklin Alves <wanfranklin@users.noreply.github.com>
+Homepage: https://github.com/wanfranklin/algori
+Description: Linguagem de programação em português
+ Algori é uma linguagem de pseudocódigo educacional
+ com palavras reservadas em português para aprendizado
+ de algoritmos e lógica de programação.
+ .
+ Suporta variáveis tipadas, condicionais, loops, funções,
+ e 12 funções built-in para operações matemáticas e texto.

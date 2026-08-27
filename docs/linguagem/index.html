@@ -1,0 +1,2018 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algori - Documentação da Linguagem</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo">
+                <span class="logo-text">Algori</span>
+            </a>
+            
+            <nav class="nav-main">
+                <a href="#inicio" class="nav-main-link active">Início</a>
+                <a href="#tutorial" class="nav-main-link">Tutorial</a>
+                <a href="#estrutura" class="nav-main-link">Linguagem</a>
+                <a href="#exemplos" class="nav-main-link">Exemplos</a>
+                <a href="#referencia" class="nav-main-link">Referência</a>
+            </nav>
+
+            <div class="search-box">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <input type="text" class="search-input" placeholder="Pesquisar na documentação...">
+            </div>
+
+            <div class="header-actions">
+                <button id="theme-toggle" class="icon-btn" title="Alternar tema">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/>
+                        <line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                </button>
+                <button id="about-btn" class="icon-btn" title="Sobre">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="16" x2="12" y2="12"/>
+                        <line x1="12" y1="8" x2="12.01" y2="8"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Layout Principal -->
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Começando</div>
+                <a href="#inicio" class="sidebar-link active">Visão Geral</a>
+                <a href="#tutorial" class="sidebar-link">Primeiro Programa</a>
+                <a href="#tutorial-variaveis" class="sidebar-link sub">Variáveis</a>
+                <a href="#tutorial-entrada" class="sidebar-link sub">Entrada e Saída</a>
+                <a href="#tutorial-condicionais" class="sidebar-link sub">Condicionais</a>
+                <a href="#tutorial-repeticoes" class="sidebar-link sub">Repetições</a>
+                <a href="#tutorial-funcoes" class="sidebar-link sub">Funções</a>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Linguagem</div>
+                <a href="#estrutura" class="sidebar-link">Estrutura</a>
+                <a href="#tipos" class="sidebar-link">Tipos de Dados</a>
+                <a href="#variaveis" class="sidebar-link">Variáveis</a>
+                <a href="#operadores" class="sidebar-link">Operadores</a>
+                <a href="#controle" class="sidebar-link">Controle de Fluxo</a>
+                <a href="#funcoes-ref" class="sidebar-link">Funções</a>
+                <a href="#comentarios" class="sidebar-link">Comentários</a>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Exemplos</div>
+                <a href="#exemplos" class="sidebar-link">Básicos</a>
+                <a href="#exemplos-intermediarios" class="sidebar-link">Intermediários</a>
+                <a href="#exemplos-avancados" class="sidebar-link">Avançados</a>
+                <a href="#exemplos-especialista" class="sidebar-link">Especialista</a>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Referência</div>
+                <a href="#referencia" class="sidebar-link">Palavras Reservadas</a>
+                <a href="#built-in" class="sidebar-link">Funções Built-in</a>
+                <a href="#sintaxe" class="sidebar-link">Sintaxe</a>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Guia</div>
+                <a href="#boas-praticas" class="sidebar-link">Boas Práticas</a>
+                <a href="#limitacoes" class="sidebar-link">Limitações</a>
+            </div>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="content">
+            <!-- Hero -->
+            <section id="inicio" class="hero">
+                <h1 class="hero-title">Linguagem de Programação Algori</h1>
+                
+                <div class="wiki-meta">
+                    <div class="wiki-meta-title">Linguagem Algori</div>
+                    <div class="wiki-meta-item">
+                        <span class="wiki-meta-label">Criador</span>
+                        <span class="wiki-meta-value">Wanfranklin Alves</span>
+                    </div>
+                    <div class="wiki-meta-item">
+                        <span class="wiki-meta-label">Ano de lançamento</span>
+                        <span class="wiki-meta-value">2026</span>
+                    </div>
+                    <div class="wiki-meta-item">
+                        <span class="wiki-meta-label">Versão estável</span>
+                        <span class="wiki-meta-value">v1.0.0</span>
+                    </div>
+                    <div class="wiki-meta-item">
+                        <span class="wiki-meta-label">Influenciada por</span>
+                        <span class="wiki-meta-value">Portugol, C#, Python, Java</span>
+                    </div>
+                    <div class="wiki-meta-item">
+                        <span class="wiki-meta-label">Tipo</span>
+                        <span class="wiki-meta-value">Pseudo-código educacional</span>
+                    </div>
+                    <div class="wiki-meta-item">
+                        <span class="wiki-meta-label">Paradigma</span>
+                        <span class="wiki-meta-value">Imperativo, estruturado</span>
+                    </div>
+                    <div class="wiki-meta-item">
+                        <span class="wiki-meta-label">Extensão</span>
+                        <span class="wiki-meta-value">.algori</span>
+                    </div>
+                    <div class="wiki-meta-item">
+                        <span class="wiki-meta-label">Licença</span>
+                        <span class="wiki-meta-value">GNU GPLv3</span>
+                    </div>
+                </div>
+
+                <div class="wiki-intro">
+                    <p>
+                        <strong>Algori</strong> é uma linguagem de programação 
+                        <a href="#tipos">tipada</a> e de 
+                        <a href="#estrutura">pseudocódigo</a> desenvolvida por 
+                        <strong>Wanfranklin Alves</strong>, projetada para 
+                        <a href="#tutorial">ensino de algoritmos</a> e 
+                        <a href="#tutorial-variaveis">estruturas de dados</a> em 
+                        língua portuguesa. Com palavras reservadas como 
+                        <code class="inline-code">mostrar</code>, 
+                        <code class="inline-code">capturar</code>, 
+                        <code class="inline-code">se</code>, 
+                        <code class="inline-code">enquanto</code> e 
+                        <code class="inline-code">funcao</code>, o Algori permite que 
+                        estudantes foquem na <em>lógica</em> do algoritmo sem a barreira 
+                        de sintaxe em inglês. O nome é uma abreviação de 
+                        <em>algoritmo</em>, reforçando o propósito central da linguagem.
+                    </p>
+
+                    <p>
+                        O Algori suporta <a href="#tipos">nove tipos de dados</a>, 
+                        incluindo 
+                        <code class="inline-code">inteiro</code>, 
+                        <code class="inline-code">real</code>, 
+                        <code class="inline-code">decimal</code>, 
+                        <code class="inline-code">texto</code>, 
+                        <code class="inline-code">caractere</code>, 
+                        <code class="inline-code">logico</code>, 
+                        <code class="inline-code">vetor</code>, 
+                        <code class="inline-code">matriz</code> e 
+                        <code class="inline-code">vazio</code>, com 
+                        <strong>48 palavras reservadas</strong> inteiramente em português. 
+                        A linguagem também inclui <strong>12 funções nativas</strong> para 
+                        operações matemáticas e manipulação de textos, além de suporte 
+                        completo a <a href="#funcoes-ref">funções</a> com tipo de retorno 
+                        e parâmetros tipados, permitindo a criação de programas modulares 
+                        e organizados.
+                    </p>
+                </div>
+
+                <div class="wiki-toc">
+                    <div class="wiki-toc-title">Conteúdo</div>
+                    <ol>
+                        <li><a href="#historia">História</a></li>
+                        <li><a href="#tutorial">Tutorial</a></li>
+                        <li><a href="#estrutura">Estrutura da Linguagem</a></li>
+                        <li><a href="#exemplos">Exemplos</a></li>
+                        <li><a href="#referencia">Referência</a></li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- Cards de Destaque -->
+            <div class="highlight-grid">
+                <a href="#tutorial" class="highlight-card">
+                    <div class="highlight-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                        </svg>
+                    </div>
+                    <div class="highlight-card-title">Início Rápido</div>
+                    <div class="highlight-card-desc">Aprenda os fundamentos em poucos minutos e comece a programar.</div>
+                </a>
+                <a href="#exemplos" class="highlight-card">
+                    <div class="highlight-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="16 18 22 12 16 6"/>
+                            <polyline points="8 6 2 12 8 18"/>
+                        </svg>
+                    </div>
+                    <div class="highlight-card-title">Exemplos Práticos</div>
+                    <div class="highlight-card-desc">Veja código funcionando e entenda cada conceito na prática.</div>
+                </a>
+                <a href="#referencia" class="highlight-card">
+                    <div class="highlight-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                        </svg>
+                    </div>
+                    <div class="highlight-card-title">Referência Completa</div>
+                    <div class="highlight-card-desc">Todas as palavras reservadas, tipos e funções documentadas.</div>
+                </a>
+            </div>
+
+            <!-- Tutorial -->
+            <section id="tutorial" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Primeiro Programa</h2>
+                </div>
+                
+                <p>
+                    <strong>O que é:</strong> Todo programa pode opcionalmente começar com a palavra 
+                    <code class="inline-code">algori</code> seguida de um nome. É como uma assinatura 
+                    que identifica seu programa.
+                </p>
+                <p>
+                    <strong>Para que serve:</strong> Declara o início do programa e define seu nome, 
+                    que é usado para identificar o arquivo e organizar o código.
+                </p>
+                <p>
+                    <strong>Como usar:</strong> Comece com <code class="inline-code">algori "Nome"</code> 
+                    seguido do código, ou escreva o código diretamente sem nenhum cabeçalho. 
+                    O nome deve conter apenas letras, números e underscores.
+                </p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span>Algori</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    </div>
+                    <pre><code>algori "MeuPrograma"
+
+mostrar("Olá, Mundo!")</code></pre>
+                </div>
+
+                <div class="note note-info">
+                    <strong>Dica:</strong> O comando <code class="inline-code">mostrar()</code> 
+                    exibe texto no console. É a forma mais simples de saída de dados.
+                </div>
+            </section>
+
+            <!-- Variáveis -->
+            <section id="tutorial-variaveis" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Variáveis</h2>
+                </div>
+
+                <p>
+                    <strong>O que são:</strong> Variáveis são "caixas" onde você guarda dados como números, 
+                    textos ou valores lógicos. Cada variável tem um nome e um tipo.
+                </p>
+                <p>
+                    <strong>Para que servem:</strong> Permitem armazenar e manipular informações durante 
+                    a execução do programa, como nomes de usuários, contadores ou cálculos.
+                </p>
+                <p>
+                    <strong>Como usar:</strong> Declare o tipo antes do nome e opcionalmente atribua um valor. 
+                    Por exemplo: <code class="inline-code">inteiro idade = 25</code>
+                </p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span>Algori</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    </div>
+                    <pre><code>// Números inteiros
+inteiro idade = 25
+inteiro ano = 2026
+
+// Números decimais
+real pi = 3.14
+decimal salario = 3500.00
+
+// Texto
+texto nome = "João"
+caractere inicial = 'A'
+
+// Booleano
+logico ativo = verdadeiro</code></pre>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Descrição</th>
+                                <th>Exemplo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code class="inline-code">inteiro</code></td>
+                                <td>Números inteiros</td>
+                                <td><code class="inline-code">inteiro x = 10</code></td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">real</code></td>
+                                <td>Números decimais</td>
+                                <td><code class="inline-code">real pi = 3.14</code></td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">decimal</code></td>
+                                <td>Alta precisão</td>
+                                <td><code class="inline-code">decimal d = 0.0001</code></td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">texto</code></td>
+                                <td>Cadeia de caracteres</td>
+                                <td><code class="inline-code">texto t = "oi"</code></td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">caractere</code></td>
+                                <td>Caractere único</td>
+                                <td><code class="inline-code">caractere c = 'A'</code></td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">logico</code></td>
+                                <td>Verdadeiro ou falso</td>
+                                <td><code class="inline-code">logico b = verdadeiro</code></td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">vetor</code></td>
+                                <td>Lista de valores</td>
+                                <td><code class="inline-code">inteiro v[5]</code></td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">matriz</code></td>
+                                <td>Tabela bidimensional</td>
+                                <td><code class="inline-code">inteiro m[3][3]</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Entrada e Saída -->
+            <section id="tutorial-entrada" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Entrada e Saída</h2>
+                </div>
+
+                <p>
+                    <strong>O que são:</strong> Entrada e saída são as formas de comunicação entre 
+                    o programa e o usuário. Saída mostra informações, entrada recebe dados.
+                </p>
+                <p>
+                    <strong>Para que servem:</strong> Permitem que o programa exiba resultados e receba 
+                    informações do usuário durante a execução, tornando-o interativo.
+                </p>
+                <p>
+                    <strong>Como usar:</strong> Use <code class="inline-code">mostrar()</code> para exibir 
+                    texto e <code class="inline-code">capturar()</code> para ler dados do usuário.
+                </p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span>Algori</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    </div>
+                    <pre><code>algori "EntradaSaida"
+
+// Saída de dados
+mostrar("Qual é o seu nome? ")
+
+// Entrada de dados
+texto nome = ""
+capturar(nome)
+
+mostrar("Olá, ", nome, "!")</code></pre>
+                </div>
+            </section>
+
+            <!-- Condicionais -->
+            <section id="tutorial-condicionais" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Condicionais</h2>
+                </div>
+
+                <p>
+                    <strong>O que são:</strong> Condicionais são estruturas que permitem ao programa 
+                    tomar decisões com base em condições (verdadeiras ou falsas).
+                </p>
+                <p>
+                    <strong>Para que servem:</strong> Permitem que o programa execute blocos de código 
+                    diferentes dependendo de situações específicas, como idade do usuário ou valores calculados.
+                </p>
+                <p>
+                    <strong>Como usar:</strong> Use <code class="inline-code">se (condição)</code> seguido 
+                    de um bloco <code class="inline-code">{}</code>. Opcionalmente adicione 
+                    <code class="inline-code">senao se</code> ou <code class="inline-code">senao</code>.
+                </p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span>Algori</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    </div>
+                    <pre><code>inteiro idade = 20
+
+se (idade >= 18) {
+    mostrar("Maior de idade")
+} senao se (idade >= 16) {
+    mostrar("Pode dirigir")
+} senao {
+    mostrar("Menor de idade")
+}</code></pre>
+                </div>
+            </section>
+
+            <!-- Repetições -->
+            <section id="tutorial-repeticoes" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Repetições</h2>
+                </div>
+
+                <p>
+                    <strong>O que são:</strong> Repetições (loops) são estruturas que permitem executar 
+                    um bloco de código várias vezes, enquanto uma condição for atendida.
+                </p>
+                <p>
+                    <strong>Para que servem:</strong> Evitam a repetição manual de código. São úteis para 
+                    percorrer listas, contar números ou executar ações repetidamente.
+                </p>
+                <p>
+                    <strong>Como usar:</strong> Use <code class="inline-code">enquanto (condição)</code> 
+                    para loops while ou <code class="inline-code">para (início; condição; passo)</code> 
+                    para loops for.
+                </p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span>Algori - Enquanto</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    </div>
+                    <pre><code>inteiro i = 1
+enquanto (i <= 5) {
+    mostrar("Contagem: ", i)
+    i = i + 1
+}</code></pre>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span>Algori - Para</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    </div>
+                    <pre><code>// Estilo C
+para (inteiro i = 0; i < 5; i = i + 1) {
+    mostrar(i)
+}
+
+// Estilo legado
+para i de 1 ate 5 faca
+    mostrar(i)
+fimPara</code></pre>
+                </div>
+            </section>
+
+            <!-- Funções -->
+            <section id="tutorial-funcoes" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Funções</h2>
+                </div>
+
+                <p>
+                    <strong>O que são:</strong> Funções são blocos de código reutilizáveis que realizam 
+                    uma tarefa específica. Elas podem receber dados (parâmetros) e retornar resultados.
+                </p>
+                <p>
+                    <strong>Para que servem:</strong> Organizam o código, evitam repetição e tornam o 
+                    programa mais fácil de entender e manter. Funções são como "mini-programas" dentro do programa.
+                </p>
+                <p>
+                    <strong>Como usar:</strong> Declare com <code class="inline-code">funcao tipo nome(parâmetros)</code> 
+                    e use <code class="inline-code">retorne</code> para devolver um valor. Chame a função pelo nome.
+                </p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span>Algori</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    </div>
+                    <pre><code>// Função com retorno
+funcao inteiro somar(inteiro a, inteiro b) {
+    retorne a + b
+}
+
+// Função sem retorno
+funcao vazio saudar(texto nome) {
+    mostrar("Olá, ", nome, "!")
+}
+
+// Chamando as funcoes
+inteiro resultado = somar(10, 20)
+saudar("João")</code></pre>
+                </div>
+            </section>
+
+            <!-- Estrutura da Linguagem -->
+            <section id="estrutura" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Estrutura da Linguagem</h2>
+                </div>
+
+                <p>
+                    <strong>O que é:</strong> A estrutura da linguagem define as regras de como o código 
+                    deve ser escrito, incluindo sintaxe moderna e legada.
+                </p>
+                <p>
+                    <strong>Para que serve:</strong> Oferece flexibilidade para programadores vindos de 
+                    outras linguagens (como Portugol) enquanto mantém uma sintaxe moderna e limpa.
+                </p>
+                <p>
+                    <strong>Como usar:</strong> Escolha entre a sintaxe moderna (com <code class="inline-code">{}</code>) 
+                    ou legada (com <code class="inline-code">fimSe</code>, <code class="inline-code">fimPara</code>).
+                </p>
+
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="moderna">Moderna</button>
+                    <button class="tab-btn" data-tab="legada">Legada</button>
+                </div>
+
+                <div class="tab-content active" id="moderna">
+                    <div class="code-block">
+                        <div class="code-block-header">
+                            <span>Sintaxe Moderna</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <pre><code>algori "Exemplo"
+
+inteiro x = 10
+texto nome = "Algori"
+
+se (x > 5) {
+    mostrar("Maior que 5")
+}
+
+para (inteiro i = 0; i < x; i = i + 1) {
+    mostrar(i)
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="legada">
+                    <div class="code-block">
+                        <div class="code-block-header">
+                            <span>Sintaxe Legada</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <pre><code>programa Exemplo
+
+inteiro x = 10
+texto nome = "Algori"
+
+se x > 5 entao
+    mostrar("Maior que 5")
+fimSe
+
+para i de 0 ate 9 faca
+    mostrar(i)
+fimPara</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tipos de Dados -->
+            <section id="tipos" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Tipos de Dados</h2>
+                </div>
+
+                <p>
+                    <strong>O que são:</strong> Tipos de dados definem que tipo de informação uma variável 
+                    pode armazenar, como números inteiros, decimais, textos ou booleanos.
+                </p>
+                <p>
+                    <strong>Para que servem:</strong> Garantem que os dados sejam tratados corretamente 
+                    pelo programa, evitando erros como somar texto com números.
+                </p>
+                <p>
+                    <strong>Como usar:</strong> Sempre declare o tipo antes do nome da variável. 
+                    Escolha o tipo adequado para cada dado.
+                </p>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Tamanho</th>
+                                <th>Valores</th>
+                                <th>Exemplo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code class="inline-code">inteiro</code></td>
+                                <td>4 bytes</td>
+                                <td>-2.1B a 2.1B</td>
+                                <td><code class="inline-code">42</code></td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">real</code></td>
+                                <td>4 bytes</td>
+                                <td>Ponto flutuante</td>
+                                <td><code class="inline-code">3.14</code></td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">decimal</code></td>
+                                <td>8 bytes</td>
+                                <td>Alta precisão</td>
+                                <td><code class="inline-code">0.0001</code></td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">texto</code></td>
+                                <td>Variant</td>
+                                <td>Até 2B chars</td>
+                                <td><code class="inline-code">"Olá"</code></td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">caractere</code></td>
+                                <td>1 byte</td>
+                                <td>ASCII</td>
+                                <td><code class="inline-code">'A'</code></td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">logico</code></td>
+                                <td>1 byte</td>
+                                <td>true/false</td>
+                                <td><code class="inline-code">verdadeiro</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Exemplos -->
+            <section id="exemplos" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Exemplos Práticos</h2>
+                </div>
+
+                <p>
+                    <strong>O que são:</strong> Exemplos reais de programas funcionando na linguagem Algori, 
+                    desde operações básicas até algoritmos mais complexos.
+                </p>
+                <p>
+                    <strong>Para que servem:</strong> Ajudam a entender como aplicar os conceitos na prática 
+                    e servem como referência para criar seus próprios programas.
+                </p>
+                <p>
+                    <strong>Como usar:</strong> Copie o código e execute para testar. 
+                    Modifique os valores para experimentar diferentes resultados.
+                </p>
+
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="basico">Básicos</button>
+                    <button class="tab-btn" data-tab="intermediario">Intermediários</button>
+                    <button class="tab-btn" data-tab="avancado">Avançados</button>
+                    <button class="tab-btn" data-tab="especialista">Especialista</button>
+                </div>
+
+                <div class="tab-content active" id="basico">
+                    <div class="example-grid">
+                        <div class="example-card">
+                            <div class="example-card-header">
+                                <span class="example-card-title">Olá Mundo</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                            </div>
+                            <pre><code>algori "OlaMundo"
+
+mostrar("Olá, Mundo!")
+mostrar("Bem-vindo ao Algori!")</code></pre>
+                        </div>
+
+                        <div class="example-card">
+                            <div class="example-card-header">
+                                <span class="example-card-title">Calculadora</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                            </div>
+                            <pre><code>algori "Calculadora"
+
+real a = 10
+real b = 5
+
+mostrar("Soma: ", a + b)
+mostrar("Subtração: ", a - b)
+mostrar("Multiplicação: ", a * b)
+mostrar("Divisão: ", a / b)</code></pre>
+                        </div>
+
+                        <div class="example-card">
+                            <div class="example-card-header">
+                                <span class="example-card-title">Par ou Ímpar</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                            </div>
+                            <pre><code>algori "ParOuImpar"
+
+inteiro numero = 7
+
+se (numero % 2 == 0) {
+    mostrar(numero, " é par")
+} senao {
+    mostrar(numero, " é ímpar")
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="intermediario">
+                    <div class="example-grid">
+                        <div class="example-card">
+                            <div class="example-card-header">
+                                <span class="example-card-title">Tabuada</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                            </div>
+                            <pre><code>algori "Tabuada"
+
+inteiro numero = 7
+
+mostrar("Tabuada do ", numero, ":")
+para (inteiro i = 1; i <= 10; i = i + 1) {
+    mostrar(numero, " x ", i, " = ", numero * i)
+}</code></pre>
+                        </div>
+
+                        <div class="example-card">
+                            <div class="example-card-header">
+                                <span class="example-card-title">Fatorial</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                            </div>
+                            <pre><code>algori "Fatorial"
+
+funcao inteiro fatorial(inteiro n) {
+    inteiro resultado = 1
+    para (inteiro i = 1; i <= n; i = i + 1) {
+        resultado = resultado * i
+    }
+    retorne resultado
+}
+
+mostrar("5! = ", fatorial(5))</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="avancado">
+                    <div class="example-grid">
+                        <div class="example-card">
+                            <div class="example-card-header">
+                                <span class="example-card-title">Validador de CPF</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                            </div>
+                            <pre><code>algori "ValidadorCPF"
+
+texto cpf = ""
+mostrar("Digite o CPF (apenas números): ")
+capturar(cpf)
+
+se (tamanho(cpf) != 11) {
+    mostrar("CPF inválido!")
+} senao {
+    inteiro soma = 0
+    inteiro i = 0
+    
+    // Primeiro dígito verificador
+    i = 0
+    enquanto (i < 9) {
+        inteiro d = cpf[i] - "0"
+        soma = soma + d * (10 - i)
+        i = i + 1
+    }
+    inteiro resto = soma % 11
+    inteiro d1 = se (resto < 2) { 0 } senao { 11 - resto }
+    
+    // Verificação
+    inteiro p = cpf[9] - "0"
+    se (p == d1) {
+        mostrar("CPF válido!")
+    } senao {
+        mostrar("CPF inválido!")
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="especialista">
+                    <div class="example-grid">
+                        <div class="example-card example-card-full">
+                            <div class="example-card-header">
+                                <span class="example-card-title">Sistema de Gerenciamento de Biblioteca</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                            </div>
+                            <p class="example-description">Sistema completo com cadastro, busca, empréstimos e relatórios.</p>
+                            <pre><code>algori "SistemaBiblioteca"
+
+/*
+  ============================================
+  Sistema de Gerenciamento de Biblioteca
+  ============================================
+  Autor: Wanfranklin Alves
+  Versao: 1.0
+  
+  Funcionalidades:
+  - Cadastro de livros e usuarios
+  - Emprestimo e devolucao
+  - Busca por titulo, autor e categoria
+  - Relatorios e estatisticas
+  - Controle de multas
+  ============================================
+*/
+
+// === ESTRUTURAS DE DADOS ===
+
+// Cadastro de Livros (max 100)
+texto titulos[100]
+texto autores[100]
+texto categorias[100]
+inteiro quantidades[100]
+inteiro disponiveis[100]
+real precos[100]
+inteiro totalLivros = 0
+
+// Cadastro de Usuarios (max 50)
+inteiro idsUsuarios[50]
+texto nomesUsuarios[50]
+texto emails[50]
+inteiro livrosEmprestados[50]
+real multas[50]
+inteiro totalUsuarios = 0
+
+// Emprestimos (max 200)
+inteiro empLivro[200]
+inteiro empUsuario[200]
+texto empDataEmprestimo[200]
+texto empDataDevolucao[200]
+logico empAtivo[200]
+inteiro totalEmprestimos = 0
+
+// === FUNCOES AUXILIARES ===
+
+funcao texto formatarData(inteiro dia, inteiro mes, inteiro ano) {
+  texto resultado = ""
+  se (dia < 10) {
+    resultado = resultado + "0"
+  }
+  resultado = resultado + dia + "/"
+  se (mes < 10) {
+    resultado = resultado + "0"
+  }
+  resultado = resultado + mes + "/" + ano
+  retorne resultado
+}
+
+funcao inteiro buscarLivro(texto tituloBusca) {
+  inteiro i = 0
+  inteiro resultado = -1
+  enquanto (i < totalLivros) {
+    se (titulos[i] == tituloBusca) {
+      resultado = i
+      i = totalLivros
+    }
+    i = i + 1
+  }
+  retorne resultado
+}
+
+funcao inteiro buscarUsuario(inteiro idBusca) {
+  inteiro i = 0
+  inteiro resultado = -1
+  enquanto (i < totalUsuarios) {
+    se (idsUsuarios[i] == idBusca) {
+      resultado = i
+      i = totalUsuarios
+    }
+    i = i + 1
+  }
+  retorne resultado
+}
+
+funcao texto obterStatusLivro(inteiro indice) {
+  texto resultado = ""
+  se (disponiveis[indice] > 0) {
+    resultado = "Disponivel (" + disponiveis[indice] + "/" + quantidades[indice] + ")"
+  } senao {
+    resultado = "Emprestado"
+  }
+  retorne resultado
+}
+
+// === FUNCIONALIDADE 1: CADASTRO DE LIVROS ===
+
+funcao cadastrarLivro() {
+  mostrar("")
+  mostrar("=== CADASTRO DE LIVRO ===")
+  mostrar("")
+  
+  texto titulo
+  texto autor
+  texto categoria
+  inteiro quantidade
+  real preco
+  
+  mostrar("Titulo do livro: ")
+  capturar(titulo)
+  mostrar("Autor: ")
+  capturar(autor)
+  mostrar("Categoria: ")
+  capturar(categoria)
+  mostrar("Quantidade de exemplares: ")
+  capturar(quantidade)
+  mostrar("Preco unitario (R$): ")
+  capturar(preco)
+  
+  se (totalLivros < 100) {
+    titulos[totalLivros] = titulo
+    autores[totalLivros] = autor
+    categorias[totalLivros] = categoria
+    quantidades[totalLivros] = quantidade
+    disponiveis[totalLivros] = quantidade
+    precos[totalLivros] = preco
+    totalLivros = totalLivros + 1
+    
+    mostrar("")
+    mostrar("Livro cadastrado com sucesso!")
+    mostrar("Total de livros: ", totalLivros)
+  } senao {
+    mostrar("")
+    mostrar("Erro: Limite de livros atingido!")
+  }
+}
+
+// === FUNCIONALIDADE 2: CADASTRO DE USUARIOS ===
+
+funcao cadastrarUsuario() {
+  mostrar("")
+  mostrar("=== CADASTRO DE USUARIO ===")
+  mostrar("")
+  
+  inteiro id
+  texto nome
+  texto email
+  
+  mostrar("ID do usuario: ")
+  capturar(id)
+  
+  se (buscarUsuario(id) != -1) {
+    mostrar("")
+    mostrar("Erro: ID ja cadastrado!")
+    retorne
+  }
+  
+  mostrar("Nome completo: ")
+  capturar(nome)
+  mostrar("Email: ")
+  capturar(email)
+  
+  se (totalUsuarios < 50) {
+    idsUsuarios[totalUsuarios] = id
+    nomesUsuarios[totalUsuarios] = nome
+    emails[totalUsuarios] = email
+    livrosEmprestados[totalUsuarios] = 0
+    multas[totalUsuarios] = 0.0
+    totalUsuarios = totalUsuarios + 1
+    
+    mostrar("")
+    mostrar("Usuario cadastrado com sucesso!")
+    mostrar("Total de usuarios: ", totalUsuarios)
+  } senao {
+    mostrar("")
+    mostrar("Erro: Limite de usuarios atingido!")
+  }
+}
+
+// === FUNCIONALIDADE 3: EMPRESTIMO ===
+
+funcao emprestarLivro() {
+  mostrar("")
+  mostrar("=== EMPRESTIMO DE LIVRO ===")
+  mostrar("")
+  
+  inteiro idUsuario
+  texto tituloLivro
+  
+  mostrar("ID do usuario: ")
+  capturar(idUsuario)
+  mostrar("Titulo do livro: ")
+  capturar(tituloLivro)
+  
+  inteiro idxUsuario = buscarUsuario(idUsuario)
+  inteiro idxLivro = buscarLivro(tituloLivro)
+  
+  se (idxUsuario == -1) {
+    mostrar("")
+    mostrar("Erro: Usuario nao encontrado!")
+    retorne
+  }
+  
+  se (idxLivro == -1) {
+    mostrar("")
+    mostrar("Erro: Livro nao encontrado!")
+    retorne
+  }
+  
+  se (disponiveis[idxLivro] <= 0) {
+    mostrar("")
+    mostrar("Erro: Livro indisponivel!")
+    retorne
+  }
+  
+  se (livrosEmprestados[idxUsuario] >= 5) {
+    mostrar("")
+    mostrar("Erro: Usuario ja atingiu o limite de emprestimos!")
+    retorne
+  }
+  
+  se (multas[idxUsuario] > 0) {
+    mostrar("")
+    mostrar("Erro: Usuario possui multas pendentes de R$ ", multas[idxUsuario])
+    retorne
+  }
+  
+  se (totalEmprestimos < 200) {
+    empLivro[totalEmprestimos] = idxLivro
+    empUsuario[totalEmprestimos] = idxUsuario
+    empDataEmprestimo[totalEmprestimos] = formatarData(23, 8, 2026)
+    empDataDevolucao[totalEmprestimos] = formatarData(6, 9, 2026)
+    empAtivo[totalEmprestimos] = verdadeiro
+    totalEmprestimos = totalEmprestimos + 1
+    
+    disponiveis[idxLivro] = disponiveis[idxLivro] - 1
+    livrosEmprestados[idxUsuario] = livrosEmprestados[idxUsuario] + 1
+    
+    mostrar("")
+    mostrar("Emprestimo realizado com sucesso!")
+    mostrar("Data de devolucao: ", empDataDevolucao[totalEmprestimos - 1])
+  } senao {
+    mostrar("")
+    mostrar("Erro: Limite de emprestimos atingido!")
+  }
+}
+
+// === FUNCIONALIDADE 4: DEVOLUCAO ===
+
+funcao devolverLivro() {
+  mostrar("")
+  mostrar("=== DEVOLUCAO DE LIVRO ===")
+  mostrar("")
+  
+  inteiro idUsuario
+  texto tituloLivro
+  
+  mostrar("ID do usuario: ")
+  capturar(idUsuario)
+  mostrar("Titulo do livro: ")
+  capturar(tituloLivro)
+  
+  inteiro idxUsuario = buscarUsuario(idUsuario)
+  inteiro idxLivro = buscarLivro(tituloLivro)
+  
+  se (idxUsuario == -1) {
+    mostrar("")
+    mostrar("Erro: Usuario nao encontrado!")
+    retorne
+  }
+  
+  se (idxLivro == -1) {
+    mostrar("")
+    mostrar("Erro: Livro nao encontrado!")
+    retorne
+  }
+  
+  inteiro i = 0
+  logico encontrado = falso
+  enquanto (i < totalEmprestimos && !encontrado) {
+    se (empLivro[i] == idxLivro && empUsuario[i] == idxUsuario && empAtivo[i]) {
+      empAtivo[i] = falso
+      encontrado = verdadeiro
+      disponiveis[idxLivro] = disponiveis[idxLivro] + 1
+      livrosEmprestados[idxUsuario] = livrosEmprestados[idxUsuario] - 1
+      
+      mostrar("")
+      mostrar("Devolucao realizada com sucesso!")
+      mostrar("Livro devolvido: ", titulos[idxLivro])
+    }
+    i = i + 1
+  }
+  
+  se (!encontrado) {
+    mostrar("")
+    mostrar("Erro: Emprestimo nao encontrado para este usuario/livro!")
+  }
+}
+
+// === FUNCIONALIDADE 5: BUSCA ===
+
+funcao buscarLivros() {
+  mostrar("")
+  mostrar("=== BUSCAR LIVROS ===")
+  mostrar("")
+  mostrar("1 - Buscar por titulo")
+  mostrar("2 - Buscar por autor")
+  mostrar("3 - Buscar por categoria")
+  mostrar("4 - Listar todos")
+  mostrar("")
+  mostrar("Opcao: ")
+  
+  inteiro opcao
+  capturar(opcao)
+  
+  texto termo = ""
+  se (opcao != 4) {
+    mostrar("Digite o termo de busca: ")
+    capturar(termo)
+  }
+  
+  inteiro i = 0
+  inteiro encontrados = 0
+  
+  mostrar("")
+  mostrar("--- RESULTADOS ---")
+  
+  enquanto (i < totalLivros) {
+    logico corresponde = falso
+    
+    se (opcao == 1 && titulos[i] == termo) {
+      corresponde = verdadeiro
+    }
+    se (opcao == 2 && autores[i] == termo) {
+      corresponde = verdadeiro
+    }
+    se (opcao == 3 && categorias[i] == termo) {
+      corresponde = verdadeiro
+    }
+    se (opcao == 4) {
+      corresponde = verdadeiro
+    }
+    
+    se (corresponde) {
+      mostrar("")
+      mostrar("Titulo: ", titulos[i])
+      mostrar("Autor: ", autores[i])
+      mostrar("Categoria: ", categorias[i])
+      mostrar("Status: ", obterStatusLivro(i))
+      mostrar("Preco: R$ ", precos[i])
+      encontrados = encontrados + 1
+    }
+    
+    i = i + 1
+  }
+  
+  mostrar("")
+  mostrar("Total encontrado: ", encontrados, " livro(s)")
+}
+
+// === FUNCIONALIDADE 6: RELATORIOS ===
+
+funcao gerarRelatorios() {
+  mostrar("")
+  mostrar("=== RELATORIOS ===")
+  mostrar("")
+  mostrar("1 - Livros mais emprestados")
+  mostrar("2 - Usuarios com mais emprestimos")
+  mostrar("3 - Estatisticas gerais")
+  mostrar("4 - Livros por categoria")
+  mostrar("")
+  mostrar("Opcao: ")
+  
+  inteiro opcao
+  capturar(opcao)
+  
+  se (opcao == 1) {
+    mostrar("")
+    mostrar("--- LIVROS POPULARES ---")
+    inteiro i = 0
+    enquanto (i < totalLivros) {
+      inteiro emprestimos = quantidades[i] - disponiveis[i]
+      mostrar(titulos[i], " - ", emprestimos, " emprestimo(s)")
+      i = i + 1
+    }
+  }
+  
+  se (opcao == 2) {
+    mostrar("")
+    mostrar("--- USUARIOS ATIVOS ---")
+    inteiro i = 0
+    enquanto (i < totalUsuarios) {
+      mostrar(nomesUsuarios[i], " - ", livrosEmprestados[i], " livro(s)")
+      i = i + 1
+    }
+  }
+  
+  se (opcao == 3) {
+    mostrar("")
+    mostrar("--- ESTATISTICAS GERAIS ---")
+    mostrar("Total de livros: ", totalLivros)
+    mostrar("Total de usuarios: ", totalUsuarios)
+    mostrar("Total de emprestimos: ", totalEmprestimos)
+    
+    inteiro emprestimosAtivos = 0
+    real valorMultas = 0.0
+    inteiro i = 0
+    enquanto (i < totalEmprestimos) {
+      se (empAtivo[i]) {
+        emprestimosAtivos = emprestimosAtivos + 1
+      }
+      i = i + 1
+    }
+    i = 0
+    enquanto (i < totalUsuarios) {
+      valorMultas = valorMultas + multas[i]
+      i = i + 1
+    }
+    
+    mostrar("Emprestimos ativos: ", emprestimosAtivos)
+    mostrar("Multas pendentes: R$ ", valorMultas)
+  }
+  
+  se (opcao == 4) {
+    mostrar("")
+    mostrar("--- LIVROS POR CATEGORIA ---")
+    texto catAtual = ""
+    inteiro i = 0
+    enquanto (i < totalLivros) {
+      se (categorias[i] != catAtual) {
+        catAtual = categorias[i]
+        mostrar("")
+        mostrar("[", catAtual, "]")
+      }
+      mostrar("  - ", titulos[i], " (", autores[i], ")")
+      i = i + 1
+    }
+  }
+}
+
+// === FUNCIONALIDADE 7: MENU PRINCIPAL ===
+
+funcao exibirMenu() {
+  mostrar("")
+  mostrar("╔══════════════════════════════════════╗")
+  mostrar("║   SISTEMA DE BIBLIOTECA - v1.0       ║")
+  mostrar("║   Algori                              ║")
+  mostrar("╠══════════════════════════════════════╣")
+  mostrar("║  1 - Cadastrar Livro                 ║")
+  mostrar("║  2 - Cadastrar Usuario               ║")
+  mostrar("║  3 - Emprestar Livro                 ║")
+  mostrar("║  4 - Devolver Livro                  ║")
+  mostrar("║  5 - Buscar Livros                   ║")
+  mostrar("║  6 - Relatorios                      ║")
+  mostrar("║  7 - Listar Usuarios                 ║")
+  mostrar("║  0 - Sair                            ║")
+  mostrar("╚══════════════════════════════════════╝")
+  mostrar("")
+  mostrar("Escolha uma opcao: ")
+}
+
+// === LISTAR USUARIOS ===
+
+funcao listarUsuarios() {
+  mostrar("")
+  mostrar("=== USUARIOS CADASTRADOS ===")
+  mostrar("")
+  
+  inteiro i = 0
+  enquanto (i < totalUsuarios) {
+    mostrar("ID: ", idsUsuarios[i])
+    mostrar("Nome: ", nomesUsuarios[i])
+    mostrar("Email: ", emails[i])
+    mostrar("Emprestimos: ", livrosEmprestados[i], "/5")
+    se (multas[i] > 0) {
+      mostrar("Multas: R$ ", multas[i])
+    }
+    mostrar("---")
+    i = i + 1
+  }
+  
+  mostrar("Total: ", totalUsuarios, " usuario(s)")
+}
+
+// === PROGRAMA PRINCIPAL ===
+
+mostrar("Bem-vindo ao Sistema de Biblioteca!")
+mostrar("Carregando dados de exemplo...")
+
+// Cadastrar livros de exemplo
+titulos[0] = "Algoritmos em Portugol"
+autores[0] = "Wanfranklin Alves"
+categorias[0] = "Programacao"
+quantidades[0] = 5
+disponiveis[0] = 3
+precos[0] = 89.90
+
+titulos[1] = "Estruturas de Dados"
+autores[1] = "Carlos Silva"
+categorias[1] = "Programacao"
+quantidades[1] = 3
+disponiveis[1] = 3
+precos[1] = 129.90
+
+titulos[2] = "Banco de Dados SQL"
+autores[2] = "Maria Santos"
+categorias[2] = "Banco de Dados"
+quantidades[2] = 4
+disponiveis[2] = 2
+precos[2] = 99.90
+
+titulos[3] = "Inteligencia Artificial"
+autores[3] = "Pedro Costa"
+categorias[3] = "IA"
+quantidades[3] = 2
+disponiveis[3] = 2
+precos[3] = 149.90
+
+titulos[4] = "Redes de Computadores"
+autores[4] = "Ana Oliveira"
+categorias[4] = "Redes"
+quantidades[4] = 3
+disponiveis[4] = 1
+precos[4] = 119.90
+
+totalLivros = 5
+
+// Cadastrar usuarios de exemplo
+idsUsuarios[0] = 1001
+nomesUsuarios[0] = "Joao Silva"
+emails[0] = "joao@email.com"
+livrosEmprestados[0] = 1
+multas[0] = 0.0
+
+idsUsuarios[1] = 1002
+nomesUsuarios[1] = "Maria Souza"
+emails[1] = "maria@email.com"
+livrosEmprestados[1] = 2
+multas[1] = 0.0
+
+totalUsuarios = 2
+
+// Criar emprestimos de exemplo
+empLivro[0] = 0
+empUsuario[0] = 0
+empDataEmprestimo[0] = "20/08/2026"
+empDataDevolucao[0] = "03/09/2026"
+empAtivo[0] = verdadeiro
+
+empLivro[1] = 2
+empUsuario[1] = 1
+empDataEmprestimo[1] = "18/08/2026"
+empDataDevolucao[1] = "01/09/2026"
+empAtivo[1] = verdadeiro
+
+empLivro[2] = 4
+empUsuario[2] = 1
+empDataEmprestimo[2] = "15/08/2026"
+empDataDevolucao[2] = "29/08/2026"
+empAtivo[2] = verdadeiro
+
+totalEmprestimos = 3
+
+mostrar("Dados carregados: ", totalLivros, " livros, ", totalUsuarios, " usuarios")
+
+// Loop principal
+inteiro opcao = -1
+
+enquanto (opcao != 0) {
+  exibirMenu()
+  capturar(opcao)
+  
+  se (opcao == 1) {
+    cadastrarLivro()
+  }
+  senao se (opcao == 2) {
+    cadastrarUsuario()
+  }
+  senao se (opcao == 3) {
+    emprestarLivro()
+  }
+  senao se (opcao == 4) {
+    devolverLivro()
+  }
+  senao se (opcao == 5) {
+    buscarLivros()
+  }
+  senao se (opcao == 6) {
+    gerarRelatorios()
+  }
+  senao se (opcao == 7) {
+    listarUsuarios()
+  }
+  senao se (opcao == 0) {
+    mostrar("")
+    mostrar("Obrigado por usar o Sistema de Biblioteca!")
+    mostrar("Ate logo!")
+  }
+  senao {
+    mostrar("")
+    mostrar("Opcao invalida! Tente novamente.")
+  }
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Referência -->
+            <section id="referencia" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Palavras Reservadas</h2>
+                </div>
+
+                <p>
+                    <strong>O que são:</strong> Palavras reservadas são termos especiais da linguagem 
+                    que têm significado específico e não podem ser usados como nomes de variáveis.
+                </p>
+                <p>
+                    <strong>Para que servem:</strong> Formam o vocabulário básico da linguagem, 
+                    permitindo declarar variáveis, controlar fluxo e criar funções.
+                </p>
+                <p>
+                    <strong>Como usar:</strong> Use essas palavras conforme a sintaxe da linguagem. 
+                    Consulte a tabela abaixo para conhecer todas as palavras disponíveis.
+                </p>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Palavra</th>
+                                <th>Categoria</th>
+                                <th>Descrição</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code class="inline-code">algori</code></td>
+                                <td>Programa</td>
+                                <td>Cabeçalho opcional do programa</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">programa</code></td>
+                                <td>Programa</td>
+                                <td>Cabeçalho opcional (legado)</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">constante</code></td>
+                                <td>Declaração</td>
+                                <td>Declara constante</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">inteiro</code></td>
+                                <td>Tipo</td>
+                                <td>Número inteiro</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">real</code></td>
+                                <td>Tipo</td>
+                                <td>Número decimal</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">decimal</code></td>
+                                <td>Tipo</td>
+                                <td>Alta precisão</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">texto</code></td>
+                                <td>Tipo</td>
+                                <td>Cadeia de caracteres</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">caractere</code></td>
+                                <td>Tipo</td>
+                                <td>Caractere único</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">logico</code></td>
+                                <td>Tipo</td>
+                                <td>Booleano</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">vetor</code></td>
+                                <td>Tipo</td>
+                                <td>Lista de valores</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">matriz</code></td>
+                                <td>Tipo</td>
+                                <td>Tabela bidimensional</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">vazio</code></td>
+                                <td>Tipo</td>
+                                <td>Sem retorno</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">funcao</code></td>
+                                <td>Função</td>
+                                <td>Declaração de função</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">retorne</code></td>
+                                <td>Função</td>
+                                <td>Retorno de valor</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">procedimento</code></td>
+                                <td>Função</td>
+                                <td>Função sem retorno (legado)</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">mostrar</code></td>
+                                <td>E/S</td>
+                                <td>Saída de dados</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">capturar</code></td>
+                                <td>E/S</td>
+                                <td>Entrada de dados</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">escreva</code></td>
+                                <td>E/S</td>
+                                <td>Saída (legado)</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">escrevaln</code></td>
+                                <td>E/S</td>
+                                <td>Saída com linha (legado)</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">leia</code></td>
+                                <td>E/S</td>
+                                <td>Entrada (legado)</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">ler</code></td>
+                                <td>E/S</td>
+                                <td>Entrada (legado)</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">se</code></td>
+                                <td>Controle</td>
+                                <td>Condicional</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">senao</code></td>
+                                <td>Controle</td>
+                                <td>Alternativa</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">entao</code></td>
+                                <td>Controle</td>
+                                <td>Then (legado)</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">enquanto</code></td>
+                                <td>Repetição</td>
+                                <td>Loop while</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">para</code></td>
+                                <td>Repetição</td>
+                                <td>Loop for</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">de</code></td>
+                                <td>Repetição</td>
+                                <td>Range start (legado)</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">ate</code></td>
+                                <td>Repetição</td>
+                                <td>Range end (legado)</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">passo</code></td>
+                                <td>Repetição</td>
+                                <td>Step (legado)</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">faca</code></td>
+                                <td>Repetição</td>
+                                <td>Do (legado)</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">verdadeiro</code></td>
+                                <td>Literal</td>
+                                <td>Booleano true</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">falso</code></td>
+                                <td>Literal</td>
+                                <td>Booleano false</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">e</code></td>
+                                <td>Lógica</td>
+                                <td>AND</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">ou</code></td>
+                                <td>Lógica</td>
+                                <td>OR</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">nao</code></td>
+                                <td>Lógica</td>
+                                <td>NOT</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">mod</code></td>
+                                <td>Lógica</td>
+                                <td>Módulo (legado)</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">div</code></td>
+                                <td>Lógica</td>
+                                <td>Divisão inteira (legado)</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">var</code></td>
+                                <td>Declaração</td>
+                                <td>Bloco de variáveis (legado)</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">tipo</code></td>
+                                <td>Tipo</td>
+                                <td>Tipo do valor</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Funções Built-in -->
+            <section id="built-in" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Funções Built-in</h2>
+                </div>
+
+                <p>
+                    <strong>O que são:</strong> Funções built-in são funções pré-definidas na linguagem 
+                    que realizam tarefas comuns, como cálculos matemáticos e manipulação de textos.
+                </p>
+                <p>
+                    <strong>Para que servem:</strong> Economizam tempo e esforço, oferecendo soluções 
+                    prontas para operações frequentes sem precisar criar suas próprias funções.
+                </p>
+                <p>
+                    <strong>Como usar:</strong> Chame a função pelo nome passando os parâmetros entre parênteses. 
+                    Consulte a tabela abaixo para ver todas as funções disponíveis.
+                </p>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Função</th>
+                                <th>Retorno</th>
+                                <th>Descrição</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code class="inline-code">raiz(x)</code></td>
+                                <td>real</td>
+                                <td>Raiz quadrada</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">potencia(b, e)</code></td>
+                                <td>real</td>
+                                <td>Potência</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">abs(x)</code></td>
+                                <td>real</td>
+                                <td>Valor absoluto</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">modulo(x)</code></td>
+                                <td>real</td>
+                                <td>Módulo (legado)</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">arredondar(x)</code></td>
+                                <td>inteiro</td>
+                                <td>Arredondar para inteiro</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">tamanho(x)</code></td>
+                                <td>inteiro</td>
+                                <td>Tamanho de texto/vetor</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">subtexto(t, i, f)</code></td>
+                                <td>texto</td>
+                                <td>Substring</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">maiusculo(x)</code></td>
+                                <td>texto</td>
+                                <td>Para maiúsculo</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">minusculo(x)</code></td>
+                                <td>texto</td>
+                                <td>Para minúsculo</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">posicao(t, s)</code></td>
+                                <td>inteiro</td>
+                                <td>Posição de substring</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">tipo(x)</code></td>
+                                <td>texto</td>
+                                <td>Tipo do valor</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">tamanho_vetor(v)</code></td>
+                                <td>inteiro</td>
+                                <td>Tamanho do vetor</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Boas Práticas -->
+            <section id="boas-praticas" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Boas Práticas</h2>
+                </div>
+
+                <p>
+                    Seguir boas práticas de programação desde o início ajuda a escrever 
+                    código mais limpo, legível e fácil de manter. Abaixo estão as 
+                    principais recomendações para programar em Algori.
+                </p>
+
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <div class="tip-icon">1</div>
+                        <h4>Use nomes descritivos</h4>
+                        <p>Dê nomes significativos às variáveis que expliquem seu propósito.</p>
+                        <div class="code-block">
+                            <pre><code>// Ruim
+inteiro x = 10
+inteiro t = 365
+
+// Bom
+inteiro idade = 10
+inteiro diasNoAno = 365</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-icon">2</div>
+                        <h4>Comente o porquê, não o quê</h4>
+                        <p>Comentários devem explicar a intenção do código, não a sintaxe.</p>
+                        <div class="code-block">
+                            <pre><code>// Ruim
+inteiro i = 0  // inicializa i
+
+// Bom
+inteiro i = 0  // índice para percorrer o vetor</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-icon">3</div>
+                        <h4>Use blocos sempre que possível</h4>
+                        <p>Prefira a sintaxe moderna com <code class="inline-code">{}</code> em vez da legada.</p>
+                        <div class="code-block">
+                            <pre><code>// Evite (legado)
+se x > 10 entao
+    mostrar("Maior")
+fimSe
+
+// Prefira (moderno)
+se (x > 10) {
+    mostrar("Maior")
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-icon">4</div>
+                        <h4>Declare variáveis no início</h4>
+                        <p>Mantenha todas as declarações no topo do programa para melhor organização.</p>
+                        <div class="code-block">
+                            <pre><code>// Bom
+inteiro idade
+texto nome
+real salario
+
+mostrar("Nome: ")
+capturar(nome)
+mostrar("Idade: ")
+capturar(idade)</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-icon">5</div>
+                        <h4>Valide entradas do usuário</h4>
+                        <p>Sempre verifique se os valores recebidos são válidos antes de processá-los.</p>
+                        <div class="code-block">
+                            <pre><code>inteiro idade = 0
+mostrar("Digite sua idade: ")
+capturar(idade)
+
+se (idade >= 0 && idade <= 150) {
+    mostrar("Idade: ", idade)
+} senao {
+    mostrar("Idade invalida!")
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-icon">6</div>
+                        <h4>Use funções para reutilizar código</h4>
+                        <p>Extraia blocos de código repetidos em funções com tipo de retorno.</p>
+                        <div class="code-block">
+                            <pre><code>// Função reutilizável
+funcao real calcularMedia(real n1, real n2, real n3) {
+    retorne (n1 + n2 + n3) / 3
+}
+
+real m1 = calcularMedia(8, 7, 9)
+real m2 = calcularMedia(6, 5, 8)</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Limitações -->
+            <section id="limitacoes" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Limitações</h2>
+                </div>
+
+                <p>
+                    Como toda linguagem em desenvolvimento, o Algori possui algumas 
+                    limitações que devem ser consideradas. Conhecer essas limitações 
+                    ajuda a evitar frustrações e a planejar melhor seus programas.
+                </p>
+
+                <div class="limitations-list">
+                    <div class="limitation-item">
+                        <div class="limitation-icon warning">!</div>
+                        <div class="limitation-content">
+                            <h4>Sem importação de bibliotecas</h4>
+                            <p>
+                                O Algori não suporta importação de bibliotecas externas. 
+                                Todas as funções disponíveis são as 12 built-in incluídas 
+                                na linguagem. Não é possível criar módulos ou arquivos 
+                                separados.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="limitation-item">
+                        <div class="limitation-icon warning">!</div>
+                        <div class="limitation-content">
+                            <h4>Sem ponteiros ou referências</h4>
+                            <p>
+                                Variáveis são passadas por valor, não por referência. 
+                                Não é possível manipular endereços de memória ou criar 
+                                estruturas como listas encadeadas de forma eficiente.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="limitation-item">
+                        <div class="limitation-icon warning">!</div>
+                        <div class="limitation-content">
+                            <h4>Sem tratamento de exceções</h4>
+                            <p>
+                                Não há mecanismo formal de tratamento de erros (try/catch). 
+                                Erros de execução interrompem o programa com uma mensagem 
+                                no console.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="limitation-item">
+                        <div class="limitation-icon warning">!</div>
+                        <div class="limitation-content">
+                            <h4>Acesso ao sistema</h4>
+                            <p>
+                                O código não tem acesso ao sistema de arquivos, rede ou 
+                                dispositivos externos. No navegador, a execução ocorre em 
+                                um Web Worker isolado.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="limitation-item">
+                        <div class="limitation-icon warning">!</div>
+                        <div class="limitation-content">
+                            <h4>Sem orientação a objetos</h4>
+                            <p>
+                                O Algori é uma linguagem imperativa e estruturada. 
+                                Não suporta classes, herança, polimorfismo ou outros 
+                                conceitos de POO.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="limitation-item">
+                        <div class="limitation-icon warning">!</div>
+                        <div class="limitation-content">
+                            <h4>Limite de iterações</h4>
+                            <p>
+                                Loops são limitados a 10.000 iterações para prevenir 
+                                travamentos. Recursão é limitada a 50 chamadas. 
+                                Esses limites podem ser insuficientes para algoritmos 
+                                complexos.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="limitation-item">
+                        <div class="limitation-icon warning">!</div>
+                        <div class="limitation-content">
+                            <h4>Extensão do arquivo</h4>
+                            <p>
+                                Arquivos devem ter a extensão <code class="inline-code">.algori</code>. 
+                                O nome do programa deve conter apenas letras, números e 
+                                underscores (sem espaços ou caracteres especiais).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="note note-info">
+                    <strong>Dica:</strong> Essas limitações são intencionais para manter 
+                    a simplicidade da linguagem. O Algori foi projetado para ensinar 
+                    lógica e algoritmos, não para desenvolvimento profissional. 
+                    Para projetos mais complexos, considere migrar para uma linguagem 
+                    de programação completa, como Python, JavaScript, Java ou C#.
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="footer-content">
+                    <div class="footer-left">
+                        <p class="footer-license">Licença: GNU General Public License v3.0</p>
+                    </div>
+                    <div class="footer-right">
+                        <div class="footer-links">
+                            <span class="footer-version">v1.0.0</span>
+                            <a href="https://github.com/wanfranklin/algori" class="footer-link" target="_blank">GitHub</a>
+                            <a href="#inicio" class="footer-link" title="Voltar ao topo">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 15l-6-6-6 6"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- About Modal -->
+    <div id="about-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Sobre o Algori</h3>
+                <button class="modal-close" onclick="closeModal('about-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Versão:</strong> v1.0.0</p>
+                <p><strong>Criador:</strong> Wanfranklin Alves</p>
+                <p><strong>Licença:</strong> GNU GPLv3</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
