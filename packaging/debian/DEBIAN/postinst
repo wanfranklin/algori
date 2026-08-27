@@ -1,0 +1,7 @@
+#!/bin/sh
+set -e
+
+echo "Algori instalado com sucesso!"
+echo ""
+echo "Execute: algori --help"
+echo "Documentação: https://github.com/wanfranklin/algori/tree/main/docs/linguagem"

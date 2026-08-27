@@ -1,0 +1,27 @@
+PackageIdentifier: wanfranklin.algori
+PackageVersion: 1.0.0
+PackageLocale: pt-BR
+Publisher: Wanfranklin Alves
+PublisherUrl: https://github.com/wanfranklin
+PublisherSupportUrl: https://github.com/wanfranklin/algori/issues
+PackageName: Algori
+PackageUrl: https://github.com/wanfranklin/algori
+License: GPL-3.0-or-later
+LicenseUrl: https://github.com/wanfranklin/algori/blob/main/LICENSE
+ShortDescription: Linguagem de programação para aprendizado de algoritmos
+Description: >
+  Algori é uma linguagem de pseudocódigo educacional com palavras
+  reservadas em português para aprendizado de algoritmos e lógica
+  de programação.
+Tags:
+  - programming-language
+  - education
+  - pseudocode
+  - portuguese
+Installers:
+  - Architecture: x64
+    InstallerType: portable
+    InstallerUrl: https://github.com/wanfranklin/algori/releases/download/v1.0.0/algori-windows-x64.exe
+    InstallerSha256: PLACEHOLDER_WINDOWS_X64
+ManifestType: singleton
+ManifestVersion: 1.12.0
