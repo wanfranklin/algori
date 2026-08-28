@@ -1,0 +1,62 @@
+algori "Funcoes"
+
+// Exercicio 06: Funções
+// Objetivo: Criar e usar funções
+
+mostrar("=== Funções ===")
+
+// Função simples
+funcao inteiro soma(inteiro a, inteiro b) {
+    retorne a + b
+}
+
+// Função com retorno
+funcao real media(real nota1, real nota2, real nota3) {
+    real resultado = (nota1 + nota2 + nota3) / 3
+    retorne resultado
+}
+
+// Função sem retorno
+funcao mostrar_boas_vindas(texto nome) {
+    mostrar("Olá, " + nome + "! Bem-vindo!")
+}
+
+// Usando as funções
+mostrar_boas_vindas("João")
+
+inteiro resultado = soma(10, 5)
+mostrar("10 + 5 = " + resultado)
+
+real nota_media = media(8.5, 7.0, 9.0)
+mostrar("Média: " + nota_media)
+
+// Exercício: Calculadora com funções
+mostrar("")
+mostrar("=== Calculadora com Funções ===")
+
+funcao real soma_calc(real a, real b) {
+    retorne a + b
+}
+
+funcao real subtrai_calc(real a, real b) {
+    retorne a - b
+}
+
+funcao real multiplica_calc(real a, real b) {
+    retorne a * b
+}
+
+funcao real divide_calc(real a, real b) {
+    retorne a / b
+}
+
+mostrar("Digite o primeiro número:")
+real num1 = capturar()
+
+mostrar("Digite o segundo número:")
+real num2 = capturar()
+
+mostrar("Soma: " + soma_calc(num1, num2))
+mostrar("Subtração: " + subtrai_calc(num1, num2))
+mostrar("Multiplicação: " + multiplica_calc(num1, num2))
+mostrar("Divisão: " + divide_calc(num1, num2))

@@ -1,0 +1,47 @@
+algori "Matrizes"
+
+// Exercicio 08: Matrizes
+// Objetivo: Usar matrizes (vetores bidimensionais)
+
+mostrar("=== Matrizes ===")
+
+// Declarar matriz 3x3
+inteiro matriz[3][3]
+
+// Preencher matriz
+para (inteiro i = 0; i < 3; i = i + 1) {
+    para (inteiro j = 0; j < 3; j = j + 1) {
+        matriz[i][j] = (i * 3) + j + 1
+    }
+}
+
+// Exibir matriz
+mostrar("Matriz 3x3:")
+para (inteiro i = 0; i < 3; i = i + 1) {
+    texto linha = ""
+    para (inteiro j = 0; j < 3; j = j + 1) {
+        linha = linha + matriz[i][j] + " "
+    }
+    mostrar(linha)
+}
+
+// Exercício: Tabuada em matriz
+mostrar("")
+mostrar("=== Tabuada em Matriz ===")
+
+inteiro tabuada[5][5]
+
+para (inteiro i = 0; i < 5; i = i + 1) {
+    para (inteiro j = 0; j < 5; j = j + 1) {
+        tabuada[i][j] = (i + 1) * (j + 1)
+    }
+}
+
+mostrar("Tabuada (1-5):")
+para (inteiro i = 0; i < 5; i = i + 1) {
+    texto linha = ""
+    para (inteiro j = 0; j < 5; j = j + 1) {
+        linha = linha + tabuada[i][j] + "\t"
+    }
+    mostrar(linha)
+}

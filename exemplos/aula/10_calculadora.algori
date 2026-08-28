@@ -1,0 +1,79 @@
+algori "Calculadora"
+
+// Exercicio 10: Calculadora Completa
+// Objetivo: Projeto integrador usando todos os conceitos
+
+mostrar("=== Calculadora Completa ===")
+
+// Funções auxiliares
+funcao real soma(real a, real b) {
+    retorne a + b
+}
+
+funcao real subtrai(real a, real b) {
+    retorne a - b
+}
+
+funcao real multiplica(real a, real b) {
+    retorne a * b
+}
+
+funcao real divide(real a, real b) {
+    se (b == 0) {
+        mostrar("Erro: Divisão por zero!")
+        retorne 0
+    }
+    retorne a / b
+}
+
+// Menu principal
+mostrar("Operações disponíveis:")
+mostrar("1 - Soma")
+mostrar("2 - Subtração")
+mostrar("3 - Multiplicação")
+mostrar("4 - Divisão")
+mostrar("0 - Sair")
+
+logico executando = verdadeiro
+
+enquanto (executando) {
+    mostrar("")
+    mostrar("Escolha uma operação (0-4):")
+    inteiro opcao = capturar()
+
+    se (opcao == 0) {
+        executando = falso
+        mostrar("Saindo da calculadora...")
+    } senao {
+        se (opcao >= 1 e opcao <= 4) {
+            mostrar("Digite o primeiro número:")
+            real num1 = capturar()
+
+            mostrar("Digite o segundo número:")
+            real num2 = capturar()
+
+            real resultado = 0
+
+            se (opcao == 1) {
+                resultado = soma(num1, num2)
+                mostrar("Resultado: " + num1 + " + " + num2 + " = " + resultado)
+            }
+            se (opcao == 2) {
+                resultado = subtrai(num1, num2)
+                mostrar("Resultado: " + num1 + " - " + num2 + " = " + resultado)
+            }
+            se (opcao == 3) {
+                resultado = multiplica(num1, num2)
+                mostrar("Resultado: " + num1 + " x " + num2 + " = " + resultado)
+            }
+            se (opcao == 4) {
+                resultado = divide(num1, num2)
+                mostrar("Resultado: " + num1 + " / " + num2 + " = " + resultado)
+            }
+        } senao {
+            mostrar("Opção inválida! Tente novamente.")
+        }
+    }
+}
+
+mostrar("Calculadora finalizada!")

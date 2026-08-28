@@ -9,7 +9,7 @@
 [![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/wanfranklin/algori/actions)
 [![Testes](https://img.shields.io/badge/testes-51%20passando-brightgreen.svg)](https://github.com/wanfranklin/algori)
 
-[Documentação](https://wanfranklin.github.io/algori/linguagem/) • [Instalação](#instalação) • [Exemplos](#exemplo) • [Contribuindo](CONTRIBUTING.md)
+[Documentação](https://wanfranklin.github.io/algori/linguagem/) • [Instalação](#instalação) • [Exemplos](#exemplo) • [Guia do Professor](GUIA_PROFESSOR.md) • [Guia do Aluno](GUIA_ALUNO.md) • [Contribuindo](CONTRIBUTING.md)
 
 ---
 
@@ -284,6 +284,43 @@ O workflow `.github/workflows/release.yml` gera automaticamente executáveis, `.
 git tag v1.0.0
 git push origin v1.0.0
 ```
+
+---
+
+## 🎓 Para Professores e Alunos
+
+### Guia do Professor
+
+Acesse o [Guia do Professor](GUIA_PROFESSOR.md) para:
+- Configurar o laboratório de informática
+- Planejar aulas com Algori
+- Acessar exercícios prontos
+- Solucionar problemas comuns
+
+### Guia do Aluno
+
+Acesse o [Guia do Aluno](GUIA_ALUNO.md) para:
+- Aprender a usar o Algori
+- Ver comandos básicos
+- Tirar dúvidas frequentes
+
+### Exercícios Prontos
+
+A pasta [exemplos/aula/](exemplos/aula/) contém exercícios prontos para usar em aula.
+
+### Extensão VSCode
+
+A extensão VSCode oferece:
+- Syntax highlighting para Algori
+- Autocomplete de palavras-chave
+- Snippets para código comum
+- Execução integrada
+
+Veja mais em [extensions/vscode/](extensions/vscode/).
+
+### Modo Portátil (USB)
+
+Execute o Algori de qualquer computador sem instalar nada. Veja em [packaging/portable/](packaging/portable/).
 
 ---
 

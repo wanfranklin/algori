@@ -1,0 +1,57 @@
+{
+  "Mostrar texto": {
+    "prefix": "mostrar",
+    "body": "mostrar(\"${1:texto}\")",
+    "description": "Mostra texto na tela"
+  },
+  "Ler entrada": {
+    "prefix": "capturar",
+    "body": "${1:tipo} ${2:variavel} = capturar()",
+    "description": "Lê dados do usuário"
+  },
+  "Variável inteiro": {
+    "prefix": "inteiro",
+    "body": "inteiro ${1:nome} = ${2:valor}",
+    "description": "Declara variável inteira"
+  },
+  "Variável texto": {
+    "prefix": "texto",
+    "body": "texto ${1:nome} = \"${2:valor}\"",
+    "description": "Declara variável de texto"
+  },
+  "Variável real": {
+    "prefix": "real",
+    "body": "real ${1:nome} = ${2:valor}",
+    "description": "Declara variável real"
+  },
+  "Variável lógico": {
+    "prefix": "logico",
+    "body": "logico ${1:nome} = ${2:verdadeiro|falso}",
+    "description": "Declara variável lógica"
+  },
+  "Condicional se": {
+    "prefix": "se",
+    "body": "se (${1:condicao}) {\n\t${2:código}\n} senao {\n\t${3:código}\n}",
+    "description": "Estrutura condicional"
+  },
+  "Laço para": {
+    "prefix": "para",
+    "body": "para (${1:tipo} ${2:i} = ${3:0}; ${2:i} < ${4:limite}; ${2:i} = ${2:i} + 1) {\n\t${5:código}\n}",
+    "description": "Laço de repetição"
+  },
+  "Laço enquanto": {
+    "prefix": "enquanto",
+    "body": "enquanto (${1:condicao}) {\n\t${2:código}\n}",
+    "description": "Laço de repetição"
+  },
+  "Função": {
+    "prefix": "funcao",
+    "body": "${1:tipo} ${2:nome}(${3:parâmetros}) {\n\t${4:código}\n\tretorne ${5:resultado}\n}",
+    "description": "Declara função"
+  },
+  "Programa completo": {
+    "prefix": "programa",
+    "body": "algori \"${1:NomePrograma}\"\n\nmostrar(\"Olá, Mundo!\")",
+    "description": "Estrutura básica de um programa"
+  }
+}

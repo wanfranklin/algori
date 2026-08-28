@@ -1,0 +1,77 @@
+algori "Ordenacao"
+
+// Exercicio 12: Algoritmo de Ordenação (Bubble Sort)
+// Objetivo: Implementar algoritmo de ordenação
+
+mostrar("=== Ordenação de Vetores ===")
+mostrar("Algoritmo: Bubble Sort")
+
+// Vetor desordenado
+inteiro numeros[10]
+numeros[0] = 64
+numeros[1] = 34
+numeros[2] = 25
+numeros[3] = 12
+numeros[4] = 22
+numeros[5] = 11
+numeros[6] = 90
+numeros[7] = 1
+numeros[8] = 88
+numeros[9] = 5
+
+// Exibir vetor original
+mostrar("Vetor original:")
+para (inteiro i = 0; i < 10; i = i + 1) {
+    mostrar("numeros[" + i + "] = " + numeros[i])
+}
+
+// Bubble Sort
+mostrar("")
+mostrar("Ordenando...")
+
+para (inteiro i = 0; i < 9; i = i + 1) {
+    para (inteiro j = 0; j < 9 - i; j = j + 1) {
+        se (numeros[j] > numeros[j + 1]) {
+            // Trocar elementos
+            inteiro temp = numeros[j]
+            numeros[j] = numeros[j + 1]
+            numeros[j + 1] = temp
+        }
+    }
+}
+
+// Exibir vetor ordenado
+mostrar("")
+mostrar("Vetor ordenado:")
+para (inteiro i = 0; i < 10; i = i + 1) {
+    mostrar("numeros[" + i + "] = " + numeros[i])
+}
+
+// Exercício: Ordenar números do usuário
+mostrar("")
+mostrar("=== Ordenar Números do Usuário ===")
+
+inteiro numeros_usuario[5]
+
+mostrar("Digite 5 números:")
+para (inteiro i = 0; i < 5; i = i + 1) {
+    mostrar("Número " + (i + 1) + ":")
+    numeros_usuario[i] = capturar()
+}
+
+// Ordenar
+para (inteiro i = 0; i < 4; i = i + 1) {
+    para (inteiro j = 0; j < 4 - i; j = j + 1) {
+        se (numeros_usuario[j] > numeros_usuario[j + 1]) {
+            inteiro temp = numeros_usuario[j]
+            numeros_usuario[j] = numeros_usuario[j + 1]
+            numeros_usuario[j + 1] = temp
+        }
+    }
+}
+
+mostrar("")
+mostrar("Números ordenados:")
+para (inteiro i = 0; i < 5; i = i + 1) {
+    mostrar("numeros[" + i + "] = " + numeros_usuario[i])
+}

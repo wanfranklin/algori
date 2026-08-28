@@ -1,0 +1,107 @@
+{
+  "name": "algori",
+  "displayName": "Algori",
+  "description": "Suporte para a linguagem de programação Algori (português)",
+  "version": "1.0.0",
+  "publisher": "wanfranklin",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wanfranklin/algori"
+  },
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "keywords": [
+    "algori",
+    "pseudocode",
+    "portuguese",
+    "education",
+    "programming language"
+  ],
+  "activationEvents": [
+    "onLanguage:algori"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "algori",
+        "aliases": [
+          "Algori",
+          "algori"
+        ],
+        "extensions": [
+          ".algori"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "algori",
+        "scopeName": "source.algori",
+        "path": "./syntaxes/algori.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "algori",
+        "path": "./snippets/algori.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "algori.run",
+        "title": "Algori: Executar Programa",
+        "icon": "$(play)"
+      },
+      {
+        "command": "algori.stop",
+        "title": "Algori: Parar Programa",
+        "icon": "$(debug-stop)"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "algori.run",
+          "when": "editorLangId == algori",
+          "group": "algori"
+        },
+        {
+          "command": "algori.stop",
+          "when": "editorLangId == algori",
+          "group": "algori"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "algori.run",
+          "when": "editorLangId == algori",
+          "group": "navigation"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "algori.run",
+        "key": "f5",
+        "when": "editorLangId == algori"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "@types/node": "^18.0.0",
+    "typescript": "^5.0.0"
+  }
+}

@@ -1,0 +1,46 @@
+algori "Vetores"
+
+// Exercicio 07: Vetores (Arrays)
+// Objetivo: Usar vetores para armazenar dados
+
+mostrar("=== Vetores ===")
+
+// Declarar vetor
+inteiro numeros[5]
+numeros[0] = 10
+numeros[1] = 20
+numeros[2] = 30
+numeros[3] = 40
+numeros[4] = 50
+
+// Percorrer vetor
+mostrar("Elementos do vetor:")
+para (inteiro i = 0; i < 5; i = i + 1) {
+    mostrar("numeros[" + i + "] = " + numeros[i])
+}
+
+// Exercício: Média de notas
+mostrar("")
+mostrar("=== Média de Notas ===")
+
+real notas[5]
+
+mostrar("Digite 5 notas:")
+para (inteiro i = 0; i < 5; i = i + 1) {
+    mostrar("Nota " + (i + 1) + ":")
+    notas[i] = capturar()
+}
+
+real soma_notas = 0
+para (inteiro i = 0; i < 5; i = i + 1) {
+    soma_notas = soma_notas + notas[i]
+}
+
+real media_notas = soma_notas / 5
+mostrar("Média: " + media_notas)
+
+se (media_notas >= 7) {
+    mostrar("Aprovado!")
+} senao {
+    mostrar("Reprovado!")
+}

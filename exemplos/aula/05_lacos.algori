@@ -1,0 +1,41 @@
+algori "Lacos"
+
+// Exercicio 05: Laços de Repetição
+// Objetivo: Usar laços para e enquanto
+
+mostrar("=== Laços de Repetição ===")
+
+// Exemplo 1: Laço para
+mostrar("Números de 1 a 5:")
+para (inteiro i = 1; i <= 5; i = i + 1) {
+    mostrar("Número: " + i)
+}
+
+// Exemplo 2: Tabuada
+mostrar("")
+mostrar("Tabuada do 5:")
+para (inteiro i = 1; i <= 10; i = i + 1) {
+    mostrar("5 x " + i + " = " + (5 * i))
+}
+
+// Exemplo 3: Laço enquanto
+mostrar("")
+mostrar("Contagem regressiva:")
+inteiro contador = 5
+enquanto (contador > 0) {
+    mostrar(contador + "...")
+    contador = contador - 1
+}
+mostrar("Fogos! 🎆")
+
+// Exercício: Tabuada personalizada
+mostrar("")
+mostrar("=== Tabuada Personalizada ===")
+
+mostrar("De qual número você quer a tabuada?")
+inteiro numero = capturar()
+
+mostrar("Tabuada do " + numero + ":")
+para (inteiro i = 1; i <= 10; i = i + 1) {
+    mostrar(numero + " x " + i + " = " + (numero * i))
+}

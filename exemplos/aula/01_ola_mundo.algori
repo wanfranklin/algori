@@ -1,0 +1,12 @@
+algori "OlaMundo"
+
+// Exercicio 01: Olá Mundo
+// Objetivo: Executar o primeiro programa
+
+mostrar("Olá, Mundo!")
+mostrar("Bem-vindo ao Algori!")
+
+mostrar("Qual é o seu nome?")
+texto nome = capturar()
+mostrar("Olá, " + nome + "!")
+mostrar("Seja bem-vindo à disciplina de Algoritmos!")

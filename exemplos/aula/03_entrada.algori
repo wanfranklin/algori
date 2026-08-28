@@ -1,0 +1,41 @@
+algori "Entrada"
+
+// Exercicio 03: Entrada de Dados
+// Objetivo: Usar a função capturar()
+
+mostrar("=== Entrada de Dados ===")
+
+// Entrada de texto
+mostrar("Qual é o seu nome?")
+texto nome = capturar()
+mostrar("Olá, " + nome + "!")
+
+// Entrada de número inteiro
+mostrar("Qual é a sua idade?")
+inteiro idade = capturar()
+mostrar("Você tem " + idade + " anos")
+
+// Entrada de número real
+mostrar("Qual é a sua nota?")
+real nota = capturar()
+mostrar("Sua nota é: " + nota)
+
+// Exercício: Calculadora simples
+mostrar("")
+mostrar("=== Calculadora Simples ===")
+
+mostrar("Digite o primeiro número:")
+real numero1 = capturar()
+
+mostrar("Digite o segundo número:")
+real numero2 = capturar()
+
+real soma = numero1 + numero2
+real subtracao = numero1 - numero2
+real multiplicacao = numero1 * numero2
+real divisao = numero1 / numero2
+
+mostrar("Soma: " + soma)
+mostrar("Subtração: " + subtracao)
+mostrar("Multiplicação: " + multiplicacao)
+mostrar("Divisão: " + divisao)

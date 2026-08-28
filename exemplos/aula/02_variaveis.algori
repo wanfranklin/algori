@@ -1,0 +1,41 @@
+algori "Variaveis"
+
+// Exercicio 02: Variáveis e Tipos de Dados
+// Objetivo: Entender variáveis e tipos
+
+mostrar("=== Variáveis e Tipos de Dados ===")
+
+// Variável inteiro
+inteiro idade = 25
+mostrar("Idade: " + idade)
+
+// Variável texto
+texto nome = "João"
+mostrar("Nome: " + nome)
+
+// Variável real
+real altura = 1.75
+mostrar("Altura: " + altura)
+
+// Variável lógico
+logico estudante = verdadeiro
+mostrar("Estudante: " + estudante)
+
+// Exercício: Preencher dados
+mostrar("")
+mostrar("=== Preencha seus dados ===")
+
+mostrar("Qual é o seu nome?")
+texto meu_nome = capturar()
+
+mostrar("Qual é a sua idade?")
+inteiro minha_idade = capturar()
+
+mostrar("Qual é a sua altura? (ex: 1.70)")
+real minha_altura = capturar()
+
+mostrar("")
+mostrar("=== Seus dados ===")
+mostrar("Nome: " + meu_nome)
+mostrar("Idade: " + minha_idade)
+mostrar("Altura: " + minha_altura)

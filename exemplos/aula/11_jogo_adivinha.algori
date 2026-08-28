@@ -1,0 +1,44 @@
+algori "JogoAdivinha"
+
+// Exercicio 11: Jogo de Adivinha
+// Objetivo: Lógica complexa com laços e condicionais
+
+mostrar("=== Jogo de Adivinha ===")
+mostrar("Eu estou pensando em um número de 1 a 100.")
+mostrar("Tente adivinhar!")
+
+// Para simular um número aleatório, usamos um fixo
+// Em uma versão real, poderíamos usar random()
+inteiro numero_secreto = 42
+inteiro tentativas = 0
+logico acertou = falso
+
+enquanto (nao acertou) {
+    mostrar("")
+    mostrar("Digite seu palpite:")
+    inteiro palpite = capturar()
+    tentativas = tentativas + 1
+
+    se (palpite == numero_secreto) {
+        acertou = verdadeiro
+        mostrar("")
+        mostrar("🎉 Parabéns! Você acertou!")
+        mostrar("Número de tentativas: " + tentativas)
+    } senao {
+        se (palpite < numero_secreto) {
+            mostrar("Muito baixo! Tente um número maior.")
+        } senao {
+            mostrar("Muito alto! Tente um número menor.")
+        }
+
+        se (tentativas >= 10) {
+            mostrar("")
+            mostrar("Você usou todas as tentativas!")
+            mostrar("O número era: " + numero_secreto)
+            acertou = verdadeiro
+        }
+    }
+}
+
+mostrar("")
+mostrar("Jogo finalizado!")

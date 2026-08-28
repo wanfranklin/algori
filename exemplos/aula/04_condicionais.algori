@@ -1,0 +1,52 @@
+algori "Condicionais"
+
+// Exercicio 04: Condicionais
+// Objetivo: Usar estruturas condicionais
+
+mostrar("=== Condicionais ===")
+
+// Exemplo 1: Verificar idade
+mostrar("Qual é a sua idade?")
+inteiro idade = capturar()
+
+se (idade >= 18) {
+    mostrar("Você é maior de idade!")
+} senao {
+    mostrar("Você é menor de idade!")
+}
+
+// Exemplo 2: Verificar nota
+mostrar("")
+mostrar("Qual é a sua nota?")
+real nota = capturar()
+
+se (nota >= 7) {
+    mostrar("Aprovado! Parabéns!")
+} senao {
+    se (nota >= 5) {
+        mostrar("Recuperação. Estude mais!")
+    } senao {
+        mostrar("Reprovado. Tente novamente!")
+    }
+}
+
+// Exercício: Classificação de idade
+mostrar("")
+mostrar("=== Classificação de Idade ===")
+
+mostrar("Digite sua idade:")
+inteiro idade2 = capturar()
+
+se (idade2 < 12) {
+    mostrar("Criança")
+} senao {
+    se (idade2 < 18) {
+        mostrar("Adolescente")
+    } senao {
+        se (idade2 < 60) {
+            mostrar("Adulto")
+        } senao {
+            mostrar("Idoso")
+        }
+    }
+}

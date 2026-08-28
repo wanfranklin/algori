@@ -1,0 +1,47 @@
+algori "Strings"
+
+// Exercicio 09: Manipulação de Strings
+// Objetivo: Trabalhar com texto
+
+mostrar("=== Manipulação de Strings ===")
+
+// Concatenação
+texto saudacao = "Olá"
+texto nome = "Mundo"
+texto mensagem = saudacao + ", " + nome + "!"
+mostrar(mensagem)
+
+// Tamanho da string
+texto frase = "Algori é incrível!"
+inteiro tamanho = tamanho(frase)
+mostrar("Tamanho da frase: " + tamanho)
+
+// Maiúsculas e minúsculas
+texto texto1 = "algori"
+texto maiusculo = maiusculo(texto1)
+texto minusculo = minusculo(texto1)
+mostrar("Maiúsculo: " + maiusculo)
+mostrar("Minúsculo: " + minusculo)
+
+// Exercício: Contador de caracteres
+mostrar("")
+mostrar("=== Contador de Caracteres ===")
+
+mostrar("Digite uma frase:")
+texto frase_usuario = capturar()
+
+inteiro total_letras = 0
+inteiro total_espacos = 0
+
+para (inteiro i = 0; i < tamanho(frase_usuario); i = i + 1) {
+    caractere c = frase_usuario[i]
+    se (c == " ") {
+        total_espacos = total_espacos + 1
+    } senao {
+        total_letras = total_letras + 1
+    }
+}
+
+mostrar("Total de letras: " + total_letras)
+mostrar("Total de espaços: " + total_espacos)
+mostrar("Total de caracteres: " + tamanho(frase_usuario))
