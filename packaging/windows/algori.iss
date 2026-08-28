@@ -48,6 +48,43 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\algori.exe"; Tasks: desktop
 Filename: "{app}\algori.exe"; Parameters: "--version"; Description: "Verificar instalação"; Flags: runhidden waituntilterminated
 
 [Code]
+// Verificar pre-requisitos antes da instalacao
+function CheckPrerequisites: Boolean;
+var
+  OSVersion: TWindowsVersion;
+  FreeSpace: Int64;
+  ResultCode: Integer;
+begin
+  Result := True;
+
+  // Verificar versao do Windows
+  GetWindowsVersionEx(OSVersion);
+  if OSVersion.dwBuildNumber < 19041 then
+  begin
+    if MsgBox('Seu Windows pode nao ser totalmente compativel.' + #13#10 +
+              'Build atual: ' + IntToStr(OSVersion.dwBuildNumber) + #13#10 +
+              'Build minimo recomendado: 19041' + #13#10 + #13#10 +
+              'Deseja continuar mesmo assim?',
+              mbConfirmation, MB_YESNO) = IDNO then
+    begin
+      Result := False;
+      Exit;
+    end;
+  end;
+
+  // Verificar espaco em disco
+  FreeSpace := DiskFree(0);
+  if FreeSpace < 104857600 then  // 100 MB
+  begin
+    MsgBox('Espaco insuficiente no disco.' + #13#10 +
+           'Espaco disponivel: ' + IntToStr(FreeSpace div 1048576) + ' MB' + #13#10 +
+           'Espaco minimo necessario: 100 MB',
+           mbError, MB_OK);
+    Result := False;
+    Exit;
+  end;
+end;
+
 // Adicionar ao PATH
 procedure AddToPath;
 var
@@ -66,6 +103,14 @@ end;
 
 procedure CurStepChanged(CurStep: TSetupStep);
 begin
+  if CurStep = ssInstall then
+  begin
+    if not CheckPrerequisites then
+    begin
+      Abort;
+    end;
+  end;
+
   if CurStep = ssPostInstall then
   begin
     if IsTaskSelected('addtopath') then

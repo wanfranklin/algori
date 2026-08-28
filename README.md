@@ -73,9 +73,25 @@ brew install algori
 
 ### Windows
 
+#### Opção 1: WinGet (recomendado)
+
 ```bash
 winget install wanfranklin.algori
 ```
+
+#### Opção 2: PowerShell (instalador automático)
+
+```powershell
+irm https://raw.githubusercontent.com/wanfranklin/algori/main/install.ps1 | iex
+```
+
+#### Opção 3: Inno Setup (instalador visual)
+
+Baixe o instalador `.exe` em [GitHub Releases](https://github.com/wanfranklin/algori/releases) e execute.
+
+#### Opção 4: Download direto
+
+Baixe o executável `algori-windows-x64.exe` em [GitHub Releases](https://github.com/wanfranklin/algori/releases), renomeie para `algori.exe` e adicione ao PATH do sistema.
 
 ### Outras opções
 
@@ -85,6 +101,87 @@ winget install wanfranklin.algori
 | **Fedora/RHEL** | `sudo rpm -i algori-1.0.0-1.*.rpm` |
 | **npm** | `npm install -g @algori/core` |
 | **Download direto** | [GitHub Releases](https://github.com/wanfranklin/algori/releases) |
+
+---
+
+## 🚀 Executar após a instalação
+
+### No VSCode
+
+1. Abra o VSCode
+2. Crie um arquivo `ola.algori` com seu código
+3. Abra o terminal integrado: `` Ctrl+` ``
+4. Execute:
+
+```bash
+algori ola.algori
+```
+
+### No PowerShell
+
+1. Abra o PowerShell (procure "PowerShell" no menu Iniciar)
+2. Navegue até a pasta do arquivo:
+
+```powershell
+cd C:\Users\SeuUsuario\Documents
+```
+
+3. Execute:
+
+```powershell
+algori ola.algori
+```
+
+### No Prompt de Comando (cmd)
+
+1. Abra o Prompt de Comando (procure "cmd" no menu Iniciar)
+2. Navegue até a pasta do arquivo:
+
+```cmd
+cd C:\Users\SeuUsuario\Documents
+```
+
+3. Execute:
+
+```cmd
+algori ola.algori
+```
+
+> **Nota:** Após a instalação, pode ser necessário fechar e reabrir o terminal para que o comando `algori` seja reconhecido.
+
+---
+
+## 🔍 Verificar Pré-requisitos
+
+Antes de instalar, você pode verificar se seu sistema atende aos requisitos:
+
+### Windows
+
+```powershell
+irm https://raw.githubusercontent.com/wanfranklin/algori/main/scripts/check-windows.ps1 | iex
+```
+
+### macOS / Linux
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/wanfranklin/algori/main/scripts/check-unix.sh | sh
+```
+
+---
+
+## 🗑️ Desinstalar
+
+### Windows
+
+```powershell
+irm https://raw.githubusercontent.com/wanfranklin/algori/main/scripts/uninstall-windows.ps1 | iex
+```
+
+### macOS / Linux
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/wanfranklin/algori/main/scripts/uninstall-unix.sh | sh
+```
 
 ---
 
