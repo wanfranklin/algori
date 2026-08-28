@@ -1,0 +1,238 @@
+<Window x:Class="Algori.Installer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Algori - Instalador" 
+        Height="500" Width="650"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="#1E1E2E">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#2D2D44" Padding="20">
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock Text="🧠 Algori" 
+                           FontSize="28" 
+                           FontWeight="Bold" 
+                           Foreground="#89B4FA"/>
+                <TextBlock Text="Linguagem de programação em português" 
+                           FontSize="14" 
+                           Foreground="#A6ADC8"
+                           Margin="0,5,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Content Area -->
+        <Grid Grid.Row="1" Margin="30,20">
+            <!-- Step 1: Welcome -->
+            <StackPanel x:Name="Step1_Welcome" Visibility="Visible">
+                <TextBlock Text="Bem-vindo!" 
+                           FontSize="24" 
+                           FontWeight="Bold" 
+                           Foreground="#CDD6F4"
+                           Margin="0,0,0,20"/>
+                
+                <TextBlock Text="Este assistente vai instalar o Algori no seu computador."
+                           FontSize="14" 
+                           Foreground="#BAC2DE"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,10"/>
+                
+                <TextBlock Text="O Algori é uma linguagem de programação com palavras-chave em português, ideal para aprender lógica e algoritmos."
+                           FontSize="14" 
+                           Foreground="#BAC2DE"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,20"/>
+
+                <TextBlock Text="Requisitos do sistema:"
+                           FontSize="14" 
+                           FontWeight="Bold"
+                           Foreground="#CDD6F4"
+                           Margin="0,0,0,10"/>
+
+                <TextBlock Text="• Windows 10 ou posterior&#x0a;• 100 MB de espaço em disco&#x0a;• Conexão com a internet (para download)"
+                           FontSize="13" 
+                           Foreground="#A6ADC8"
+                           TextWrapping="Wrap"
+                           LineHeight="22"/>
+            </StackPanel>
+
+            <!-- Step 2: Install Location -->
+            <StackPanel x:Name="Step2_Location" Visibility="Collapsed">
+                <TextBlock Text="Local de Instalação" 
+                           FontSize="24" 
+                           FontWeight="Bold" 
+                           Foreground="#CDD6F4"
+                           Margin="0,0,0,20"/>
+                
+                <TextBlock Text="Escolha onde o Algori será instalado:"
+                           FontSize="14" 
+                           Foreground="#BAC2DE"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,15"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBox x:Name="TxtInstallPath" 
+                             Grid.Column="0"
+                             Height="35" 
+                             FontSize="13"
+                             VerticalContentAlignment="Center"
+                             Padding="10,0"
+                             Background="#313244"
+                             Foreground="#CDD6F4"
+                             BorderBrush="#45475A"
+                             Text="C:\Program Files\Algori"/>
+                    
+                    <Button Grid.Column="1" 
+                            Content="Alterar..." 
+                            Width="90" 
+                            Height="35"
+                            Margin="10,0,0,0"
+                            Background="#45475A"
+                            Foreground="#CDD6F4"
+                            BorderBrush="#585B70"
+                            Click="BtnBrowse_Click"/>
+                </Grid>
+
+                <CheckBox x:Name="ChkAddToPath" 
+                          Content="Adicionar ao PATH do sistema (recomendado)"
+                          IsChecked="True"
+                          Foreground="#BAC2DE"
+                          Margin="0,20,0,0"
+                          FontSize="13"/>
+
+                <CheckBox x:Name="ChkDesktopIcon" 
+                          Content="Criar atalho na área de trabalho"
+                          IsChecked="True"
+                          Foreground="#BAC2DE"
+                          Margin="0,10,0,0"
+                          FontSize="13"/>
+
+                <CheckBox x:Name="ChkStartMenu" 
+                          Content="Criar atalho no Menu Iniciar"
+                          IsChecked="True"
+                          Foreground="#BAC2DE"
+                          Margin="0,10,0,0"
+                          FontSize="13"/>
+            </StackPanel>
+
+            <!-- Step 3: Installing -->
+            <StackPanel x:Name="Step3_Installing" Visibility="Collapsed">
+                <TextBlock Text="Instalando..." 
+                           FontSize="24" 
+                           FontWeight="Bold" 
+                           Foreground="#CDD6F4"
+                           Margin="0,0,0,20"/>
+                
+                <TextBlock x:Name="TxtStatus" 
+                           Text="Preparando instalação..."
+                           FontSize="14" 
+                           Foreground="#BAC2DE"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,20"/>
+
+                <ProgressBar x:Name="ProgressBar" 
+                             Height="20" 
+                             Minimum="0" 
+                             Maximum="100"
+                             Background="#313244"
+                             Foreground="#89B4FA"
+                             BorderBrush="#45475A"/>
+
+                <TextBlock x:Name="TxtPercent" 
+                           Text="0%"
+                           FontSize="12" 
+                           Foreground="#A6ADC8"
+                           HorizontalAlignment="Center"
+                           Margin="0,10,0,0"/>
+            </StackPanel>
+
+            <!-- Step 4: Complete -->
+            <StackPanel x:Name="Step4_Complete" Visibility="Collapsed">
+                <TextBlock Text="✅ Instalação Concluída!" 
+                           FontSize="24" 
+                           FontWeight="Bold" 
+                           Foreground="#A6E3A1"
+                           Margin="0,0,0,20"/>
+                
+                <TextBlock Text="O Algori foi instalado com sucesso!"
+                           FontSize="14" 
+                           Foreground="#BAC2DE"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,15"/>
+
+                <TextBlock Text="Para começar a usar:"
+                           FontSize="14" 
+                           FontWeight="Bold"
+                           Foreground="#CDD6F4"
+                           Margin="0,0,0,10"/>
+
+                <TextBlock Text="1. Abra o PowerShell ou Prompt de Comando&#x0a;2. Digite: algori --version&#x0a;3. Crie um arquivo .algori e execute!"
+                           FontSize="13" 
+                           Foreground="#A6ADC8"
+                           TextWrapping="Wrap"
+                           LineHeight="22"
+                           Margin="0,0,0,20"/>
+
+                <TextBlock x:Name="TxtInstallInfo"
+                           FontSize="12" 
+                           Foreground="#6C7086"
+                           TextWrapping="Wrap"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Footer -->
+        <Border Grid.Row="2" Background="#2D2D44" Padding="20,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" 
+                           VerticalAlignment="Center"
+                           Foreground="#6C7086"
+                           FontSize="11">
+                    <Run Text="Algori v1.0.0"/>
+                    <LineBreak/>
+                    <Run Text="GPL-3.0-or-later"/>
+                </TextBlock>
+
+                <Button Grid.Column="1" 
+                        x:Name="BtnBack"
+                        Content="← Voltar" 
+                        Width="100" 
+                        Height="35"
+                        Margin="0,0,10,0"
+                        Background="#45475A"
+                        Foreground="#CDD6F4"
+                        BorderBrush="#585B70"
+                        Click="BtnBack_Click"
+                        Visibility="Collapsed"/>
+
+                <Button Grid.Column="2" 
+                        x:Name="BtnNext"
+                        Content="Próximo →" 
+                        Width="100" 
+                        Height="35"
+                        Background="#89B4FA"
+                        Foreground="#1E1E2E"
+                        FontWeight="Bold"
+                        BorderBrush="Transparent"
+                        Click="BtnNext_Click"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

@@ -73,23 +73,27 @@ brew install algori
 
 ### Windows
 
-#### Opção 1: WinGet (recomendado)
+#### Opção 1: Instalador Visual (recomendado para iniciantes)
+
+Baixe o `AlgoriInstaller.exe` em [GitHub Releases](https://github.com/wanfranklin/algori/releases) e execute. Siga as instruções: **Próximo → Instalar → Finalizar**.
+
+#### Opção 2: WinGet
 
 ```bash
 winget install wanfranklin.algori
 ```
 
-#### Opção 2: PowerShell (instalador automático)
+#### Opção 3: PowerShell (instalador automático)
 
 ```powershell
 irm https://raw.githubusercontent.com/wanfranklin/algori/main/install.ps1 | iex
 ```
 
-#### Opção 3: Inno Setup (instalador visual)
+#### Opção 4: Inno Setup (instalador clássico)
 
-Baixe o instalador `.exe` em [GitHub Releases](https://github.com/wanfranklin/algori/releases) e execute.
+Baixe o instalador `algori-*-setup.exe` em [GitHub Releases](https://github.com/wanfranklin/algori/releases) e execute.
 
-#### Opção 4: Download direto
+#### Opção 5: Download direto
 
 Baixe o executável `algori-windows-x64.exe` em [GitHub Releases](https://github.com/wanfranklin/algori/releases), renomeie para `algori.exe` e adicione ao PATH do sistema.
 

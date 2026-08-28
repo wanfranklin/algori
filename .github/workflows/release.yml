@@ -134,6 +134,30 @@ jobs:
           name: algori-winget-manifest
           path: dist/wanfranklin.algori.yaml
 
+  # Build instalador WPF (visual)
+  build-wpf-installer:
+    runs-on: windows-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build WPF installer
+        run: |
+          cd packaging/windows-installer
+          dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+
+      - name: Upload WPF installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: algori-wpf-installer
+          path: packaging/windows-installer/bin/Release/net8.0-windows/win-x64/publish/AlgoriInstaller.exe
+
   # Build pacote Debian
   build-deb:
     runs-on: ubuntu-latest
@@ -227,7 +251,7 @@ jobs:
 
   # Criar release no GitHub
   release:
-    needs: [build, build-windows-installer, build-deb, build-rpm]
+    needs: [build, build-windows-installer, build-wpf-installer, build-deb, build-rpm]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
 
@@ -250,6 +274,7 @@ jobs:
             dist/algori-linux-arm64/algori-linux-arm64
             dist/algori-windows-x64/algori-windows-x64.exe
             dist/algori-windows-installer/algori-*-setup.exe
+            dist/algori-wpf-installer/AlgoriInstaller.exe
             dist/algori-winget-manifest/wanfranklin.algori.yaml
             dist/algori-deb/algori_${VERSION#v}_amd64.deb
             dist/algori-rpm/algori-*.rpm
