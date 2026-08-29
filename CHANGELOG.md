@@ -28,6 +28,16 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - 8 métodos de instalação (npm, curl, brew, winget, debian, rpm, windows, git)
 - Testes unitários com Vitest (51 testes)
 - Documentação da linguagem em HTML interativo
+
+### Corrigido
+
+- `mostrar()` agora exibe output antes de `capturar()` (buffer flush)
+- `capturar()` não causa mais recursão infinita (resume execução)
+
+### Adicionado (CLI)
+
+- `algori --update` / `algori --atualizar` para atualização via GitHub Releases
+- `algori --versao` como alias para `algori --version`
 - Limites de segurança: tamanho de arquivo, iterações, caracteres desconhecidos
 
 ### Corrigido

@@ -464,7 +464,10 @@ class Parser {
 
   private parseVarDecl(isConstant: boolean = false): VarDeclNode {
     const token = this.advance();
-    const typeName = TYPES.has(token.value) ? token.value : token.value;
+    if (!TYPES.has(token.value)) {
+      throw new Error(`Linha ${token.line}: Tipo inválido '${token.value}'|||Tipos válidos: inteiro, real, decimal, caractere, texto, logico, vetor, matriz|||inteiro x = 0\nreal pi = 3.14\ntexto nome = "Algori"`);
+    }
+    const typeName = token.value;
     const nameToken = this.peek();
     if (nameToken.type !== "IDENTIFIER" && nameToken.type !== "KEYWORD") {
       throw new Error(`Linha ${nameToken.line}: Esperado nome de variável, mas encontrado ${friendlyTokenName(nameToken.type)} "${nameToken.value}"`);
@@ -509,16 +512,20 @@ class Parser {
     };
   }
 
-  private defaultValueForType(typeName: string): number | string | boolean {
+  private defaultValueForType(typeName: string): number | string | boolean | unknown[] {
     return defaultValueForType(typeName);
   }
 
   private parseConstDecl(): VarDeclNode {
+    let typeName: string | null = null;
+    if (this.peek().type === "KEYWORD" && TYPES.has(this.peek().value)) {
+      typeName = this.advance().value;
+    }
     const token = this.expect("IDENTIFIER");
     const name = token.value;
     this.expect("OPERATOR", "=");
     const expr = this.parseExpression();
-    return { kind: "var_decl", name, typeName: null, expr, isConstant: true, line: token.line };
+    return { kind: "var_decl", name, typeName, expr, isConstant: true, line: token.line };
   }
 
   private parseAssign(): AssignNode {

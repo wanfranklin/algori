@@ -1,4 +1,4 @@
-export function defaultValueForType(typeName: string): number | string | boolean {
+export function defaultValueForType(typeName: string): number | string | boolean | unknown[] {
   switch (typeName) {
     case "inteiro": return 0;
     case "real": return 0;
@@ -6,8 +6,8 @@ export function defaultValueForType(typeName: string): number | string | boolean
     case "caractere": return "";
     case "texto": return "";
     case "logico": return false;
-    case "vetor": return 0;
-    case "matriz": return 0;
+    case "vetor": return [];
+    case "matriz": return [];
     default: return 0;
   }
 }

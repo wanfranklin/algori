@@ -208,9 +208,10 @@ algori ola.algori
 ### Comandos CLI
 
 ```bash
-algori <arquivo.algori>   # Executar um programa
-algori --help             # Mostrar ajuda
-algori --version          # Mostrar versão
+algori <arquivo.algori>       # Executar um programa
+algori --help / -h            # Mostrar ajuda
+algori --version / --versao   # Mostrar versão
+algori --update / --atualizar # Verificar e instalar atualização
 ```
 
 ---

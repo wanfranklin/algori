@@ -158,10 +158,14 @@ export function tokenize(source: string): Token[] {
 
     if (ch === '"' || ch === "'") {
       const quote = advance();
+      const startLine = line;
       let str = "";
       while (pos < source.length && peek() !== quote) {
         if (peek() === "\\") {
           advance();
+          if (pos >= source.length) {
+            throw new Error(`Linha ${startLine}: Sequência de escape incompleta|||Escape de string não terminado no final do arquivo.|||"Olá\\nMundo"`);
+          }
           const esc = advance();
           if (esc === "n") str += "\n";
           else if (esc === "t") str += "\t";
@@ -172,7 +176,10 @@ export function tokenize(source: string): Token[] {
           str += advance();
         }
       }
-      if (pos < source.length) advance();
+      if (pos >= source.length) {
+        throw new Error(`Linha ${startLine}: String não terminada|||Fechamento de aspas não encontrado.|||"Texto entre aspas"`);
+      }
+      advance();
       addToken("STRING", str, startLine, startCol);
       continue;
     }

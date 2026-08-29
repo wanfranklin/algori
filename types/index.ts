@@ -134,7 +134,7 @@ export type ExprNode =
 
 export interface LiteralNode {
   kind: "literal";
-  value: number | string | boolean;
+  value: number | string | boolean | unknown[];
   line: number;
 }
 

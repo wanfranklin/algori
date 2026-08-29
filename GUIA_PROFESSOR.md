@@ -125,6 +125,9 @@ algori --version
 
 # Mostrar ajuda
 algori --help
+
+# Atualizar o Algori
+algori --update
 ```
 
 ---

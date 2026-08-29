@@ -8,6 +8,7 @@ Linguagem de programação para aprendizado de algoritmos.
 algori programa.algori
 algori --help
 algori --version
+algori --update
 ```
 
 ## Documentação

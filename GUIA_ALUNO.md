@@ -55,6 +55,12 @@ algori --version
 
 Se mostrar a versão, está tudo certo!
 
+### Atualizar o Algori
+
+```bash
+algori --update
+```
+
 ---
 
 ## Seu Primeiro Programa

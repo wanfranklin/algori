@@ -150,9 +150,14 @@ export class Interpreter {
           // Legacy for: end is a numeric bound
           const end = this.evalExpr(node.end) as number;
           const stepValue = node.step ? (this.evalExpr(node.step) as number) : (start <= end ? 1 : -1);
+          let iterations = 0;
           for (let i = start; stepValue > 0 ? i <= end : i >= end; i += stepValue) {
+            if (iterations >= this.maxIterations) {
+              throw new Error(`Linha ${node.line}: Limite de ${this.maxIterations} iterações excedido no 'para'|||Verifique se o loop tem uma condição de parada.|||para i de 0 ate 10 faca\n  ...\nfimPara`);
+            }
             this.variables.set(node.varName, i);
             this.execBlock(node.body);
+            iterations++;
           }
         }
         break;
@@ -235,7 +240,7 @@ export class Interpreter {
     }
   }
 
-  private defaultValueForType(typeName: string | null): number | string | boolean {
+  private defaultValueForType(typeName: string | null): number | string | boolean | unknown[] {
     return defaultValueForType(typeName ?? "");
   }
 
@@ -250,7 +255,7 @@ export class Interpreter {
     switch (name) {
       case "raiz": return Math.sqrt(args[0] as number);
       case "potencia": return Math.pow(args[0] as number, args[1] as number);
-      case "modulo": return Math.abs(args[0] as number);
+      case "modulo": return (args[0] as number) % (args[1] as number);
       case "abs": return Math.abs(args[0] as number);
       case "arredondar": return Math.round(args[0] as number);
       case "tamanho": {
@@ -266,7 +271,7 @@ export class Interpreter {
       case "tipo": {
         const val = args[0];
         if (typeof val === "number") return "inteiro";
-        if (typeof val === "string") return "caractere";
+        if (typeof val === "string") return "texto";
         if (typeof val === "boolean") return "logico";
         if (Array.isArray(val)) return "vetor";
         return "nulo";
@@ -290,6 +295,12 @@ export class Interpreter {
   execBlock(nodes: ASTNode[]): void {
     for (const node of nodes) {
       this.execNode(node);
+    }
+  }
+
+  execBlockFrom(nodes: ASTNode[], startIndex: number): void {
+    for (let i = startIndex; i < nodes.length; i++) {
+      this.execNode(nodes[i]);
     }
   }
 
@@ -406,9 +417,12 @@ export class Interpreter {
         if ((right as number) === 0) throw new Error(`Linha ${line}: Divisão por zero|||Verifique se o divisor é diferente de zero.|||se (divisor != 0) entao\n  resultado = numerador div divisor\nfimSe`);
         return Math.floor((left as number) / (right as number));
       }
-      case "%": return (left as number) % (right as number);
-      case "==": return left === right;
-      case "!=": return left !== right;
+      case "%": {
+        if ((right as number) === 0) throw new Error(`Linha ${line}: Divisão por zero|||Verifique se o divisor é diferente de zero.|||se (divisor != 0) entao\n  resultado = resto % divisor\nfimSe`);
+        return (left as number) % (right as number);
+      }
+      case "==": return left == right;
+      case "!=": return left != right;
       case "<": return (left as number) < (right as number);
       case ">": return (left as number) > (right as number);
       case "<=": return (left as number) <= (right as number);
