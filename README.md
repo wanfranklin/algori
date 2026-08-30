@@ -7,9 +7,9 @@
 [![Versão](https://img.shields.io/badge/v1.0.0-blue.svg)](https://github.com/wanfranklin/algori/releases)
 [![Licença](https://img.shields.io/badge/Licença-GPL--3.0--or--later-green.svg)](LICENSE)
 [![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/wanfranklin/algori/actions)
-[![Testes](https://img.shields.io/badge/testes-51%20passando-brightgreen.svg)](https://github.com/wanfranklin/algori)
+[![Testes](https://img.shields.io/badge/testes-97%20passando-brightgreen.svg)](https://github.com/wanfranklin/algori)
 
-[Documentação](https://wanfranklin.github.io/algori/linguagem/) • [Instalação](#instalação) • [Exemplos](#exemplo) • [Guia do Professor](GUIA_PROFESSOR.md) • [Guia do Aluno](GUIA_ALUNO.md) • [Contribuindo](CONTRIBUTING.md)
+[Documentação](https://wanfranklin.github.io/algori/linguagem/) • [Instalação](#instalação) • [Exemplos](#exemplo) • [Guia do Professor](GUIA_PROFESSOR.md) • [Guia do Aluno](GUIA_ALUNO.md) • [Contribuindo](CONTRIBUTING.md) • [Referência da Linguagem](REFERENCIA_LINGUAGEM.md)
 
 ---
 
@@ -244,14 +244,30 @@ console.log(interpreter.console);
 |---------|---------|
 | Variáveis tipadas | `inteiro x = 5` |
 | Constantes | `constante PI = 3.14` |
-| Arrays | `inteiro vetor[10]` |
-| Laço para | `para (inteiro i = 0; i < 10; i = i + 1) { ... }` |
+| Arrays 1D | `inteiro vetor[10]` |
+| Matrizes 2D | `real matriz[3][4]` |
+| Laço para (estilo-C) | `para (inteiro i = 0; i < 10; i = i + 1) { ... }` |
+| Laço para (legado) | `para i de 1 ate 10 { ... }` |
 | Laço enquanto | `enquanto (x < 10) { ... }` |
 | Condicionais | `se (x > 0) { ... } senao { ... }` |
-| Funções | `funcao inteiro soma(inteiro a, inteiro b) { retorne a + b }` |
+| Funções com retorno | `funcao inteiro soma(inteiro a, inteiro b) { retorne a + b }` |
 | Entrada/Saída | `mostrar(...)` / `capturar(...)` |
 | Operadores lógicos | `e`, `ou`, `nao` |
 | Divisão inteira | `a div b`, `a mod b` |
+| Break / Continue | `pare` / `continua` |
+
+---
+
+## 🐛 Correções Recentes (v1.0.0)
+
+| Bug | Descrição |
+|-----|-----------|
+| `continua` + `para` estilo-C | `continua` agora executa o incremento antes de pular para a próxima iteração |
+| `pare`/`continua` em funções | Sinais de controle que escapavam de funções agora geram `RuntimeError` |
+| Mensagem de erro duplicada | `Linha X: Linha X:` não aparece mais em erros de parse/runtime |
+| Variável local vazando | Variáveis declaradas dentro de funções não vazam mais para o escopo global |
+| Matrizes 2D | Leitura e escrita com `matriz[i][j]` funcionando com bounds check por dimensão |
+| Extensão VS Code | `console.log` substituído por output channel, tipos `node` resolvidos |
 
 ---
 
@@ -259,12 +275,14 @@ console.log(interpreter.console);
 
 ```
 algori/
-├── src/                    # Código fonte
+├── src/                    # Código fonte (tokenizer, parser, interpretador)
 ├── types/                  # Tipos TypeScript
-├── test/                   # Testes (51 testes)
+├── test/                   # Testes (97 testes)
+├── extensions/vscode/      # Extensão VS Code
 ├── docs/                   # Documentação da linguagem
 ├── scripts/                # Scripts de build
 ├── packaging/              # Pacotes para gerenciadores
+├── exemplos/               # Exemplos de código
 ├── install.sh              # Script de instalação universal
 └── package.json            # @algori/core
 ```
