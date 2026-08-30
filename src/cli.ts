@@ -3,6 +3,7 @@
 import { tokenize } from "./tokenizer.js";
 import { parse } from "./parser.js";
 import { Interpreter, InputRequestError } from "./interpreter.js";
+import { ParseError, RuntimeError } from "./errors.js";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -82,15 +83,21 @@ async function runUpdate() {
   const url = `https://github.com/wanfranklin/algori/releases/download/v${latest}/${filename}`;
 
   const currentBin = process.argv[1];
-  const tmpFile = `${currentBin}.tmp`;
+  const isWindows = process.platform === "win32";
+  const tmpFile = isWindows ? `${currentBin}.tmp` : `${currentBin}.tmp`;
 
   try {
     const { execSync } = await import("child_process");
-    execSync(`curl -fsSL -o "${tmpFile}" "${url}"`, { stdio: "inherit" });
-    execSync(`chmod +x "${tmpFile}"`, { stdio: "inherit" });
-    execSync(`mv "${tmpFile}" "${currentBin}"`, { stdio: "inherit" });
+    if (isWindows) {
+      execSync(`powershell -Command "Invoke-WebRequest -Uri '${url}' -OutFile '${tmpFile}'"`, { stdio: "inherit" });
+      execSync(`move /Y "${tmpFile}" "${currentBin}"`, { stdio: "inherit" });
+    } else {
+      execSync(`curl -fsSL -o "${tmpFile}" "${url}"`, { stdio: "inherit" });
+      execSync(`chmod +x "${tmpFile}"`, { stdio: "inherit" });
+      execSync(`mv "${tmpFile}" "${currentBin}"`, { stdio: "inherit" });
+    }
     console.log(`\nAtualizado com sucesso para v${latest}!`);
-  } catch (e) {
+  } catch {
     console.error("Erro ao baixar ou instalar a atualização.");
     try {
       const fs = await import("fs");
@@ -186,6 +193,13 @@ async function handleInput(
         interpreter.variables.set(varName, parsed);
       }
     });
+  } else if (input) {
+    interpreter.console.push({
+      id: Date.now(),
+      text: input,
+      type: "input" as const,
+      timestamp: new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", second: "2-digit", hour12: true }),
+    });
   }
 
   try {
@@ -202,13 +216,16 @@ async function handleInput(
 
 function printOutput(interpreter: Interpreter) {
   for (const line of interpreter.console) {
-    if (line.type === "output") {
+    if (line.type === "output" || line.type === "input") {
       process.stdout.write(line.text + "\n");
     }
   }
 }
 
 function formatError(err: Error): string {
+  if (err instanceof ParseError || err instanceof RuntimeError) {
+    return err.format();
+  }
   const msg = err.message;
   const parts = msg.split("|||");
   if (parts.length === 1) return msg;

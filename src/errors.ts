@@ -12,7 +12,7 @@ export class ParseError extends Error {
   }
 
   format(): string {
-    let msg = `Linha ${this.line}: ${this.message}`;
+    let msg = this.message;
     if (this.hint) msg += `|||${this.hint}`;
     if (this.example) msg += `|||${this.example}`;
     return msg;
@@ -33,7 +33,7 @@ export class RuntimeError extends Error {
   }
 
   format(): string {
-    let msg = `Linha ${this.line}: ${this.message}`;
+    let msg = this.message;
     if (this.hint) msg += `|||${this.hint}`;
     if (this.example) msg += `|||${this.example}`;
     return msg;

@@ -5,13 +5,14 @@ import type {
   FunctionDeclNode,
 } from "../types/index.js";
 import { defaultValueForType } from "./utils.js";
+import { RuntimeError } from "./errors.js";
 
 export class InputRequestError extends Error {
   prompt: string;
   args: string[];
 
   constructor(prompt: string, args: string[]) {
-    super("Input request");
+    super("Solicitação de entrada");
     this.name = "InputRequestError";
     this.prompt = prompt;
     this.args = args;
@@ -21,9 +22,23 @@ export class InputRequestError extends Error {
 export class ReturnSignal extends Error {
   value: unknown;
   constructor(value: unknown) {
-    super("return");
+    super("retorno");
     this.name = "ReturnSignal";
     this.value = value;
+  }
+}
+
+export class BreakSignal extends Error {
+  constructor() {
+    super("pare");
+    this.name = "BreakSignal";
+  }
+}
+
+export class ContinueSignal extends Error {
+  constructor() {
+    super("continua");
+    this.name = "ContinueSignal";
   }
 }
 
@@ -42,7 +57,9 @@ export class Interpreter {
   functions: Map<string, UserFunction> = new Map();
   console: ConsoleLine[] = [];
   currentLine: number = 0;
-  maxIterations: number = 10000;
+  currentExecIndex: number = 0;
+  maxIterations: number = 1000000;
+  maxLoopIterations: number = 10000;
   iterationCount: number = 0;
   outputBuffer: string = "";
   callStack: string[] = [];
@@ -53,15 +70,22 @@ export class Interpreter {
     this.iterationCount++;
 
     if (this.iterationCount > this.maxIterations) {
-      throw new Error(
-        `Linha ${node.line}: Limite de ${this.maxIterations} iterações excedido. Verifique se não há loops infinitos.`
+      throw new RuntimeError(
+        node.line,
+        `Programa excedeu o limite de ${this.maxIterations} passos de execução. Verifique se não há loops infinitos ou recursão infinita.`
       );
     }
 
     switch (node.kind) {
       case "var_decl": {
         const value = this.evalExpr(node.expr);
-        this.variables.set(node.name, value);
+        // Pre-allocate array with declared dimensions if no initializer
+        if (node.dimensions && node.dimensions.length > 0 && Array.isArray(value) && value.length === 0) {
+          const dims = node.dimensions.map((d) => this.evalExpr(d) as number);
+          this.variables.set(node.name, this.createArray(dims));
+        } else {
+          this.variables.set(node.name, value);
+        }
         if (node.isConstant) {
           this.constants.add(node.name);
         }
@@ -70,25 +94,40 @@ export class Interpreter {
       case "assign": {
         const target = node.name;
         if (this.constants.has(target)) {
-          throw new Error(`Linha ${node.line}: Não é possível alterar a constante '${target}'|||Constantes não podem ser reatribuídas.|||constante PI = 3.14\nmostrar(PI)`);
+          throw new RuntimeError(node.line, `Não é possível alterar a constante '${target}'`, 'Constantes não podem ser reatribuídas.', 'constante PI = 3.14\nmostrar(PI)');
         }
         if (!this.variables.has(target)) {
-          throw new Error(`Linha ${node.line}: Variável '${target}' não declarada|||Declare a variável antes de usar.|||inteiro ${target} = 0`);
+          throw new RuntimeError(node.line, `Variável '${target}' não declarada`, 'Declare a variável antes de usar.', `inteiro ${target} = 0`);
         }
         const value = this.evalExpr(node.expr);
         this.variables.set(target, value);
         break;
       }
       case "array_assign": {
-        const arr = this.variables.get(node.name);
-        if (!Array.isArray(arr)) {
-          throw new Error(`Linha ${node.line}: '${node.name}' não é um array|||Use um vetor para acessar por índice.|||inteiro vetor[] = {1, 2, 3}\nmostrar(vetor[0])`);
+        let current: unknown = this.variables.get(node.name);
+        if (!Array.isArray(current)) {
+          throw new RuntimeError(node.line, `'${node.name}' não é um array`, 'Use um vetor para acessar por índice.', 'inteiro vetor[3] = [1, 2, 3]\nmostrar(vetor[0])');
         }
-        const idx = this.evalExpr(node.index);
-        if (typeof idx !== "number" || !Number.isInteger(idx)) {
-          throw new Error(`Linha ${node.line}: Índice inválido|||Use um número inteiro como índice.|||vetor[0]`);
+        // Traverse to the target through all indices except the last
+        for (let d = 0; d < node.indices.length - 1; d++) {
+          const idx = this.evalExpr(node.indices[d]);
+          if (typeof idx !== "number" || !Number.isInteger(idx)) {
+            throw new RuntimeError(node.line, 'Índice inválido', 'Use um número inteiro como índice.', 'vetor[0]');
+          }
+          if (!Array.isArray(current) || idx < 0 || idx >= current.length) {
+            throw new RuntimeError(node.line, `Índice ${idx} fora dos limites (tamanho: ${Array.isArray(current) ? current.length : 0})`, `Use um índice entre 0 ${(Array.isArray(current) ? `e ${current.length - 1}` : '')}.`, `${node.name}[0]`);
+          }
+          current = current[idx];
         }
-        (arr as unknown[])[idx] = this.evalExpr(node.expr);
+        // Set value at the last index
+        const lastIdx = this.evalExpr(node.indices[node.indices.length - 1]);
+        if (typeof lastIdx !== "number" || !Number.isInteger(lastIdx)) {
+          throw new RuntimeError(node.line, 'Índice inválido', 'Use um número inteiro como índice.', 'vetor[0]');
+        }
+        if (!Array.isArray(current) || lastIdx < 0 || lastIdx >= current.length) {
+          throw new RuntimeError(node.line, `Índice ${lastIdx} fora dos limites (tamanho: ${Array.isArray(current) ? current.length : 0})`, `Use um índice entre 0 ${(Array.isArray(current) ? `e ${current.length - 1}` : '')}.`, `${node.name}[0]`);
+        }
+        (current as unknown[])[lastIdx] = this.evalExpr(node.expr);
         break;
       }
       case "print": {
@@ -125,10 +164,16 @@ export class Interpreter {
       case "while": {
         let iterations = 0;
         while (this.evalExpr(node.condition)) {
-          if (iterations >= this.maxIterations) {
-            throw new Error(`Linha ${node.line}: Limite de ${this.maxIterations} iterações excedido no 'enquanto'|||Verifique se há uma condição de saída no loop.|||enquanto (x < 10) faca\n  x = x + 1\nfimEnquanto`);
+          if (iterations >= this.maxLoopIterations) {
+            throw new RuntimeError(node.line, `Limite de ${this.maxLoopIterations} iterações excedido no 'enquanto'`, 'Verifique se há uma condição de saída no loop.', 'enquanto (x < 10) faca\n  x = x + 1\nfimEnquanto');
           }
-          this.execBlock(node.body);
+          try {
+            this.execBlock(node.body);
+          } catch (e) {
+            if (e instanceof BreakSignal) break;
+            if (e instanceof ContinueSignal) { iterations++; continue; }
+            throw e;
+          }
           iterations++;
         }
         break;
@@ -140,10 +185,21 @@ export class Interpreter {
           // C-style for: condition is a boolean expression (e.g. i < 5)
           let iterations = 0;
           while (this.evalExpr(node.condition)) {
-            if (iterations >= this.maxIterations) {
-              throw new Error(`Linha ${node.line}: Limite de ${this.maxIterations} iterações excedido no 'para'|||Verifique se o loop tem uma condição de parada.|||para (inteiro i = 0; i < 10; i = i + 1) faca\n  ...\nfimPara`);
+            if (iterations >= this.maxLoopIterations) {
+              throw new RuntimeError(node.line, `Limite de ${this.maxLoopIterations} iterações excedido no 'para'`, 'Verifique se o loop tem uma condição de parada.', 'para (inteiro i = 0; i < 10; i = i + 1) faca\n  ...\nfimPara');
             }
-            this.execBlock(node.body);
+            try {
+              this.execBlock(node.body);
+            } catch (e) {
+              if (e instanceof BreakSignal) break;
+              if (e instanceof ContinueSignal) {
+                if (node.update) this.execNode(node.update);
+                iterations++;
+                continue;
+              }
+              throw e;
+            }
+            if (node.update) this.execNode(node.update);
             iterations++;
           }
         } else {
@@ -152,11 +208,17 @@ export class Interpreter {
           const stepValue = node.step ? (this.evalExpr(node.step) as number) : (start <= end ? 1 : -1);
           let iterations = 0;
           for (let i = start; stepValue > 0 ? i <= end : i >= end; i += stepValue) {
-            if (iterations >= this.maxIterations) {
-              throw new Error(`Linha ${node.line}: Limite de ${this.maxIterations} iterações excedido no 'para'|||Verifique se o loop tem uma condição de parada.|||para i de 0 ate 10 faca\n  ...\nfimPara`);
+            if (iterations >= this.maxLoopIterations) {
+              throw new RuntimeError(node.line, `Limite de ${this.maxLoopIterations} iterações excedido no 'para'`, 'Verifique se o loop tem uma condição de parada.', 'para i de 0 ate 10 faca\n  ...\nfimPara');
             }
             this.variables.set(node.varName, i);
-            this.execBlock(node.body);
+            try {
+              this.execBlock(node.body);
+            } catch (e) {
+              if (e instanceof BreakSignal) break;
+              if (e instanceof ContinueSignal) { iterations++; continue; }
+              throw e;
+            }
             iterations++;
           }
         }
@@ -170,6 +232,12 @@ export class Interpreter {
       case "return": {
         const value = node.expr ? this.evalExpr(node.expr) : null;
         throw new ReturnSignal(value);
+      }
+      case "break": {
+        throw new BreakSignal();
+      }
+      case "continue": {
+        throw new ContinueSignal();
       }
     }
   }
@@ -188,6 +256,7 @@ export class Interpreter {
         const parts = args.map((arg) => this.formatValue(this.evalExpr(arg)));
         const text = parts.join("");
         if (callee === "escrevaln") {
+          this.flushBuffer();
           this.console.push({ id: this.nextId++, text, type: "output", timestamp: getTimestamp() });
         } else {
           this.outputBuffer += text;
@@ -210,11 +279,18 @@ export class Interpreter {
 
   private execUserFunction(func: UserFunction, args: ExprNode[], line: number): void {
     if (this.callStack.length > 50) {
-      throw new Error(`Linha ${line}: Pilha de chamadas muito profunda (recursão infinita?)|||Verifique se as chamadas recursivas têm condição de parada.|||funcao inteiro fatorial(n)\n  se (n <= 1) entao\n    retorne 1\n  senao\n    retorne n * fatorial(n - 1)\nfim`);
+      throw new RuntimeError(line, 'Pilha de chamadas muito profunda (recursão infinita?)', 'Verifique se as chamadas recursivas têm condição de parada.', 'funcao inteiro fatorial(n)\n  se (n <= 1) entao\n    retorne 1\n  senao\n    retorne n * fatorial(n - 1)\nfim');
     }
 
     const { decl } = func;
-    const savedVars = new Map(this.variables);
+
+    // Save current values of params (they may shadow globals)
+    const savedParamValues = new Map<string, unknown>();
+    for (const param of decl.params) {
+      if (this.variables.has(param.name)) {
+        savedParamValues.set(param.name, this.variables.get(param.name));
+      }
+    }
 
     // Bind arguments to parameters
     for (let i = 0; i < decl.params.length; i++) {
@@ -224,24 +300,48 @@ export class Interpreter {
     }
 
     this.callStack.push(decl.name);
+    const varKeysSnapshot = new Set(this.variables.keys());
     try {
       this.execBlock(decl.body);
     } catch (e) {
       if (e instanceof ReturnSignal) {
         // Function returned a value - do nothing here, it's handled in evalExpr for call_expr
-        // For direct calls (not in expression), we can optionally push to console
+      } else if (e instanceof BreakSignal || e instanceof ContinueSignal) {
+        throw new RuntimeError(line, `'${e instanceof BreakSignal ? 'pare' : 'continua'}' usado fora de um loop`, 'O comando de controle de fluxo deve ser usado dentro de um loop (enquanto ou para).');
       } else {
         throw e;
       }
     } finally {
       this.callStack.pop();
-      // Restore variables (except the function's params)
-      this.variables = savedVars;
+      // Remove local variables created inside the function
+      for (const key of this.variables.keys()) {
+        if (!varKeysSnapshot.has(key)) {
+          this.variables.delete(key);
+        }
+      }
+      // Restore only param bindings to their previous values, preserving global mutations
+      for (const [name, oldValue] of savedParamValues) {
+        this.variables.set(name, oldValue);
+      }
+      // Remove params that didn't exist before
+      for (const param of decl.params) {
+        if (!savedParamValues.has(param.name)) {
+          this.variables.delete(param.name);
+        }
+      }
     }
   }
 
   private defaultValueForType(typeName: string | null): number | string | boolean | unknown[] {
     return defaultValueForType(typeName ?? "");
+  }
+
+  private createArray(dims: number[]): unknown {
+    const size = dims[0];
+    if (dims.length === 1) {
+      return Array.from({ length: size }, () => defaultValueForType("inteiro"));
+    }
+    return Array.from({ length: size }, () => this.createArray(dims.slice(1)));
   }
 
   private flushBuffer(): void {
@@ -262,9 +362,20 @@ export class Interpreter {
         const val = args[0];
         if (typeof val === "string") return val.length;
         if (Array.isArray(val)) return val.length;
-        throw new Error(`Linha ${line}: 'tamanho' espera texto ou vetor|||Use com uma string ou vetor.|||tamanho("olá") ou tamanho(vetor)`);
+        throw new RuntimeError(line, "'tamanho' espera texto ou vetor", 'Use com uma string ou vetor.', 'tamanho("olá") ou tamanho(vetor)');
       }
-      case "subtexto": return String(args[0]).substring(args[1] as number, args[2] as number);
+      case "subtexto": {
+        const str = String(args[0]);
+        const start = args[1] as number;
+        const end = args[2] as number;
+        if (typeof start !== "number" || !Number.isInteger(start)) {
+          throw new RuntimeError(line, "subtexto: segundo argumento deve ser um inteiro", "Use um número inteiro para a posição inicial.", 'subtexto("olá", 0, 3)');
+        }
+        if (typeof end !== "number" || !Number.isInteger(end)) {
+          throw new RuntimeError(line, "subtexto: terceiro argumento deve ser um inteiro", "Use um número inteiro para a posição final.", 'subtexto("olá", 0, 3)');
+        }
+        return str.substring(start, end);
+      }
       case "maiusculo": return String(args[0]).toUpperCase();
       case "minusculo": return String(args[0]).toLowerCase();
       case "posicao": return String(args[0]).indexOf(String(args[1]));
@@ -277,11 +388,11 @@ export class Interpreter {
         return "nulo";
       }
       case "tamanho_vetor": {
-        if (!Array.isArray(args[0])) throw new Error(`Linha ${line}: Esperado um vetor|||Use com um vetor.|||inteiro vetor[] = {1, 2, 3}\ntamanho_vetor(vetor)`);
+        if (!Array.isArray(args[0])) throw new RuntimeError(line, 'Esperado um vetor', 'Use com um vetor.', 'inteiro vetor[3] = [1, 2, 3]\ntamanho_vetor(vetor)');
         return args[0].length;
       }
       default:
-        throw new Error(`Linha ${line}: Função '${name}' não encontrada|||Verifique se a função foi declarada.|||funcao minhaFuncao()\n  ...\nfim`);
+        throw new RuntimeError(line, `Função '${name}' não encontrada`, 'Verifique se a função foi declarada.', 'funcao minhaFuncao()\n  ...\nfim');
     }
   }
 
@@ -310,7 +421,7 @@ export class Interpreter {
         return node.value;
       case "identifier": {
         if (!this.variables.has(node.name)) {
-          throw new Error(`Linha ${node.line}: Variável '${node.name}' não definida|||Declare a variável antes de usar.|||inteiro ${node.name} = 0`);
+          throw new RuntimeError(node.line, `Variável '${node.name}' não definida`, 'Declare a variável antes de usar.', `inteiro ${node.name} = 0`);
         }
         return this.variables.get(node.name);
       }
@@ -323,30 +434,35 @@ export class Interpreter {
         const operand = this.evalExpr(node.operand);
         if (node.op === "-") return -(operand as number);
         if (node.op === "!") return !operand;
-        throw new Error(`Linha ${node.line}: Operador unário desconhecido: ${node.op}|||Use "-" para negação ou "!" para negação lógica.|||-valor ou !verdadeiro`);
+        throw new RuntimeError(node.line, `Operador unário desconhecido: ${node.op}`, 'Use "-" para negação ou "!" para negação lógica.', '-valor ou !verdadeiro');
       }
       case "array":
         return node.elements.map((el) => this.evalExpr(el));
       case "array_access": {
-        const arr = this.variables.get(node.name);
-        const index = this.evalExpr(node.index) as number;
-        if (typeof arr === "string") {
-          if (index < 0 || index >= arr.length) {
-            throw new Error(
-              `Linha ${node.line}: Índice ${index} fora dos limites de '${node.name}' (tamanho: ${arr.length})|||Use um índice entre 0 e ${arr.length - 1}.|||${node.name}[0]`
-            );
+        let current: unknown = this.variables.get(node.name);
+        for (let d = 0; d < node.indices.length; d++) {
+          const idx = this.evalExpr(node.indices[d]);
+          if (typeof idx !== "number" || !Number.isInteger(idx)) {
+            throw new RuntimeError(node.line, 'Índice inválido', 'Use um número inteiro como índice.', 'vetor[0]');
           }
-          return arr[index];
+          if (typeof current === "string") {
+            if (idx < 0 || idx >= current.length) {
+              throw new RuntimeError(node.line, `Índice ${idx} fora dos limites de '${node.name}' (tamanho: ${current.length})`, `Use um índice entre 0 e ${current.length - 1}.`, `${node.name}[0]`);
+            }
+            if (d < node.indices.length - 1) {
+              throw new RuntimeError(node.line, 'Não é possível acessar caracteres de uma string com múltiplos índices');
+            }
+            return current[idx];
+          }
+          if (!Array.isArray(current)) {
+            throw new RuntimeError(node.line, `'${node.name}' não é um array ou texto`, 'Use com um vetor ou texto.', 'mostrar(vetor[0]) ou mostrar(texto[0])');
+          }
+          if (idx < 0 || idx >= current.length) {
+            throw new RuntimeError(node.line, `Índice ${idx} fora dos limites de '${node.name}' (tamanho: ${current.length})`, `Use um índice entre 0 e ${current.length - 1}.`, `${node.name}[0]`);
+          }
+          current = current[idx];
         }
-        if (!Array.isArray(arr)) {
-          throw new Error(`Linha ${node.line}: '${node.name}' não é um array ou texto|||Use com um vetor ou texto.|||mostrar(vetor[0]) ou mostrar(texto[0])`);
-        }
-        if (index < 0 || index >= arr.length) {
-          throw new Error(
-            `Linha ${node.line}: Índice ${index} fora dos limites de '${node.name}' (tamanho: ${arr.length})|||Use um índice entre 0 e ${arr.length - 1}.|||${node.name}[0]`
-          );
-        }
-        return arr[index];
+        return current;
       }
       case "call_expr": {
         // Check for user-defined functions
@@ -361,20 +477,28 @@ export class Interpreter {
         const condition = this.evalExpr(node.condition);
         if (condition) {
           return this.evalExpr(node.thenBranch);
-        } else {
+        } else if (node.elseBranch) {
           return this.evalExpr(node.elseBranch);
         }
+        return null;
       }
     }
   }
 
   private evalUserFunction(func: UserFunction, args: ExprNode[], line: number): unknown {
     if (this.callStack.length > 50) {
-      throw new Error(`Linha ${line}: Pilha de chamadas muito profunda (recursão infinita?)`);
+      throw new RuntimeError(line, 'Pilha de chamadas muito profunda (recursão infinita?)');
     }
 
     const { decl } = func;
-    const savedVars = new Map(this.variables);
+
+    // Save current values of params (they may shadow globals)
+    const savedParamValues = new Map<string, unknown>();
+    for (const param of decl.params) {
+      if (this.variables.has(param.name)) {
+        savedParamValues.set(param.name, this.variables.get(param.name));
+      }
+    }
 
     // Bind arguments to parameters
     for (let i = 0; i < decl.params.length; i++) {
@@ -384,18 +508,36 @@ export class Interpreter {
     }
 
     this.callStack.push(decl.name);
+    const varKeysSnapshot = new Set(this.variables.keys());
     let returnValue: unknown = null;
     try {
       this.execBlock(decl.body);
     } catch (e) {
       if (e instanceof ReturnSignal) {
         returnValue = e.value;
+      } else if (e instanceof BreakSignal || e instanceof ContinueSignal) {
+        throw new RuntimeError(line, `'${e instanceof BreakSignal ? 'pare' : 'continua'}' usado fora de um loop`, 'O comando de controle de fluxo deve ser usado dentro de um loop (enquanto ou para).');
       } else {
         throw e;
       }
     } finally {
       this.callStack.pop();
-      this.variables = savedVars;
+      // Remove local variables created inside the function
+      for (const key of this.variables.keys()) {
+        if (!varKeysSnapshot.has(key)) {
+          this.variables.delete(key);
+        }
+      }
+      // Restore only param bindings to their previous values, preserving global mutations
+      for (const [name, oldValue] of savedParamValues) {
+        this.variables.set(name, oldValue);
+      }
+      // Remove params that didn't exist before
+      for (const param of decl.params) {
+        if (!savedParamValues.has(param.name)) {
+          this.variables.delete(param.name);
+        }
+      }
     }
     return returnValue;
   }
@@ -410,15 +552,15 @@ export class Interpreter {
       case "-": return (left as number) - (right as number);
       case "*": return (left as number) * (right as number);
       case "/": {
-        if ((right as number) === 0) throw new Error(`Linha ${line}: Divisão por zero|||Verifique se o divisor é diferente de zero.|||se (divisor != 0) entao\n  resultado = numerador / divisor\nfimSe`);
+        if ((right as number) === 0) throw new RuntimeError(line, 'Divisão por zero', 'Verifique se o divisor é diferente de zero.', 'se (divisor != 0) entao\n  resultado = numerador / divisor\nfimSe');
         return (left as number) / (right as number);
       }
       case "div": {
-        if ((right as number) === 0) throw new Error(`Linha ${line}: Divisão por zero|||Verifique se o divisor é diferente de zero.|||se (divisor != 0) entao\n  resultado = numerador div divisor\nfimSe`);
+        if ((right as number) === 0) throw new RuntimeError(line, 'Divisão por zero', 'Verifique se o divisor é diferente de zero.', 'se (divisor != 0) entao\n  resultado = numerador div divisor\nfimSe');
         return Math.floor((left as number) / (right as number));
       }
       case "%": {
-        if ((right as number) === 0) throw new Error(`Linha ${line}: Divisão por zero|||Verifique se o divisor é diferente de zero.|||se (divisor != 0) entao\n  resultado = resto % divisor\nfimSe`);
+        if ((right as number) === 0) throw new RuntimeError(line, 'Divisão por zero', 'Verifique se o divisor é diferente de zero.', 'se (divisor != 0) entao\n  resultado = resto % divisor\nfimSe');
         return (left as number) % (right as number);
       }
       case "==": return left == right;
@@ -432,33 +574,31 @@ export class Interpreter {
       // Legacy word-style operators (normalized in parser, but keep for safety)
       case "e": return Boolean(left) && Boolean(right);
       case "ou": return Boolean(left) || Boolean(right);
-      default: throw new Error(`Linha ${line}: Operador binário desconhecido: ${op}|||Use operadores válidos: +, -, *, /, %, ==, !=, <, >, <=, >=, &&, ||`);
+      default: throw new RuntimeError(line, `Operador binário desconhecido: ${op}`, 'Use operadores válidos: +, -, *, /, %, ==, !=, <, >, <=, >=, &&, ||');
     }
   }
 
   run(ast: ASTNode[]): void {
     this.iterationCount = 0;
     this.outputBuffer = "";
+    this.currentExecIndex = 0;
     this.execBlock(ast);
     this.flushBuffer();
   }
 
   step(ast: ASTNode[]): ASTNode | null {
-    const currentIndex = ast.findIndex(
-      (n) => n.line === this.currentLine
-    );
-    const nextIndex = currentIndex === -1 ? 0 : currentIndex + 1;
+    if (this.currentExecIndex >= ast.length) return null;
 
-    if (nextIndex >= ast.length) return null;
-
-    const node = ast[nextIndex];
+    const node = ast[this.currentExecIndex];
     this.execNode(node);
-    return ast[nextIndex + 1] ?? null;
+    this.currentExecIndex++;
+    return this.currentExecIndex < ast.length ? ast[this.currentExecIndex] : null;
   }
 
   getState(): {
     variables: Record<string, unknown>;
     currentLine: number;
+    currentExecIndex: number;
     console: ConsoleLine[];
   } {
     const vars: Record<string, unknown> = {};
@@ -468,6 +608,7 @@ export class Interpreter {
     return {
       variables: vars,
       currentLine: this.currentLine,
+      currentExecIndex: this.currentExecIndex,
       console: [...this.console],
     };
   }
@@ -478,6 +619,7 @@ export class Interpreter {
     this.functions.clear();
     this.console = [];
     this.currentLine = 0;
+    this.currentExecIndex = 0;
     this.iterationCount = 0;
     this.outputBuffer = "";
     this.callStack = [];

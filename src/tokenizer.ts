@@ -42,6 +42,8 @@ const KEYWORDS = new Set([
   "de",
   "ate",
   "passo",
+  "pare",
+  "continua",
   // Boolean
   "verdadeiro",
   "falso",
@@ -83,6 +85,11 @@ const TOKEN_MAP: Record<string, TokenType> = {
 };
 
 export function tokenize(source: string): Token[] {
+  // Remove BOM (Byte Order Mark) if present
+  if (source.charCodeAt(0) === 0xFEFF) {
+    source = source.slice(1);
+  }
+
   const tokens: Token[] = [];
   let pos = 0;
   let line = 1;
@@ -158,18 +165,24 @@ export function tokenize(source: string): Token[] {
 
     if (ch === '"' || ch === "'") {
       const quote = advance();
-      const startLine = line;
+      const strLine = line;
       let str = "";
       while (pos < source.length && peek() !== quote) {
-        if (peek() === "\\") {
+        if (peek() === "\r") {
+          advance();
+          if (peek() === "\n") advance();
+          str += "\n";
+        } else if (peek() === "\\") {
           advance();
           if (pos >= source.length) {
-            throw new Error(`Linha ${startLine}: Sequência de escape incompleta|||Escape de string não terminado no final do arquivo.|||"Olá\\nMundo"`);
+            throw new Error(`Linha ${strLine}: Sequência de escape incompleta|||Escape de string não terminado no final do arquivo.|||"Olá\\nMundo"`);
           }
           const esc = advance();
           if (esc === "n") str += "\n";
+          else if (esc === "r") str += "\r";
           else if (esc === "t") str += "\t";
           else if (esc === "\\") str += "\\";
+          else if (esc === "0") str += "\0";
           else if (esc === quote) str += quote;
           else str += esc;
         } else {
@@ -177,10 +190,10 @@ export function tokenize(source: string): Token[] {
         }
       }
       if (pos >= source.length) {
-        throw new Error(`Linha ${startLine}: String não terminada|||Fechamento de aspas não encontrado.|||"Texto entre aspas"`);
+        throw new Error(`Linha ${strLine}: String não terminada|||Fechamento de aspas não encontrado.|||"Texto entre aspas"`);
       }
       advance();
-      addToken("STRING", str, startLine, startCol);
+      addToken("STRING", str, strLine, startCol);
       continue;
     }
 

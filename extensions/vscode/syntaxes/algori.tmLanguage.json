@@ -34,19 +34,28 @@
     "comments": {
       "patterns": [
         {
+          "match": "#.*$",
+          "name": "comment.line.hash.algori"
+        },
+        {
           "match": "//.*$",
           "name": "comment.line.double-slash.algori"
+        },
+        {
+          "begin": "/\\*",
+          "end": "\\*/",
+          "name": "comment.block.algori"
         }
       ]
     },
     "keywords": {
       "patterns": [
         {
-          "match": "\\b(se|senao|enquanto|para|funcao|retorne|constante)\\b",
+          "match": "\\b(se|senao|enquanto|para|funcao|retorne|constante|pare|continua|programa|algori|tipo|procedimento)\\b",
           "name": "keyword.control.algori"
         },
         {
-          "match": "\\b(mostrar|capturar)\\b",
+          "match": "\\b(mostrar|capturar|escreva|escrevaln|leia|ler)\\b",
           "name": "support.function.algori"
         }
       ]

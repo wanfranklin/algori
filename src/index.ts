@@ -1,6 +1,6 @@
 export { tokenize } from "./tokenizer.js";
 export { parse } from "./parser.js";
-export { Interpreter, InputRequestError, ReturnSignal } from "./interpreter.js";
+export { Interpreter, InputRequestError, ReturnSignal, BreakSignal, ContinueSignal } from "./interpreter.js";
 export { KEYWORD_DESCRIPTIONS, getKeywordInfo } from "./keywords.js";
 export type {
   Token,
@@ -16,6 +16,8 @@ export type {
   WhileNode,
   ForNode,
   ReturnNode,
+  BreakNode,
+  ContinueNode,
   FunctionDeclNode,
   FunctionParam,
   ArrayNode,

@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { tokenize } from "../src/tokenizer.js";
 import { parse } from "../src/parser.js";
+import { ParseError } from "../src/errors.js";
 
 function parseCode(code: string) {
   return parse(tokenize(code));
@@ -25,6 +26,15 @@ describe("parse", () => {
       expect(ast.length).toBeGreaterThanOrEqual(1);
       const decl = ast.find((n) => n.kind === "var_decl");
       expect(decl).toBeDefined();
+    });
+
+    it("parses 2D matrix declaration", () => {
+      const ast = parseCode('programa { real matriz[3][4] }');
+      const decl = ast.find((n) => n.kind === "var_decl");
+      expect(decl).toBeDefined();
+      if (decl?.kind === "var_decl") {
+        expect(decl.dimensions).toHaveLength(2);
+      }
     });
 
     it("parses constante", () => {
@@ -96,6 +106,22 @@ describe("parse", () => {
       const forNode = ast.find((n) => n.kind === "for");
       expect(forNode).toBeDefined();
     });
+
+    it("parses pare (break)", () => {
+      const ast = parseCode('programa { enquanto (verdadeiro) { pare } }');
+      const whileNode = ast.find((n) => n.kind === "while") as any;
+      expect(whileNode).toBeDefined();
+      const breakNode = whileNode.body.find((n: any) => n.kind === "break");
+      expect(breakNode).toBeDefined();
+    });
+
+    it("parses continua (continue)", () => {
+      const ast = parseCode('programa { enquanto (verdadeiro) { continua } }');
+      const whileNode = ast.find((n) => n.kind === "while") as any;
+      expect(whileNode).toBeDefined();
+      const continueNode = whileNode.body.find((n: any) => n.kind === "continue");
+      expect(continueNode).toBeDefined();
+    });
   });
 
   describe("functions", () => {
@@ -143,6 +169,28 @@ describe("parse", () => {
     it("parses negation", () => {
       const ast = parseCode('programa { mostrar(nao verdadeiro) }');
       expect(ast.length).toBeGreaterThanOrEqual(1);
+    });
+  });
+
+  describe("error cases", () => {
+    it("throws ParseError on invalid type", () => {
+      expect(() => parseCode('programa { invalido x = 5 }')).toThrow(ParseError);
+    });
+
+    it("throws ParseError on missing variable name", () => {
+      expect(() => parseCode('programa { funcao vazio ( ) { } }')).toThrow(ParseError);
+    });
+
+    it("throws ParseError on missing = in assignment", () => {
+      expect(() => parseCode('programa { x + 5 }')).toThrow();
+    });
+
+    it("throws ParseError on unclosed parenthesis in function call", () => {
+      expect(() => parseCode('programa { mostrar(1 }')).toThrow(ParseError);
+    });
+
+    it("throws ParseError on missing function name", () => {
+      expect(() => parseCode('programa { funcao inteiro ( ) { } }')).toThrow(ParseError);
     });
   });
 });

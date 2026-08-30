@@ -26,9 +26,20 @@ function handleInputError(e: InputRequestError) {
           const existing = interpreter!.variables.get(varName);
           if (typeof existing === "string") {
             parsed = raw;
-          } else if (raw === "verdadeiro" || raw === "true") parsed = true;
-          else if (raw === "falso" || raw === "false") parsed = false;
-          else if (!isNaN(Number(raw)) && raw !== "") parsed = Number(raw);
+          } else if (typeof existing === "boolean") {
+            if (raw === "verdadeiro" || raw === "true") parsed = true;
+            else if (raw === "falso" || raw === "false") parsed = false;
+            else parsed = Boolean(raw);
+          } else if (typeof existing === "number") {
+            if (raw === "verdadeiro" || raw === "true") parsed = 1;
+            else if (raw === "falso" || raw === "false") parsed = 0;
+            else if (!isNaN(Number(raw)) && raw !== "") parsed = Number(raw);
+            else parsed = 0;
+          } else {
+            if (raw === "verdadeiro" || raw === "true") parsed = true;
+            else if (raw === "falso" || raw === "false") parsed = false;
+            else if (!isNaN(Number(raw)) && raw !== "") parsed = Number(raw);
+          }
           interpreter.variables.set(varName, parsed);
         }
       });
@@ -36,14 +47,14 @@ function handleInputError(e: InputRequestError) {
         id: Date.now(),
         text: value,
         type: "input",
-        timestamp: new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", second: "2-digit", hour12: true }),
+        timestamp: new Date().toLocaleTimeString("pt-BR", { hour: "numeric", minute: "2-digit", second: "2-digit", hour12: false }),
       });
     } else {
       interpreter!.console.push({
         id: Date.now(),
         text: e.prompt ? e.prompt + value : value,
         type: "input",
-        timestamp: new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", second: "2-digit", hour12: true }),
+        timestamp: new Date().toLocaleTimeString("pt-BR", { hour: "numeric", minute: "2-digit", second: "2-digit", hour12: false }),
       });
     }
     respond({
