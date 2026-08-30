@@ -15,6 +15,7 @@ Referência completa de todas as funcionalidades, funções built-in, tipos e pl
 - [Arrays e Matrizes](#arrays-e-matrizes)
 - [Entrada e Saída](#entrada-e-saída)
 - [Funções Built-in](#funções-built-in)
+- [Linha de Comando (CLI)](#linha-de-comando-cli)
 - [Cabecalho do Programa](#cabecalho-do-programa)
 - [Planos de Melhoria](#planos-de-melhoria)
 
@@ -426,6 +427,48 @@ Em modo interativo, exibe prompt `> ` e aguarda entrada.
 | Função | Descrição | Exemplo | Resultado |
 |--------|-----------|---------|-----------|
 | `tamanho_vetor(vetor)` | Número de elementos | `tamanho_vetor([1,2,3])` | `3` |
+
+---
+
+## Linha de Comando (CLI)
+
+O Algori oferece subcomandos em português (e equivalents em inglês):
+
+### Subcomandos
+
+| Comando | Atalho inglês | Descrição |
+|---------|---------------|-----------|
+| `algori executar <arquivo>` | `algori run <arquivo>` | Executa um programa `.algori` |
+| `algori novo [nome]` | `algori new [nome]` | Cria um novo programa com estrutura básica |
+| `algori ajuda` | `algori help` | Mostra a ajuda completa |
+| `algori versao` | `algori version` | Mostra a versão instalada |
+| `algori atualizar` | `algori update` | Verifica e instala atualização |
+
+### Exemplos de uso
+
+```bash
+# Executar um programa
+algori executar meu_programa.algori
+
+# Criar um novo programa (cria pasta + arquivo .algori)
+algori novo ola_mundo
+
+# Ver versão
+algori versao
+
+# Atualizar
+algori atualizar
+```
+
+### Compatibilidade legado
+
+O formato antigo ainda funciona:
+
+```bash
+algori meu_programa.algori    # funciona como "algori executar"
+algori --help                 # funciona como "algori ajuda"
+algori --version              # funciona como "algori versao"
+```
 
 ---
 

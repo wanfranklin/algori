@@ -15,18 +15,40 @@ function printHelp() {
 Algori v${VERSION} — Linguagem de programação em português
 
 Uso:
-  algori <arquivo.algori>          Executar um programa
-  algori --help / -h               Mostrar esta ajuda
-  algori --version / --versao      Mostrar versão
-  algori --update / --atualizar    Verificar e instalar atualização
+  algori executar <arquivo.algori>   Executar um programa
+  algori novo [nome]                 Criar um novo programa
+  algori ajuda                       Mostrar esta ajuda
+  algori versao                      Mostrar versão
+  algori atualizar                   Verificar e instalar atualização
 
-Exemplo:
-  algori meuprograma.algori
+  algori <arquivo.algori>            Executar (atalho legado)
+
+Exemplos:
+  algori executar meuprograma.algori
+  algori novo ola_mundo
+  algori ajuda
 `);
 }
 
 function printVersion() {
   console.log(`Algori v${VERSION}`);
+}
+
+function createNewProject(name: string) {
+  const dir = path.resolve(name);
+  if (fs.existsSync(dir)) {
+    console.error(`Erro: Pasta "${name}" já existe.`);
+    process.exit(1);
+  }
+  fs.mkdirSync(dir, { recursive: true });
+  const filePath = path.join(dir, `${name}.algori`);
+  const content = `programa ${name}
+
+mostrar("Olá, ${name}!")
+`;
+  fs.writeFileSync(filePath, content, "utf-8");
+  console.log(`Programa "${name}" criado em: ${filePath}`);
+  console.log(`Execute com: algori executar ${name}/${name}.algori`);
 }
 
 function compareVersions(a: string, b: string): number {
@@ -84,7 +106,7 @@ async function runUpdate() {
 
   const currentBin = process.argv[1];
   const isWindows = process.platform === "win32";
-  const tmpFile = isWindows ? `${currentBin}.tmp` : `${currentBin}.tmp`;
+  const tmpFile = `${currentBin}.tmp`;
 
   try {
     const { execSync } = await import("child_process");
@@ -240,22 +262,79 @@ function formatError(err: Error): string {
   return output;
 }
 
-const args = process.argv.slice(2);
+// ── CLI ──────────────────────────────────────────────────────────────────────
 
-if (args.length === 0 || args.includes("--help") || args.includes("-h")) {
+const args = process.argv.slice(2);
+const subcommands: Record<string, string> = {
+  "executar": "executar",
+  "exec": "executar",
+  "rodar": "executar",
+  "run": "executar",
+  "novo": "novo",
+  "new": "novo",
+  "criar": "novo",
+  "create": "novo",
+  "ajuda": "ajuda",
+  "help": "ajuda",
+  "versao": "versao",
+  "version": "versao",
+  "atualizar": "atualizar",
+  "update": "atualizar",
+};
+
+// Sem argumentos: mostrar ajuda
+if (args.length === 0) {
   printHelp();
   process.exit(0);
 }
 
-if (args.includes("--version") || args.includes("--versao") || args.includes("-v")) {
+const first = args[0].toLowerCase();
+
+// Flags de legado (--help, --version, etc.)
+if (first === "--help" || first === "-h") {
+  printHelp();
+  process.exit(0);
+}
+if (first === "--version" || first === "--versao" || first === "-v") {
   printVersion();
   process.exit(0);
 }
-
-if (args.includes("--update") || args.includes("--atualizar")) {
+if (first === "--update" || first === "--atualizar") {
   await runUpdate();
   process.exit(0);
 }
 
-const filePath = path.resolve(args[0]);
-runFile(filePath);
+// Subcomandos em português
+const mapped = subcommands[first];
+if (mapped) {
+  switch (mapped) {
+    case "executar": {
+      const file = args[1];
+      if (!file) {
+        console.error("Erro: Informe o arquivo .algori para executar.");
+        console.error("Uso: algori executar <arquivo.algori>");
+        process.exit(1);
+      }
+      await runFile(path.resolve(file));
+      break;
+    }
+    case "novo": {
+      const name = args[1] || "meu_programa";
+      createNewProject(name);
+      break;
+    }
+    case "ajuda":
+      printHelp();
+      break;
+    case "versao":
+      printVersion();
+      break;
+    case "atualizar":
+      await runUpdate();
+      break;
+  }
+  process.exit(0);
+}
+
+// Legado: algori <arquivo.algori> direto
+await runFile(path.resolve(first));
