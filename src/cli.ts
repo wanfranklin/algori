@@ -9,13 +9,18 @@ import * as path from "path";
 
 const VERSION = "1.0.0";
 const MAX_FILE_SIZE = 1024 * 1024; // 1MB
+const VALID_EXTENSIONS = [".algori", ".algx"];
+
+function isValidAlgoriFile(filePath: string): boolean {
+  return VALID_EXTENSIONS.some((ext) => filePath.endsWith(ext));
+}
 
 function printHelp() {
   console.log(`
 Algori v${VERSION} — Linguagem de programação em português
 
 Uso:
-  algori executar <arquivo.algori>   Executar um programa
+  algori executar <arquivo.algori>   Executar um programa (.algori ou .algx)
   algori novo [nome]                 Criar um novo programa
   algori ajuda                       Mostrar esta ajuda
   algori versao                      Mostrar versão
@@ -25,6 +30,7 @@ Uso:
 
 Exemplos:
   algori executar meuprograma.algori
+  algori executar meuprograma.algx
   algori novo ola_mundo
   algori ajuda
 `);
@@ -153,8 +159,8 @@ async function runFile(filePath: string) {
     process.exit(1);
   }
 
-  if (!filePath.endsWith(".algori")) {
-    console.error("Erro: Arquivo deve ter extensão .algori");
+  if (!isValidAlgoriFile(filePath)) {
+    console.error(`Erro: Arquivo deve ter extensão ${VALID_EXTENSIONS.join(" ou ")}`);
     process.exit(1);
   }
 
@@ -311,7 +317,7 @@ if (mapped) {
     case "executar": {
       const file = args[1];
       if (!file) {
-        console.error("Erro: Informe o arquivo .algori para executar.");
+        console.error("Erro: Informe o arquivo .algori ou .algx para executar.");
         console.error("Uso: algori executar <arquivo.algori>");
         process.exit(1);
       }
