@@ -15,20 +15,35 @@ function isValidAlgoriFile(filePath: string): boolean {
   return VALID_EXTENSIONS.some((ext) => filePath.endsWith(ext));
 }
 
+function resolveFilePath(input: string): string {
+  const resolved = path.resolve(input);
+  if (fs.existsSync(resolved) && isValidAlgoriFile(resolved)) {
+    return resolved;
+  }
+  for (const ext of VALID_EXTENSIONS) {
+    const withExt = resolved + ext;
+    if (fs.existsSync(withExt)) {
+      return withExt;
+    }
+  }
+  return resolved;
+}
+
 function printHelp() {
   console.log(`
 Algori v${VERSION} — Linguagem de programação em português
 
 Uso:
-  algori executar <arquivo.algori>   Executar um programa (.algori ou .algx)
+  algori executar <arquivo>           Executar um programa (.algori ou .algx)
   algori novo [nome]                 Criar um novo programa
   algori ajuda                       Mostrar esta ajuda
   algori versao                      Mostrar versão
   algori atualizar                   Verificar e instalar atualização
 
-  algori <arquivo.algori>            Executar (atalho legado)
+  algori <arquivo>                   Executar (atalho legado)
 
 Exemplos:
+  algori executar meuprograma
   algori executar meuprograma.algori
   algori executar meuprograma.algx
   algori novo ola_mundo
@@ -317,11 +332,11 @@ if (mapped) {
     case "executar": {
       const file = args[1];
       if (!file) {
-        console.error("Erro: Informe o arquivo .algori ou .algx para executar.");
-        console.error("Uso: algori executar <arquivo.algori>");
+        console.error("Erro: Informe o arquivo para executar.");
+        console.error("Uso: algori executar <arquivo>");
         process.exit(1);
       }
-      await runFile(path.resolve(file));
+      await runFile(resolveFilePath(file));
       break;
     }
     case "novo": {
@@ -343,4 +358,4 @@ if (mapped) {
 }
 
 // Legado: algori <arquivo.algori> direto
-await runFile(path.resolve(first));
+await runFile(resolveFilePath(first));

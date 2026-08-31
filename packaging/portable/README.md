@@ -18,7 +18,7 @@ Execute o Algori de qualquer computador Windows sem instalar nada.
 4. Execute:
 
 ```powershell
-.\algori\algori.exe arquivo.algori
+.\algori\algori.exe arquivo
 ```
 
 ## Estrutura do USB
@@ -39,7 +39,7 @@ USB/
 ```powershell
 # No PowerShell
 cd E:\
-.\algori\algori.exe .\algori\exemplos\ola.algori
+.\algori\algori.exe .\algori\exemplos\ola
 ```
 
 Saída:

@@ -438,7 +438,7 @@ O Algori oferece subcomandos em português (e equivalents em inglês):
 
 | Comando | Atalho inglês | Descrição |
 |---------|---------------|-----------|
-| `algori executar <arquivo>` | `algori run <arquivo>` | Executa um programa `.algori` |
+| `algori executar <arquivo>` | `algori run <arquivo>` | Executa um programa `.algori` ou `.algx` |
 | `algori novo [nome]` | `algori new [nome]` | Cria um novo programa com estrutura básica |
 | `algori ajuda` | `algori help` | Mostra a ajuda completa |
 | `algori versao` | `algori version` | Mostra a versão instalada |
@@ -447,8 +447,8 @@ O Algori oferece subcomandos em português (e equivalents em inglês):
 ### Exemplos de uso
 
 ```bash
-# Executar um programa
-algori executar meu_programa.algori
+# Executar um programa (extensão opcional)
+algori executar meu_programa
 
 # Criar um novo programa (cria pasta + arquivo .algori)
 algori novo ola_mundo
@@ -465,7 +465,7 @@ algori atualizar
 O formato antigo ainda funciona:
 
 ```bash
-algori meu_programa.algori    # funciona como "algori executar"
+algori meu_programa            # funciona como "algori executar"
 algori --help                 # funciona como "algori ajuda"
 algori --version              # funciona como "algori versao"
 ```

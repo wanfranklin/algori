@@ -83,7 +83,7 @@ Salve como `ola.algori` na sua pasta de documentos.
 Abra o terminal e digite:
 
 ```bash
-algori ola.algori
+algori ola
 ```
 
 Pronto! Você programou seu primeiro programa!

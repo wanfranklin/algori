@@ -118,7 +118,7 @@ Baixe o executável `algori-windows-x64.exe` em [GitHub Releases](https://github
 4. Execute:
 
 ```bash
-algori ola.algori
+algori ola
 ```
 
 ### No PowerShell
@@ -133,7 +133,7 @@ cd C:\Users\SeuUsuario\Documents
 3. Execute:
 
 ```powershell
-algori ola.algori
+algori ola
 ```
 
 ### No Prompt de Comando (cmd)
@@ -148,7 +148,7 @@ cd C:\Users\SeuUsuario\Documents
 3. Execute:
 
 ```cmd
-algori ola.algori
+algori ola
 ```
 
 > **Nota:** Após a instalação, pode ser necessário fechar e reabrir o terminal para que o comando `algori` seja reconhecido.
@@ -202,27 +202,27 @@ mostrar("Olá, Mundo!")
 ### Executar
 
 ```bash
-algori ola.algori
+algori ola
 ```
 
 ### Comandos CLI
 
 ```bash
-algori executar <arquivo.algori>   Executar um programa
+algori executar <arquivo>           Executar um programa
 algori novo [nome]                 Criar um novo programa
 algori ajuda                       Mostrar ajuda
 algori versao                      Mostrar versão
 algori atualizar                   Verificar e instalar atualização
 
 # Atalhos em inglês (funcionam também)
-algori run <arquivo.algori>
+algori run <arquivo>
 algori new [nome]
 algori help
 algori version
 algori update
 
 # Legado (ainda funciona)
-algori <arquivo.algori>
+algori <arquivo>
 ```
 
 ---

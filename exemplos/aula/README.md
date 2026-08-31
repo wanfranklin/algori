@@ -5,7 +5,7 @@ Esta pasta contém exercícios prontos para usar em sala de aula.
 ## Como Usar
 
 1. Copie o arquivo desejado para a pasta do aluno
-2. Execute com: `algori nome_do_arquivo.algori`
+2. Execute com: `algori nome_do_arquivo`
 3. Siga as instruções na tela
 
 ## Lista de Exercícios

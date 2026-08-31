@@ -5,7 +5,7 @@ Linguagem de programação para aprendizado de algoritmos.
 ## Uso
 
 ```bash
-algori programa.algori
+algori programa
 algori --help
 algori --version
 algori --update

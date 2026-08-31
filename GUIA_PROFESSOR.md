@@ -118,7 +118,7 @@ Aluno/
 
 ```bash
 # Executar programa
-algori programa.algori
+algori programa
 
 # Verificar versão
 algori --version
