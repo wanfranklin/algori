@@ -2,7 +2,7 @@
 ; Uso: iscc algori.iss (requer Inno Setup instalado)
 
 #define MyAppName "Algori"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.1.0"
 #define MyAppPublisher "Wanfranklin Alves"
 #define MyAppURL "https://github.com/wanfranklin/algori"
 #define MyAppExeName "algori.exe"
@@ -59,7 +59,7 @@ begin
 
   // Verificar versao do Windows
   GetWindowsVersionEx(OSVersion);
-  if OSVersion.dwBuildNumber < 19041 then
+  if OSVersion.BuildNumber < 19041 then
   begin
     if MsgBox('Seu Windows pode nao ser totalmente compativel.' + #13#10 +
               'Build atual: ' + IntToStr(OSVersion.dwBuildNumber) + #13#10 +

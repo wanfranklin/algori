@@ -12,8 +12,8 @@ namespace Algori.Installer
     {
         private int currentStep = 1;
         private string installPath = @"C:\Program Files\Algori";
-        private const string VERSION = "1.0.0";
-        private const string GITHUB_URL = "https://github.com/wanfranklin/algori/releases/download/v1.0.0";
+        private const string VERSION = "1.1.0";
+        private const string GITHUB_URL = "https://github.com/wanfranklin/algori/releases/download/v1.1.0";
 
         public MainWindow()
         {
@@ -48,16 +48,15 @@ namespace Algori.Installer
 
         private void BtnBrowse_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new System.Windows.Forms.FolderBrowserDialog
+            var dialog = new Microsoft.Win32.OpenFolderDialog
             {
-                Description = "Selecione o local de instalação",
-                SelectedPath = installPath,
-                ShowNewFolderButton = true
+                Title = "Selecione o local de instalação",
+                InitialDirectory = installPath
             };
 
-            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (dialog.ShowDialog() == true)
             {
-                installPath = dialog.SelectedPath;
+                installPath = dialog.FolderName;
                 TxtInstallPath.Text = installPath;
             }
         }
@@ -219,12 +218,14 @@ namespace Algori.Installer
                 string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                 string shortcutPath = Path.Combine(desktopPath, "Algori.lnk");
 
-                var shell = new WScript.Shell();
-                var shortcut = shell.CreateShortcut(shortcutPath);
-                shortcut.TargetPath = targetPath;
-                shortcut.WorkingDirectory = Path.GetDirectoryName(targetPath);
-                shortcut.Description = "Algori - Linguagem de programação em português";
-                shortcut.Save();
+                var psi = new ProcessStartInfo
+                {
+                    FileName = "powershell.exe",
+                    Arguments = $"-Command \"$ws = New-Object -ComObject WScript.Shell; $s = $ws.CreateShortcut('{shortcutPath}'); $s.TargetPath = '{targetPath}'; $s.WorkingDirectory = '{Path.GetDirectoryName(targetPath)}'; $s.Description = 'Algori - Linguagem de programação em português'; $s.Save()\"",
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+                Process.Start(psi)?.WaitForExit();
             }
             catch (Exception)
             {
@@ -246,12 +247,14 @@ namespace Algori.Installer
 
                 string shortcutPath = Path.Combine(algoriFolder, "Algori.lnk");
 
-                var shell = new WScript.Shell();
-                var shortcut = shell.CreateShortcut(shortcutPath);
-                shortcut.TargetPath = targetPath;
-                shortcut.WorkingDirectory = Path.GetDirectoryName(targetPath);
-                shortcut.Description = "Algori - Linguagem de programação em português";
-                shortcut.Save();
+                var psi = new ProcessStartInfo
+                {
+                    FileName = "powershell.exe",
+                    Arguments = $"-Command \"$ws = New-Object -ComObject WScript.Shell; $s = $ws.CreateShortcut('{shortcutPath}'); $s.TargetPath = '{targetPath}'; $s.WorkingDirectory = '{Path.GetDirectoryName(targetPath)}'; $s.Description = 'Algori - Linguagem de programação em português'; $s.Save()\"",
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+                Process.Start(psi)?.WaitForExit();
             }
             catch (Exception)
             {
