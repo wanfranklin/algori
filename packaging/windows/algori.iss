@@ -51,26 +51,9 @@ Filename: "{app}\algori.exe"; Parameters: "--version"; Description: "Verificar i
 // Verificar pre-requisitos antes da instalacao
 function CheckPrerequisites: Boolean;
 var
-  OSVersion: TWindowsVersion;
   FreeSpace: Int64;
-  ResultCode: Integer;
 begin
   Result := True;
-
-  // Verificar versao do Windows
-  GetWindowsVersionEx(OSVersion);
-  if OSVersion.BuildNumber < 19041 then
-  begin
-    if MsgBox('Seu Windows pode nao ser totalmente compativel.' + #13#10 +
-              'Build atual: ' + IntToStr(OSVersion.dwBuildNumber) + #13#10 +
-              'Build minimo recomendado: 19041' + #13#10 + #13#10 +
-              'Deseja continuar mesmo assim?',
-              mbConfirmation, MB_YESNO) = IDNO then
-    begin
-      Result := False;
-      Exit;
-    end;
-  end;
 
   // Verificar espaco em disco
   FreeSpace := DiskFree(0);
