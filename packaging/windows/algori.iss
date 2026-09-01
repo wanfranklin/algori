@@ -49,56 +49,21 @@ Filename: "{app}\algori.exe"; Parameters: "--version"; Description: "Verificar i
 
 [Code]
 // Verificar pre-requisitos antes da instalacao
-function CheckPrerequisites: Boolean;
-var
-  FreeSpace: Int64;
+function InitializeSetup: Boolean;
 begin
   Result := True;
-
-  // Verificar espaco em disco
-  FreeSpace := DiskFree(0);
-  if FreeSpace < 104857600 then  // 100 MB
-  begin
-    MsgBox('Espaco insuficiente no disco.' + #13#10 +
-           'Espaco disponivel: ' + IntToStr(FreeSpace div 1048576) + ' MB' + #13#10 +
-           'Espaco minimo necessario: 100 MB',
-           mbError, MB_OK);
-    Result := False;
-    Exit;
-  end;
 end;
 
-// Adicionar ao PATH
-procedure AddToPath;
+// Adicionar ao PATH apos instalacao
+procedure CurStepChanged(CurStep: TSetupStep);
 var
-  Path: string;
   ResultCode: Integer;
 begin
-  if IsAdminInstallMode then
-  begin
-    Exec('cmd.exe', '/c setx PATH "' + ExpandConstant('{app}') + ';%PATH%" /M', '', 0, ewNoWait, ResultCode);
-  end
-  else
-  begin
-    Exec('cmd.exe', '/c setx PATH "' + ExpandConstant('{app}') + ';%PATH%"', '', 0, ewNoWait, ResultCode);
-  end;
-end;
-
-procedure CurStepChanged(CurStep: TSetupStep);
-begin
-  if CurStep = ssInstall then
-  begin
-    if not CheckPrerequisites then
-    begin
-      Abort;
-    end;
-  end;
-
   if CurStep = ssPostInstall then
   begin
     if IsTaskSelected('addtopath') then
     begin
-      AddToPath;
+      Exec('cmd.exe', '/c setx PATH "' + ExpandConstant('{app}') + ';%PATH%"', '', 0, ewNoWait, ResultCode);
     end;
   end;
 end;
