@@ -63,7 +63,7 @@ winget install wanfranklin.algori
 #### Opção 2: Instalador Silencioso (implantação em massa)
 
 ```cmd
-algori-1.0.0-setup.exe /VERYSILENT /NORESTART /PATH="C:\Algori"
+algori-1.1.0-setup.exe /VERYSILENT /NORESTART /PATH="C:\Algori"
 ```
 
 #### Opção 3: PowerShell (executar em todas as máquinas)

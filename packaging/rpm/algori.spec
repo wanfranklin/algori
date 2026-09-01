@@ -1,5 +1,5 @@
 Name:           algori
-Version:        1.0.0
+Version:        1.1.0
 Release:        1%{?dist}
 Summary:        Linguagem de programação em português
 License:        GPLv3+
@@ -29,5 +29,5 @@ install -m 755 %{name} %{buildroot}/usr/bin/%{name}
 /usr/bin/%{name}
 
 %changelog
-* Mon Aug 25 2026 Wanfranklin <wanfranklin@users.noreply.github.com> - 1.0.0-1
+* Mon Aug 25 2026 Wanfranklin <wanfranklin@users.noreply.github.com> - 1.1.0-1
 - Initial release

@@ -1,4 +1,4 @@
-# 🚀 Melhorias Implementadas - Algori v1.0.0
+# 🚀 Melhorias Implementadas - Algori v1.1.0
 
 Data: 31 de agosto de 2026
 

@@ -84,7 +84,7 @@ Tente outra porta USB ou outro computador.
 
 ## Versão
 
-Algori v1.0.0
+Algori v1.1.0
 
 ## Licença
 

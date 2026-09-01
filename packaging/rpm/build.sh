@@ -4,7 +4,7 @@ set -e
 # Build do pacote RPM do Algori
 # Uso: ./packaging/rpm/build.sh [versão]
 
-VERSION="${1:-1.0.0}"
+VERSION="${1:-1.1.0}"
 DIST_DIR="dist"
 BUILD_DIR="packaging/rpm/build"
 

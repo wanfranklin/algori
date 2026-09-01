@@ -4,7 +4,7 @@
 
 set -e
 
-VERSION=${1:-"1.0.0"}
+VERSION=${1:-"1.1.0"}
 MANIFEST="packaging/winget/wanfranklin.algori.yaml"
 INSTALLER_URL="https://github.com/wanfranklin/algori/releases/download/v${VERSION}/algori-${VERSION}-setup.exe"
 

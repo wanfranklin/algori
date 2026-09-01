@@ -205,7 +205,7 @@
                            VerticalAlignment="Center"
                            Foreground="#6C7086"
                            FontSize="11">
-                    <Run Text="Algori v1.0.0"/>
+                    <Run Text="Algori v1.1.0"/>
                     <LineBreak/>
                     <Run Text="GPL-3.0-or-later"/>
                 </TextBlock>

@@ -4,7 +4,7 @@ set -e
 # Build do pacote Debian do Algori
 # Uso: ./packaging/debian/build.sh [versão] [arquitetura]
 
-VERSION="${1:-1.0.0}"
+VERSION="${1:-1.1.0}"
 ARCH="${2:-amd64}"
 DIST_DIR="dist"
 BUILD_DIR="packaging/debian/build"

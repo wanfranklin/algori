@@ -5,7 +5,7 @@ REM Uso: packaging\windows\build.bat [versão]
 setlocal enabledelayedexpansion
 
 set VERSION=%1
-if "%VERSION%"=="" set VERSION=1.0.0
+if "%VERSION%"=="" set VERSION=1.1.0
 
 set DIST_DIR=dist
 set SCRIPT_DIR=%~dp0

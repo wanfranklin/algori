@@ -4,7 +4,7 @@
 
 ### Linguagem de programação em português para aprendizado de algoritmos
 
-[![Versão](https://img.shields.io/badge/v1.0.0-blue.svg)](https://github.com/wanfranklin/algori/releases)
+[![Versão](https://img.shields.io/badge/v1.1.0-blue.svg)](https://github.com/wanfranklin/algori/releases)
 [![Licença](https://img.shields.io/badge/Licença-GPL--3.0--or--later-green.svg)](LICENSE)
 [![Testes](https://img.shields.io/badge/testes-passando-brightgreen.svg)](https://github.com/wanfranklin/algori/actions)
 
@@ -45,7 +45,7 @@ irm https://raw.githubusercontent.com/wanfranklin/algori/main/install.ps1 | iex
 | **Homebrew** | `brew tap wanfranklin/tap && brew install algori` |
 | **WinGet** | `winget install wanfranklin.algori` |
 | **npm** | `npm install -g @algori/core` |
-| **Debian/Ubuntu** | `sudo dpkg -i algori_1.0.0_amd64.deb` |
+| **Debian/Ubuntu** | `sudo dpkg -i algori_1.1.0_amd64.deb` |
 | **Download** | [GitHub Releases](https://github.com/wanfranklin/algori/releases) |
 
 ---
