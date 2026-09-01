@@ -176,7 +176,7 @@ Crie uma pasta `algori` na sua área de trabalho e guarde todos os seus programa
 
 ### 4. Teste sempre
 
-Execute seu programa frequentlyente para ver se está funcionando.
+Execute seu programa frequentemente para ver se está funcionando.
 
 ### 5. Leia os erros
 

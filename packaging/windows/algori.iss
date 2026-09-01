@@ -48,13 +48,13 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\algori.exe"; Tasks: desktop
 Filename: "{app}\algori.exe"; Parameters: "--version"; Description: "Verificar instalação"; Flags: runhidden waituntilterminated
 
 [Code]
-// Verificar pre-requisitos antes da instalacao
+// Verificar pré-requisitos antes da instalação
 function InitializeSetup: Boolean;
 begin
   Result := True;
 end;
 
-// Adicionar ao PATH apos instalacao
+// Adicionar ao PATH após instalação
 procedure CurStepChanged(CurStep: TSetupStep);
 var
   ResultCode: Integer;

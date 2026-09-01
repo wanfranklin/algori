@@ -1,5 +1,5 @@
 #!/bin/sh
-# Algori - Verificacao de Pre-requisitos para macOS/Linux
+# Algori - Verificação de Pré-requisitos para macOS/Linux
 # Uso: ./scripts/check-unix.sh
 
 set -eu
@@ -20,7 +20,7 @@ all_passed=true
 
 echo ""
 echo "========================================"
-echo " Verificacao de Pre-requisitos - Algori"
+echo " Verificação de Pré-requisitos - Algori"
 echo "========================================"
 echo ""
 
@@ -30,7 +30,7 @@ os=$(uname -s)
 case "$os" in
     Linux*)   os_name="Linux" ;;
     Darwin*)  os_name="macOS" ;;
-    *)        error "Sistema operacional nao suportado: $os"; all_passed=false ;;
+    *)        error "Sistema operacional não suportado: $os"; all_passed=false ;;
 esac
 info "Sistema operacional: $os_name"
 
@@ -40,68 +40,68 @@ arch=$(uname -m)
 case "$arch" in
     x86_64|amd64)   arch_name="x64" ;;
     aarch64|arm64)   arch_name="arm64" ;;
-    *)               error "Arquitetura nao suportada: $arch"; all_passed=false ;;
+    *)               error "Arquitetura não suportada: $arch"; all_passed=false ;;
 esac
-info "Arquitetura compativel: $arch_name"
+info "Arquitetura compatível: $arch_name"
 
-# 3. Verificar espaco em disco
-check "Verificando espaco em disco..."
+# 3. Verificar espaço em disco
+check "Verificando espaço em disco..."
 if command -v df >/dev/null 2>&1; then
     free_space=$(df -h / | awk 'NR==2 {print $4}')
-    info "Espaco disponivel: $free_space"
+    info "Espaço disponível: $free_space"
 else
-    warn "Nao foi possivel verificar espaco em disco"
+    warn "Não foi possível verificar espaço em disco"
 fi
 
-# 4. Verificar conexao com a internet
-check "Verificando conexao com a internet..."
+# 4. Verificar conexão com a internet
+check "Verificando conexão com a internet..."
 if command -v curl >/dev/null 2>&1; then
     if curl -fsSL --connect-timeout 5 https://github.com >/dev/null 2>&1; then
-        info "Conexao com a internet: OK"
+        info "Conexão com a internet: OK"
     else
-        warn "Sem conexao com a internet"
+        warn "Sem conexão com a internet"
         echo "  O download do Algori pode falhar."
     fi
 elif command -v wget >/dev/null 2>&1; then
     if wget -q --spider --timeout=5 https://github.com 2>/dev/null; then
-        info "Conexao com a internet: OK"
+        info "Conexão com a internet: OK"
     else
-        warn "Sem conexao com a internet"
+        warn "Sem conexão com a internet"
         echo "  O download do Algori pode falhar."
     fi
 else
-    warn "curl ou wget nao encontrado"
-    echo "  Nao foi possivel verificar conexao com a internet."
+    warn "curl ou wget não encontrado"
+    echo "  Não foi possível verificar conexão com a internet."
 fi
 
-# 5. Verificar permissoes
-check "Verificando permissoes..."
+# 5. Verificar permissões
+check "Verificando permissões..."
 if [ "$(id -u)" -eq 0 ]; then
     info "Executando como root"
 else
-    info "Executando como usuario normal"
-    echo "  Verifique se voce tem permissao para escrever no diretorio de instalacao."
+    info "Executando como usuário normal"
+    echo "  Verifique se você tem permissão para escrever no diretório de instalação."
 fi
 
-# 6. Verificar se o Algori ja esta instalado
-check "Verificando se Algori ja esta instalado..."
+# 6. Verificar se o Algori já está instalado
+check "Verificando se Algori já está instalado..."
 if command -v algori >/dev/null 2>&1; then
     installed_version=$(algori --version 2>/dev/null || echo "desconhecida")
     algori_path=$(which algori)
-    warn "Algori ja esta instalado: $installed_version"
-    echo "  Localizacao: $algori_path"
+    warn "Algori já está instalado: $installed_version"
+    echo "  Localização: $algori_path"
 else
-    info "Algori nao encontrado (instalacao necessaria)"
+    info "Algori não encontrado (instalação necessária)"
 fi
 
-# 7. Verificar dependencias do sistema (Linux)
+# 7. Verificar dependências do sistema (Linux)
 if [ "$os_name" = "Linux" ]; then
-    check "Verificando dependencias do sistema..."
+    check "Verificando dependências do sistema..."
     if command -v ldd >/dev/null 2>&1; then
         if ldd --version 2>&1 | grep -q "glibc"; then
             info "glibc detectado"
         else
-            warn "glibc nao detectado"
+            warn "glibc não detectado"
             echo "  Algori requer glibc para funcionar."
         fi
     fi
@@ -111,10 +111,10 @@ fi
 echo ""
 echo "========================================"
 if [ "$all_passed" = true ]; then
-    echo " Todos os pre-requisitos atendidos!"
-    echo " Voce pode instalar o Algori normalmente."
+    echo " Todos os pré-requisitos atendidos!"
+    echo " Você pode instalar o Algori normalmente."
 else
-    echo " Alguns pre-requisitos nao foram atendidos."
+    echo " Alguns pré-requisitos não foram atendidos."
     echo " Verifique as mensagens acima antes de instalar."
 fi
 echo "========================================"

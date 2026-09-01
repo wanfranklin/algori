@@ -16,7 +16,7 @@ Referência completa de todas as funcionalidades, funções built-in, tipos e pl
 - [Entrada e Saída](#entrada-e-saída)
 - [Funções Built-in](#funções-built-in)
 - [Linha de Comando (CLI)](#linha-de-comando-cli)
-- [Cabecalho do Programa](#cabecalho-do-programa)
+- [Cabeçalho do Programa](#cabeçalho-do-programa)
 - [Planos de Melhoria](#planos-de-melhoria)
 
 ---
@@ -432,7 +432,7 @@ Em modo interativo, exibe prompt `> ` e aguarda entrada.
 
 ## Linha de Comando (CLI)
 
-O Algori oferece subcomandos em português (e equivalents em inglês):
+O Algori oferece subcomandos em português (e equivalentes em inglês):
 
 ### Subcomandos
 
@@ -460,7 +460,7 @@ algori versao
 algori atualizar
 ```
 
-### Compatibilidade legado
+### Compatibilidade legada
 
 O formato antigo ainda funciona:
 
@@ -472,7 +472,7 @@ algori --version              # funciona como "algori versao"
 
 ---
 
-## Cabecalho do Programa
+## Cabeçalho do Programa
 
 ### Estilo moderno
 
@@ -491,13 +491,13 @@ programa MeuPrograma
 fim
 ```
 
-### Sem cabecalho
+### Sem cabeçalho
 
 ```
 mostrar("Olá!")
 ```
 
-O Algori aceita código sem cabecalho para scripts simples.
+O Algori aceita código sem cabeçalho para scripts simples.
 
 ---
 

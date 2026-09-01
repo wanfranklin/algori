@@ -1,5 +1,5 @@
 #!/bin/sh
-# Algori - Desinstalacao Limpa para macOS/Linux
+# Algori - Desinstalação Limpa para macOS/Linux
 # Uso: ./scripts/uninstall-unix.sh
 
 set -eu
@@ -18,43 +18,43 @@ check() { printf "${CYAN}[check]${NC} %s\n" "$1"; }
 
 echo ""
 echo "========================================"
-echo " Desinstalacao do Algori"
+echo " Desinstalação do Algori"
 echo "========================================"
 echo ""
 
-# 1. Verificar se o Algori esta instalado
-check "Verificando se Algori esta instalado..."
+# 1. Verificar se o Algori está instalado
+check "Verificando se Algori está instalado..."
 if command -v algori >/dev/null 2>&1; then
     installed_version=$(algori --version 2>/dev/null || echo "desconhecida")
     algori_path=$(which algori)
     info "Algori encontrado: $installed_version"
-    echo "  Localizacao: $algori_path"
+    echo "  Localização: $algori_path"
 else
-    warn "Algori nao encontrado no PATH"
+    warn "Algori não encontrado no PATH"
 fi
 
-# 2. Perguntar se o usuario tem certeza
+# 2. Perguntar se o usuário tem certeza
 echo ""
 printf "Tem certeza que deseja desinstalar o Algori? (s/N): "
 read confirm
 
 if [ "$confirm" != "s" ] && [ "$confirm" != "S" ]; then
-    info "Desinstalacao cancelada."
+    info "Desinstalação cancelada."
     exit 0
 fi
 
 echo ""
 
-# 3. Remover executavel
-check "Removendo executavel..."
+# 3. Remover executável
+check "Removendo executável..."
 if [ -f /usr/local/bin/algori ]; then
     sudo rm -f /usr/local/bin/algori
-    info "Executavel removido: /usr/local/bin/algori"
+    info "Executável removido: /usr/local/bin/algori"
 elif [ -f "$HOME/.local/bin/algori" ]; then
     rm -f "$HOME/.local/bin/algori"
-    info "Executavel removido: $HOME/.local/bin/algori"
+    info "Executável removido: $HOME/.local/bin/algori"
 else
-    warn "Executavel nao encontrado"
+    warn "Executável não encontrado"
 fi
 
 # 4. Remover do PATH (se foi adicionado manualmente)
@@ -74,13 +74,13 @@ if grep -q "algori" "$HOME/.profile" 2>/dev/null; then
     info "Removido do .profile"
 fi
 
-# 5. Remover configuracoes locais (se existirem)
-check "Removendo configuracoes locais..."
+# 5. Remover configurações locais (se existirem)
+check "Removendo configurações locais..."
 if [ -d "$HOME/.algori" ]; then
     rm -rf "$HOME/.algori"
-    info "Configuracoes removidas: $HOME/.algori"
+    info "Configurações removidas: $HOME/.algori"
 else
-    info "Nenhuma configuracao local encontrada"
+    info "Nenhuma configuração local encontrada"
 fi
 
 # 6. Verificar limpeza completa
@@ -98,7 +98,7 @@ fi
 if [ ${#remaining_files[@]} -eq 0 ]; then
     info "Limpeza completa realizada!"
 else
-    warn "Alguns arquivos nao foram removidos:"
+    warn "Alguns arquivos não foram removidos:"
     for file in "${remaining_files[@]}"; do
         echo "  - $file"
     done

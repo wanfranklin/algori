@@ -14,7 +14,7 @@ echo Build do instalador Windows v%VERSION%
 
 REM Verificar se o executável existe
 if not exist "%DIST_DIR%\algori-windows-x64.exe" (
-    echo Erro: Executavel nao encontrado: %DIST_DIR%\algori-windows-x64.exe
+    echo Erro: Executavel não encontrado: %DIST_DIR%\algori-windows-x64.exe
     echo Execute primeiro: scripts\build.sh
     exit /b 1
 )
@@ -22,7 +22,7 @@ if not exist "%DIST_DIR%\algori-windows-x64.exe" (
 REM Verificar se Inno Setup esta instalado
 where iscc >nul 2>&1
 if errorlevel 1 (
-    echo Erro: Inno Setup nao encontrado.
+    echo Erro: Inno Setup não encontrado.
     echo Baixe em: https://jrsoftware.org/isinfo.php
     exit /b 1
 )

@@ -26,7 +26,7 @@ function Get-Architecture {
     switch ($arch) {
         "AMD64" { return "x64" }
         "ARM64" { return "arm64" }
-        default { Write-Error "Arquitetura nao suportada: $arch" }
+        default { Write-Error "Arquitetura não suportada: $arch" }
     }
 }
 

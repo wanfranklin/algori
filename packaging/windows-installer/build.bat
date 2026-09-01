@@ -12,7 +12,7 @@ echo.
 REM Verificar se dotnet esta instalado
 where dotnet >nul 2>&1
 if errorlevel 1 (
-    echo Erro: .NET SDK nao encontrado.
+    echo Erro: .NET SDK não encontrado.
     echo Baixe em: https://dotnet.microsoft.com/download
     exit /b 1
 )
@@ -31,12 +31,12 @@ if errorlevel 1 (
     exit /b 1
 )
 
-REM Verificar se o executavel foi criado
+REM Verificar se o executável foi criado
 set OUTPUT_DIR=bin\Release\net8.0-windows\win-x64\publish
 set OUTPUT_FILE=%OUTPUT_DIR%\AlgoriInstaller.exe
 
 if not exist "%OUTPUT_FILE%" (
-    echo Erro: Executavel nao encontrado: %OUTPUT_FILE%
+    echo Erro: Executavel não encontrado: %OUTPUT_FILE%
     exit /b 1
 )
 
