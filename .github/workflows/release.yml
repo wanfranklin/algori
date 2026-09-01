@@ -13,7 +13,6 @@ env:
   VERSION: ${{ github.ref_name }}
 
 jobs:
-  # Build executáveis para todas as plataformas
   build:
     strategy:
       matrix:
@@ -57,7 +56,6 @@ jobs:
           name: ${{ matrix.artifact }}
           path: dist/${{ matrix.output }}
 
-  # Build instalador Windows
   build-windows-installer:
     runs-on: windows-latest
     needs: build
@@ -80,21 +78,20 @@ jobs:
 
       - name: Calculate SHA256
         id: sha256
-        shell: bash
+        shell: pwsh
         run: |
-          INSTALLER_PATH=$(ls dist/algori-*-setup.exe)
-          SHA256=$(shasum -a 256 "$INSTALLER_PATH" | cut -d' ' -f1)
-          echo "sha256=$SHA256" >> $GITHUB_OUTPUT
-          echo "SHA256: $SHA256"
+          $file = Get-ChildItem dist/algori-*-setup.exe | Select-Object -First 1
+          $hash = (Get-FileHash -Path $file.FullName -Algorithm SHA256).Hash.ToLower()
+          echo "sha256=$hash" >> $env:GITHUB_OUTPUT
+          echo "SHA256: $hash"
 
       - name: Generate WinGet manifest
         shell: bash
         run: |
-          VERSION=${{ github.ref_name }}
-          VERSION=${VERSION#v}
+          VER=${VERSION#v}
           cat > dist/wanfranklin.algori.yaml << EOF
           PackageIdentifier: wanfranklin.algori
-          PackageVersion: ${VERSION}
+          PackageVersion: ${VER}
           PackageLocale: pt-BR
           Publisher: Wanfranklin Alves
           PublisherUrl: https://github.com/wanfranklin
@@ -116,7 +113,7 @@ jobs:
           Installers:
             - Architecture: x64
               InstallerType: inno
-              InstallerUrl: https://github.com/wanfranklin/algori/releases/download/v${VERSION}/algori-${VERSION}-setup.exe
+              InstallerUrl: https://github.com/wanfranklin/algori/releases/download/v${VER}/algori-${VER}-setup.exe
               InstallerSha256: ${{ steps.sha256.outputs.sha256 }}
           ManifestType: singleton
           ManifestVersion: 1.12.0
@@ -134,7 +131,6 @@ jobs:
           name: algori-winget-manifest
           path: dist/wanfranklin.algori.yaml
 
-  # Build instalador WPF (visual)
   build-wpf-installer:
     runs-on: windows-latest
     needs: build
@@ -158,7 +154,6 @@ jobs:
           name: algori-wpf-installer
           path: packaging/windows-installer/bin/Release/net8.0-windows/win-x64/publish/AlgoriInstaller.exe
 
-  # Build pacote Debian
   build-deb:
     runs-on: ubuntu-latest
     needs: build
@@ -174,12 +169,13 @@ jobs:
 
       - name: Build .deb
         run: |
+          VER=${VERSION#v}
           mkdir -p pkg/DEBIAN pkg/usr/bin pkg/usr/share/doc/algori
           cp dist/algori-linux-x64 pkg/usr/bin/algori
           chmod 755 pkg/usr/bin/algori
           cat > pkg/DEBIAN/control << EOF
           Package: algori
-          Version: ${VERSION#v}
+          Version: ${VER}
           Section: utils
           Priority: optional
           Architecture: amd64
@@ -191,15 +187,14 @@ jobs:
            com palavras reservadas em português.
           EOF
           cp packaging/debian/usr/share/doc/algori/* pkg/usr/share/doc/algori/
-          dpkg-deb --build pkg algori_${VERSION#v}_amd64.deb
+          dpkg-deb --build pkg "algori_${VER}_amd64.deb"
 
       - name: Upload .deb
         uses: actions/upload-artifact@v5
         with:
           name: algori-deb
-          path: algori_${VERSION#v}_amd64.deb
+          path: algori_*_amd64.deb
 
-  # Build pacote RPM
   build-rpm:
     runs-on: ubuntu-latest
     needs: build
@@ -218,12 +213,13 @@ jobs:
 
       - name: Build .rpm
         run: |
+          VER=${VERSION#v}
           mkdir -p rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
           cp dist/algori-linux-x64 rpmbuild/BUILD/algori
           chmod 755 rpmbuild/BUILD/algori
           cat > rpmbuild/SPECS/algori.spec << EOF
           Name:           algori
-          Version:        ${VERSION#v}
+          Version:        ${VER}
           Release:        1%{?dist}
           Summary:        Linguagem de programação em português
           License:        GPLv3+
@@ -249,7 +245,6 @@ jobs:
           name: algori-rpm
           path: algori-*.rpm
 
-  # Criar release no GitHub
   release:
     needs: [build, build-windows-installer, build-wpf-installer, build-deb, build-rpm]
     runs-on: ubuntu-latest
@@ -276,6 +271,6 @@ jobs:
             dist/algori-windows-installer/algori-*-setup.exe
             dist/algori-wpf-installer/AlgoriInstaller.exe
             dist/algori-winget-manifest/wanfranklin.algori.yaml
-            dist/algori-deb/algori_${VERSION#v}_amd64.deb
+            dist/algori-deb/algori_*_amd64.deb
             dist/algori-rpm/algori-*.rpm
           generate_release_notes: true
