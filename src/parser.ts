@@ -490,6 +490,13 @@ class Parser {
         getErrorExample(token.value) || undefined
       );
     }
+
+    throw new ParseError(
+      token.line,
+      'Inesperado ' + friendlyTokenName(token.type) + ' "' + token.value + '"',
+      getErrorHint(token.value) || undefined,
+      getErrorExample(token.value) || undefined
+    );
   }
 
   private parseVarDecl(isConstant: boolean = false): VarDeclNode {
