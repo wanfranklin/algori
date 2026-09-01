@@ -118,13 +118,16 @@ Aluno/
 
 ```bash
 # Executar programa
-algori programa.algori
+algori programa
 
 # Verificar versão
 algori --version
 
 # Mostrar ajuda
 algori --help
+
+# Atualizar o Algori
+algori --update
 ```
 
 ---

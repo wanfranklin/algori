@@ -46,11 +46,63 @@ describe("tokenize", () => {
     expect(keywords).toHaveLength(1);
   });
 
+  it("handles line comments with #", () => {
+    const tokens = tokenize("# comentario\nmostrar(1)");
+    const keywords = tokens.filter((t) => t.type === "KEYWORD" && t.value === "mostrar");
+    expect(keywords).toHaveLength(1);
+  });
+
+  it("handles Windows \\r\\n line endings", () => {
+    const tokens = tokenize("inteiro x\r\nmostrar(x)");
+    const keywords = tokens.filter((t) => t.type === "KEYWORD" && t.value === "mostrar");
+    expect(keywords).toHaveLength(1);
+  });
+
+  it("handles BOM at start of file", () => {
+    const tokens = tokenize("\uFEFFmostrar(1)");
+    const keywords = tokens.filter((t) => t.type === "KEYWORD" && t.value === "mostrar");
+    expect(keywords).toHaveLength(1);
+  });
+
+  it("handles escape sequences in strings", () => {
+    const tokens = tokenize('"ola\\nmundo"');
+    const str = tokens.find((t) => t.type === "STRING");
+    expect(str?.value).toBe("ola\nmundo");
+  });
+
+  it("handles \\r escape in strings", () => {
+    const tokens = tokenize('"ola\\rmundo"');
+    const str = tokens.find((t) => t.type === "STRING");
+    expect(str?.value).toBe("ola\rmundo");
+  });
+
+  it("handles \\0 escape in strings", () => {
+    const tokens = tokenize('"ola\\0mundo"');
+    const str = tokens.find((t) => t.type === "STRING");
+    expect(str?.value).toBe("ola\0mundo");
+  });
+
+  it("tokenizes break/continue keywords", () => {
+    const tokens = tokenize("pare continua");
+    const keywords = tokens.filter((t) => t.type === "KEYWORD");
+    expect(keywords).toHaveLength(2);
+    expect(keywords.map((k) => k.value)).toContain("pare");
+    expect(keywords.map((k) => k.value)).toContain("continua");
+  });
+
   it("throws on unclosed block comment", () => {
     expect(() => tokenize("/* unclosed")).toThrow();
   });
 
+  it("throws on unclosed string", () => {
+    expect(() => tokenize('"unclosed')).toThrow();
+  });
+
   it("throws on unknown characters", () => {
     expect(() => tokenize("@")).toThrow();
+  });
+
+  it("throws on incomplete escape sequence at EOF", () => {
+    expect(() => tokenize('"ola\\')).toThrow();
   });
 });

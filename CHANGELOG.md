@@ -2,10 +2,37 @@
 
 Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
-O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
-e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
+## [1.1.0] - 31/08/2026
 
-## [1.0.0] - 2026-08-25
+### Adicionado
+
+- **Modo Debug** (`--debug`): mostra cada instrução executada, call stack e variáveis em tempo real
+- **Limites de segurança**: `--timeout`, `--max-recursion`, `--max-loop-iterations`, `--max-iter`
+- **Stack traces melhorados**: erros incluem código, dica, exemplo, call stack completo e tempo decorrido
+- Subcomandos CLI em português: `algori executar`, `algori novo`, `algori ajuda`, `algori versao`, `algori atualizar`
+- Suporte à extensão `.algx` além de `.algori`
+- Scripts de atualização: `update.sh` (macOS/Linux) e `update.ps1` (Windows)
+- Auto-detect de versão nos scripts de instalação (via GitHub API)
+- `interpreter.debugLog` para acesso aos logs de debug via biblioteca
+- `ErrorContext` com callStack, sourceLine e elapsed nos erros
+
+### Corrigido
+
+- Bug de múltiplas entradas com `capturar()`
+- `pare`/`continua` escapando de funções agora gera `RuntimeError`
+- `continua` no `para` estilo-C agora executa o incremento antes de pular
+- Mensagem de erro duplicada (`Linha X: Linha X:`) removida
+- Variáveis locais vazando para escopo global corrigido
+- Matrizes 2D com bounds check por dimensão
+- `parseExpressionToString` não utilizada removida
+
+### Alterado
+
+- README simplificado (~150 linhas)
+- Scripts de instalação agora buscam versão mais recente automaticamente
+- InterpreterOptions agora inclui `maxLoopIterations`
+
+## [1.0.0] - 25/08/2026
 
 ### Adicionado
 
@@ -28,6 +55,16 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - 8 métodos de instalação (npm, curl, brew, winget, debian, rpm, windows, git)
 - Testes unitários com Vitest (51 testes)
 - Documentação da linguagem em HTML interativo
+
+### Corrigido
+
+- `mostrar()` agora exibe output antes de `capturar()` (buffer flush)
+- `capturar()` não causa mais recursão infinita (resume execução)
+
+### Adicionado (CLI)
+
+- `algori --update` / `algori --atualizar` para atualização via GitHub Releases
+- `algori --versao` como alias para `algori --version`
 - Limites de segurança: tamanho de arquivo, iterações, caracteres desconhecidos
 
 ### Corrigido

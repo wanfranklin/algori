@@ -42,6 +42,8 @@ const KEYWORDS = new Set([
   "de",
   "ate",
   "passo",
+  "pare",
+  "continua",
   // Boolean
   "verdadeiro",
   "falso",
@@ -82,7 +84,42 @@ const TOKEN_MAP: Record<string, TokenType> = {
   "}": "PUNCTUATION",
 };
 
+/**
+ * Tokenizes Algori source code into a sequence of tokens.
+ *
+ * Performs lexical analysis (scanning) of the code, identifying:
+ * - Keywords (se, mostrar, funcao, etc.)
+ * - Identifiers (variable and function names)
+ * - Integer and decimal numbers
+ * - Strings between double or single quotes
+ * - Operators (+, -, *, /, ==, &&, etc.)
+ * - Punctuation symbols (parentheses, brackets, etc.)
+ * - Line breaks
+ * - Comments (// and block comments)
+ *
+ * @param {string} source - Algori source code
+ * @returns {Token[]} Array of tokens
+ * @throws {Error} If there is an unclosed block comment
+ * @throws {Error} If there is an unterminated string
+ * @throws {Error} If there is an incomplete escape sequence
+ * @throws {Error} If there is an unknown or invalid character
+ *
+ * @example
+ * const tokens = tokenize('mostrar("Ola, Mundo!")');
+ * // Returns: [
+ * //   { type: 'KEYWORD', value: 'mostrar', line: 1, col: 1 },
+ * //   { type: 'PUNCTUATION', value: '(', line: 1, col: 8 },
+ * //   { type: 'STRING', value: 'Ola, Mundo!', line: 1, col: 9 },
+ * //   { type: 'PUNCTUATION', value: ')', line: 1, col: 22 },
+ * //   { type: 'EOF', value: '', line: 1, col: 23 }
+ * // ]
+ */
 export function tokenize(source: string): Token[] {
+  // Remove BOM (Byte Order Mark) if present
+  if (source.charCodeAt(0) === 0xFEFF) {
+    source = source.slice(1);
+  }
+
   const tokens: Token[] = [];
   let pos = 0;
   let line = 1;
@@ -158,22 +195,35 @@ export function tokenize(source: string): Token[] {
 
     if (ch === '"' || ch === "'") {
       const quote = advance();
+      const strLine = line;
       let str = "";
       while (pos < source.length && peek() !== quote) {
-        if (peek() === "\\") {
+        if (peek() === "\r") {
           advance();
+          if (peek() === "\n") advance();
+          str += "\n";
+        } else if (peek() === "\\") {
+          advance();
+          if (pos >= source.length) {
+            throw new Error(`Linha ${strLine}: Sequência de escape incompleta|||Escape de string não terminado no final do arquivo.|||"Olá\\nMundo"`);
+          }
           const esc = advance();
           if (esc === "n") str += "\n";
+          else if (esc === "r") str += "\r";
           else if (esc === "t") str += "\t";
           else if (esc === "\\") str += "\\";
+          else if (esc === "0") str += "\0";
           else if (esc === quote) str += quote;
           else str += esc;
         } else {
           str += advance();
         }
       }
-      if (pos < source.length) advance();
-      addToken("STRING", str, startLine, startCol);
+      if (pos >= source.length) {
+        throw new Error(`Linha ${strLine}: String não terminada|||Fechamento de aspas não encontrado.|||"Texto entre aspas"`);
+      }
+      advance();
+      addToken("STRING", str, strLine, startCol);
       continue;
     }
 

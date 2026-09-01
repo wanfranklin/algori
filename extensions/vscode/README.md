@@ -82,7 +82,7 @@ A pasta `exemplos/aula/` contém exercícios prontos para testar.
 ### Execução não funciona
 
 1. Verifique se o Algori está instalado: `algori --version`
-2. Abra o terminal e teste manualmente: `algori arquivo.algori`
+2. Abra o terminal e teste manualmente: `algori arquivo`
 
 ## Desenvolvimento
 

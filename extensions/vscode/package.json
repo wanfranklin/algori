@@ -35,7 +35,8 @@
           "algori"
         ],
         "extensions": [
-          ".algori"
+          ".algori",
+          ".algx"
         ],
         "configuration": "./language-configuration.json"
       }

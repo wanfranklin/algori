@@ -4,9 +4,9 @@ set -eu
 # Algori - Instalador universal
 # Uso: curl -fsSL https://raw.githubusercontent.com/wanfranklin/algori/main/install.sh | sh
 
-ALGORI_VERSION="${ALGORI_VERSION:-1.0.0}"
+ALGORI_VERSION="${ALGORI_VERSION:-}"
 ALGORI_REPO="wanfranklin/algori"
-GITHUB_URL="https://github.com/${ALGORI_REPO}/releases/download/v${ALGORI_VERSION}"
+GITHUB_API="https://api.github.com/repos/${ALGORI_REPO}/releases/latest"
 
 # Cores
 RED='\033[0;31m'
@@ -21,6 +21,15 @@ error() { printf "${RED}[error]${NC} %s\n" "$1"; exit 1; }
 # Verificar dependências
 need_cmd() {
   command -v "$1" >/dev/null 2>&1 || error "Comando '$1' não encontrado. Instale-o primeiro."
+}
+
+# Buscar versão mais recente do GitHub
+fetch_latest_version() {
+  if command -v curl >/dev/null 2>&1; then
+    curl -fsSL "$GITHUB_API" 2>/dev/null | grep '"tag_name"' | sed -E 's/.*"tag_name": *"v?([^"]+)".*/\1/'
+  elif command -v wget >/dev/null 2>&1; then
+    wget -qO- "$GITHUB_API" 2>/dev/null | grep '"tag_name"' | sed -E 's/.*"tag_name": *"v?([^"]+)".*/\1/'
+  fi
 }
 
 # Detectar plataforma
@@ -55,7 +64,7 @@ get_filename() {
 # Montar URL de download
 get_url() {
   filename=$(get_filename)
-  echo "${GITHUB_URL}/${filename}"
+  echo "https://github.com/${ALGORI_REPO}/releases/download/v${ALGORI_VERSION}/${filename}"
 }
 
 # Download
@@ -116,6 +125,16 @@ cleanup() {
 }
 
 main() {
+  # Buscar versão mais recente se não especificada
+  if [ -z "$ALGORI_VERSION" ]; then
+    info "Verificando versão mais recente..."
+    ALGORI_VERSION=$(fetch_latest_version)
+    if [ -z "$ALGORI_VERSION" ]; then
+      error "Não foi possível buscar a versão mais recente. Defina ALGORI_VERSION manualmente."
+    fi
+    info "Versão mais recente: v${ALGORI_VERSION}"
+  fi
+
   info "Instalando Algori v${ALGORI_VERSION}..."
   echo ""
 

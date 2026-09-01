@@ -26,6 +26,8 @@ export type ASTNode =
   | WhileNode
   | ForNode
   | ReturnNode
+  | BreakNode
+  | ContinueNode
   | FunctionDeclNode
   | ExprNode;
 
@@ -35,6 +37,7 @@ export interface VarDeclNode {
   typeName: string | null;
   expr: ExprNode;
   isConstant: boolean;
+  dimensions?: ExprNode[];
   line: number;
 }
 
@@ -48,7 +51,7 @@ export interface AssignNode {
 export interface ArrayAssignNode {
   kind: "array_assign";
   name: string;
-  index: ExprNode;
+  indices: ExprNode[];
   expr: ExprNode;
   line: number;
 }
@@ -98,6 +101,7 @@ export interface ForNode {
   end: ExprNode;
   step: ExprNode | null;
   condition: ExprNode | null;
+  update: AssignNode | null;
   body: ASTNode[];
   line: number;
 }
@@ -105,6 +109,16 @@ export interface ForNode {
 export interface ReturnNode {
   kind: "return";
   expr: ExprNode | null;
+  line: number;
+}
+
+export interface BreakNode {
+  kind: "break";
+  line: number;
+}
+
+export interface ContinueNode {
+  kind: "continue";
   line: number;
 }
 
@@ -134,7 +148,7 @@ export type ExprNode =
 
 export interface LiteralNode {
   kind: "literal";
-  value: number | string | boolean;
+  value: number | string | boolean | unknown[];
   line: number;
 }
 
@@ -168,7 +182,7 @@ export interface ArrayNode {
 export interface ArrayAccessNode {
   kind: "array_access";
   name: string;
-  index: ExprNode;
+  indices: ExprNode[];
   line: number;
 }
 
@@ -183,7 +197,7 @@ export interface ConditionalExprNode {
   kind: "conditional_expr";
   condition: ExprNode;
   thenBranch: ExprNode;
-  elseBranch: ExprNode;
+  elseBranch: ExprNode | null;
   line: number;
 }
 
@@ -208,7 +222,7 @@ export interface ExecutionState {
 }
 
 export type WorkerMessage =
-  | { type: "run"; code: string; breakpoints?: number[] }
+  | { type: "run"; code: string; breakpoints?: number[]; debugMode?: boolean; timeoutMs?: number; maxRecursion?: number; maxLoopIterations?: number; maxIterations?: number }
   | { type: "step"; code: string; breakpoints?: number[] }
   | { type: "continue"; value?: string }
   | { type: "stop" }

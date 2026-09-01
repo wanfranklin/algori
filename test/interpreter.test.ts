@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { tokenize } from "../src/tokenizer.js";
 import { parse } from "../src/parser.js";
 import { Interpreter, InputRequestError } from "../src/interpreter.js";
+import { RuntimeError, ParseError } from "../src/errors.js";
 
 function runCode(code: string): Interpreter {
   const tokens = tokenize(code);
@@ -14,6 +15,11 @@ function runCode(code: string): Interpreter {
 function runCodeLines(code: string): string[] {
   const interp = runCode(code);
   return interp.console.filter((l) => l.type === "output").map((l) => l.text);
+}
+
+function expectRuntimeError(code: string, match: string) {
+  expect(() => runCode(code)).toThrow(RuntimeError);
+  expect(() => runCode(code)).toThrow(match);
 }
 
 describe("Interpreter", () => {
@@ -71,6 +77,45 @@ describe("Interpreter", () => {
       const lines = runCodeLines('programa { inteiro v[5]\npara (inteiro i = 0; i < 5; i = i + 1) { v[i] = i * 10 }\nmostrar(v[2]) }');
       expect(lines[0]).toBe("20");
     });
+
+    it("pre-allocates array with declared size", () => {
+      const interp = runCode('programa { inteiro vetor[5] }');
+      const arr = interp.variables.get("vetor") as number[];
+      expect(arr).toHaveLength(5);
+      expect(arr[0]).toBe(0);
+    });
+
+    it("pre-allocates 2D matrix", () => {
+      const interp = runCode('programa { real matriz[3][4] }');
+      const mat = interp.variables.get("matriz") as number[][];
+      expect(mat).toHaveLength(3);
+      expect(mat[0]).toHaveLength(4);
+    });
+
+    it("reads 2D matrix element", () => {
+      const lines = runCodeLines('programa { real matriz[3][4]\nmatriz[1][2] = 42\nmostrar(matriz[1][2]) }');
+      expect(lines[0]).toBe("42");
+    });
+
+    it("writes 2D matrix element", () => {
+      const interp = runCode('programa { real matriz[2][3]\nmatriz[0][1] = 99\nmatriz[1][2] = 77 }');
+      const mat = interp.variables.get("matriz") as number[][];
+      expect(mat[0][1]).toBe(99);
+      expect(mat[1][2]).toBe(77);
+    });
+
+    it("reads and writes 2D matrix with loop", () => {
+      const lines = runCodeLines('programa { real matriz[3][3]\npara (inteiro i = 0; i < 3; i = i + 1) {\n  para (inteiro j = 0; j < 3; j = j + 1) {\n    matriz[i][j] = i * 3 + j\n  }\n}\nmostrar(matriz[2][1]) }');
+      expect(lines[0]).toBe("7");
+    });
+
+    it("throws on 2D matrix index out of bounds (read)", () => {
+      expectRuntimeError('programa { real matriz[3][4]\nmostrar(matriz[5][2]) }', "fora dos limites");
+    });
+
+    it("throws on 2D matrix index out of bounds (write)", () => {
+      expectRuntimeError('programa { real matriz[3][4]\nmatriz[1][10] = 5 }', "fora dos limites");
+    });
   });
 
   describe("I/O", () => {
@@ -113,6 +158,21 @@ describe("Interpreter", () => {
       const lines = runCodeLines('programa { inteiro soma = 0\npara i de 1 ate 3 { soma = soma + i }\nmostrar(soma) }');
       expect(lines[0]).toBe("6");
     });
+
+    it("pare exits loop early", () => {
+      const lines = runCodeLines('programa { inteiro x = 0\nenquanto (verdadeiro) { x = x + 1\nse (x >= 5) { pare } }\nmostrar(x) }');
+      expect(lines[0]).toBe("5");
+    });
+
+    it("continua skips to next iteration", () => {
+      const lines = runCodeLines('programa { inteiro soma = 0\npara i de 1 ate 5 {\nse (i == 3) { continua }\nsoma = soma + i\n}\nmostrar(soma) }');
+      expect(lines[0]).toBe("12");
+    });
+
+    it("continua works in C-style for without skipping update", () => {
+      const lines = runCodeLines('programa { inteiro soma = 0\npara (inteiro i = 0; i < 5; i = i + 1) {\nse (i == 2) { continua }\nsoma = soma + i\n}\nmostrar(soma) }');
+      expect(lines[0]).toBe("8");
+    });
   });
 
   describe("functions", () => {
@@ -125,11 +185,101 @@ describe("Interpreter", () => {
       const lines = runCodeLines('programa { funcao inteiro soma(inteiro a, inteiro b) { retorne a + b }\nmostrar(soma(3, 4)) }');
       expect(lines[0]).toBe("7");
     });
+
+    it("preserves global variable mutations", () => {
+      const interp = runCode('programa { inteiro contador = 0\nfuncao vazio incrementar() { contador = contador + 1 }\nincrementar()\nincrementar()\nincrementar() }');
+      expect(interp.variables.get("contador")).toBe(3);
+    });
+
+    it("throws RuntimeError when pare leaks through function call", () => {
+      expectRuntimeError('programa { funcao vazio pareTudo() { pare }\ninteiro i = 0\nenquanto (i < 10) {\ni = i + 1\nse (i == 3) { pareTudo() }\n}\nmostrar(i) }', "fora de um loop");
+    });
+
+    it("throws RuntimeError when continua leaks through function call", () => {
+      expectRuntimeError('programa { funcao vazio continuaTudo() { continua }\npara i de 1 ate 5 {\nse (i == 3) { continuaTudo() }\n} }', "fora de um loop");
+    });
+
+    it("does not leak local variables to global scope", () => {
+      expectRuntimeError('programa { funcao vazio teste() { inteiro local = 99 }\nteste()\nmostrar(local) }', "não definida");
+    });
+
+    it("keeps local variables from different functions isolated", () => {
+      const lines = runCodeLines('programa { funcao vazio f1() { inteiro x = 10\nmostrar(x) }\nfuncao vazio f2() { inteiro x = 20\nmostrar(x) }\nf1()\nf2() }');
+      expect(lines[0]).toBe("10");
+      expect(lines[1]).toBe("20");
+    });
+  });
+
+  describe("error cases", () => {
+    it("throws on division by zero", () => {
+      expectRuntimeError('programa { mostrar(10 / 0) }', "Divisão por zero");
+    });
+
+    it("throws on modulo by zero", () => {
+      expectRuntimeError('programa { mostrar(10 % 0) }', "Divisão por zero");
+    });
+
+    it("throws on array index out of bounds (read)", () => {
+      expectRuntimeError('programa { inteiro vetor[3]\nmostrar(vetor[10]) }', "fora dos limites");
+    });
+
+    it("throws on array index out of bounds (write)", () => {
+      expectRuntimeError('programa { inteiro vetor[3]\nvetor[10] = 5 }', "fora dos limites");
+    });
+
+    it("throws on non-integer index", () => {
+      expectRuntimeError('programa { inteiro vetor[3]\nmostrar(vetor[1.5]) }', "Índice inválido");
+    });
+
+    it("throws on undefined variable in expression", () => {
+      expectRuntimeError('programa { mostrar(x) }', "não definida");
+    });
+
+    it("throws on function not found", () => {
+      expectRuntimeError('programa { inexistente() }', "não encontrada");
+    });
+
+    it("throws on deep recursion", () => {
+      expectRuntimeError('programa { funcao vazio f() { f() }\nf() }', "Profundidade máxima de recursão");
+    });
+
+    it("throws on infinite loop", () => {
+      expectRuntimeError('programa { enquanto (verdadeiro) { } }', "iterações");
+    });
+
+    it("throws on invalid array access", () => {
+      expectRuntimeError('programa { inteiro x = 5\nmostrar(x[0]) }', "não é um array ou texto");
+    });
+
+    it("throws on array_assign to non-array", () => {
+      expectRuntimeError('programa { inteiro x = 5\nx[0] = 10 }', "não é um array");
+    });
   });
 
   describe("iteration limit", () => {
     it("throws on infinite loop", () => {
       expect(() => runCode('programa { enquanto (verdadeiro) { } }')).toThrow("iterações");
+    });
+  });
+
+  describe("error formatting", () => {
+    it("does not duplicate 'Linha X:' prefix in RuntimeError.format()", () => {
+      const err = new RuntimeError(1, "Divisão por zero");
+      expect(err.format()).not.toMatch(/Linha \d+: Linha \d+:/);
+      expect(err.format()).toBe("Linha 1: Divisão por zero");
+    });
+
+    it("does not duplicate 'Linha X:' prefix in ParseError.format()", () => {
+      const err = new ParseError(5, "Token inesperado");
+      expect(err.format()).not.toMatch(/Linha \d+: Linha \d+:/);
+      expect(err.format()).toBe("Linha 5: Token inesperado");
+    });
+
+    it("includes hint and example without duplicating line prefix", () => {
+      const err = new RuntimeError(3, "Erro", "Dica", "exemplo");
+      const formatted = err.format();
+      expect(formatted).not.toMatch(/Linha \d+: Linha \d+:/);
+      expect(formatted).toBe("Linha 3: Erro|||Dica|||exemplo");
     });
   });
 

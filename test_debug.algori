@@ -1,0 +1,8 @@
+algori "TestDebug"
+
+// Teste de Debug Mode
+mostrar("Iniciando teste de debug...")
+inteiro x = 10
+inteiro y = 20
+inteiro z = x + y
+mostrar("Resultado: " + z)

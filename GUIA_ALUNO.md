@@ -55,6 +55,12 @@ algori --version
 
 Se mostrar a versão, está tudo certo!
 
+### Atualizar o Algori
+
+```bash
+algori --update
+```
+
 ---
 
 ## Seu Primeiro Programa
@@ -77,7 +83,7 @@ Salve como `ola.algori` na sua pasta de documentos.
 Abra o terminal e digite:
 
 ```bash
-algori ola.algori
+algori ola
 ```
 
 Pronto! Você programou seu primeiro programa!

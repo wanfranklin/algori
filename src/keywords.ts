@@ -271,6 +271,21 @@ export const KEYWORD_DESCRIPTIONS: Record<string, KeywordInfo> = {
   },
 };
 
+/**
+ * Retrieves metadata and documentation for a given Algori keyword.
+ *
+ * Useful for IDE integrations, documentation viewers, and syntax highlighting tools.
+ * Returns information such as the keyword label, description, category, and example usage.
+ *
+ * @param {string} word - The keyword name (case-insensitive)
+ * @returns {KeywordInfo | undefined} The keyword metadata, or undefined if the keyword is not found
+ *
+ * @example
+ * const info = getKeywordInfo('mostrar');
+ * console.log(info.description); // "Exibe uma mensagem (sinônimo de escreva)"
+ * console.log(info.category); // "Entrada/Saída"
+ * console.log(info.example); // 'mostrar("Resultado: ", x)'
+ */
 export function getKeywordInfo(word: string): KeywordInfo | undefined {
   return KEYWORD_DESCRIPTIONS[word.toLowerCase()];
 }

@@ -13,12 +13,15 @@ import type {
   WhileNode,
   ForNode,
   ReturnNode,
+  BreakNode,
+  ContinueNode,
   FunctionDeclNode,
   ArrayNode,
   CallExprNode,
   FunctionParam,
 } from "../types/index.js";
 import { defaultValueForType } from "./utils.js";
+import { ParseError } from "./errors.js";
 
 const TOKEN_TYPE_NAMES: Record<TokenType, string> = {
   KEYWORD: "palavra-chave",
@@ -99,9 +102,11 @@ class Parser {
       const expected = value ? `${friendlyTokenName(type)} "${value}"` : friendlyTokenName(type);
       const hint = value ? getErrorHint(value) : '';
       const example = value ? getErrorExample(value) : '';
-      const hintStr = hint ? `|||${hint}${example ? `|||${example}` : ''}` : '';
-      throw new Error(
-        `Linha ${token.line}: Esperado ${expected}, mas encontrado ${friendlyTokenName(token.type)} "${token.value}"${hintStr}`
+      throw new ParseError(
+        token.line,
+        `Esperado ${expected}, mas encontrado ${friendlyTokenName(token.type)} "${token.value}"`,
+        hint || undefined,
+        example || undefined
       );
     }
     return this.advance();
@@ -190,8 +195,9 @@ class Parser {
       const nameToken = this.peek();
       const name = nameToken.value;
       if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(name)) {
-        throw new Error(
-          `Linha ${nameToken.line}: Nome do programa inválido "${name}". Use apenas letras (A-Z), números (0-9) e underscores (_), sem espaços ou caracteres especiais.`
+        throw new ParseError(
+          nameToken.line,
+          `Nome do programa inválido "${name}". Use apenas letras (A-Z), números (0-9) e underscores (_), sem espaços ou caracteres especiais.`
         );
       }
       this.advance();
@@ -402,6 +408,16 @@ class Parser {
       return this.parseReturn();
     }
 
+    // pare / continua
+    if (this.peek().type === "KEYWORD" && this.peek().value === "pare") {
+      const t = this.advance();
+      return { kind: "break", line: t.line } as BreakNode;
+    }
+    if (this.peek().type === "KEYWORD" && this.peek().value === "continua") {
+      const t = this.advance();
+      return { kind: "continue", line: t.line } as ContinueNode;
+    }
+
     // I/O
     if (this.peek().type === "KEYWORD" && (this.peek().value === "escreva" || this.peek().value === "escrevaln")) {
       return this.parseEscreva();
@@ -444,9 +460,20 @@ class Parser {
         return this.parseAssign();
       }
 
-      // Array element assignment: name[expr] = expr
+      // Array element assignment: name[expr] = expr (possibly multi-dimensional)
       if (next && next.type === "PUNCTUATION" && next.value === "[") {
-        const afterBracket = this.findMatchingBracket(this.pos + 1);
+        let bracketPos = this.pos + 1;
+        let afterBracket = this.findMatchingBracket(bracketPos);
+        // Skip over chained bracket pairs: name[i][j] = ...
+        while (
+          afterBracket &&
+          afterBracket + 1 < this.tokens.length &&
+          this.tokens[afterBracket + 1]?.type === "PUNCTUATION" &&
+          this.tokens[afterBracket + 1].value === "["
+        ) {
+          bracketPos = afterBracket + 1;
+          afterBracket = this.findMatchingBracket(bracketPos);
+        }
         if (
           afterBracket &&
           this.tokens[afterBracket + 1]?.type === "OPERATOR" &&
@@ -455,31 +482,40 @@ class Parser {
           return this.parseArrayAssign();
         }
       }
-    }
-
-    throw new Error(
-      `Linha ${token.line}: Inesperado ${friendlyTokenName(token.type)} "${token.value}"|||${getErrorHint(token.value)}|||${getErrorExample(token.value)}`
-    );
+      }
+      
+      throw new ParseError(
+        token.line,
+        'Inesperado ' + friendlyTokenName(token.type) + ' "' + token.value + '"',
+        getErrorHint(token.value) || undefined,
+        getErrorExample(token.value) || undefined
+      );
   }
 
   private parseVarDecl(isConstant: boolean = false): VarDeclNode {
     const token = this.advance();
-    const typeName = TYPES.has(token.value) ? token.value : token.value;
+    if (!TYPES.has(token.value)) {
+      throw new ParseError(token.line, `Tipo inválido '${token.value}'`, 'Tipos válidos: inteiro, real, decimal, caractere, texto, logico, vetor, matriz', 'inteiro x = 0\nreal pi = 3.14\ntexto nome = "Algori"');
+    }
+    const typeName = token.value;
     const nameToken = this.peek();
     if (nameToken.type !== "IDENTIFIER" && nameToken.type !== "KEYWORD") {
-      throw new Error(`Linha ${nameToken.line}: Esperado nome de variável, mas encontrado ${friendlyTokenName(nameToken.type)} "${nameToken.value}"`);
+      throw new ParseError(nameToken.line, `Esperado nome de variável, mas encontrado ${friendlyTokenName(nameToken.type)} "${nameToken.value}"`);
     }
     const name = this.advance().value;
 
-    // Array declaration: tipo nome[tamanho]
+    // Array declaration: tipo nome[N] or tipo nome[N][M]
     if (this.peek().type === "PUNCTUATION" && this.peek().value === "[") {
-      this.advance();
-      this.parseExpression();
-      this.expect("PUNCTUATION", "]");
+      const dimensions: ExprNode[] = [];
+      while (this.peek().type === "PUNCTUATION" && this.peek().value === "[") {
+        this.advance();
+        dimensions.push(this.parseExpression());
+        this.expect("PUNCTUATION", "]");
+      }
       if (this.peek().type === "OPERATOR" && this.peek().value === "=") {
         this.advance();
         const expr = this.parseExpression();
-        return { kind: "var_decl", name, typeName, expr, isConstant, line: token.line };
+        return { kind: "var_decl", name, typeName, expr, isConstant, dimensions, line: token.line };
       }
       return {
         kind: "var_decl",
@@ -487,6 +523,7 @@ class Parser {
         typeName,
         expr: { kind: "array", elements: [], line: token.line },
         isConstant,
+        dimensions,
         line: token.line,
       };
     }
@@ -509,16 +546,20 @@ class Parser {
     };
   }
 
-  private defaultValueForType(typeName: string): number | string | boolean {
+  private defaultValueForType(typeName: string): number | string | boolean | unknown[] {
     return defaultValueForType(typeName);
   }
 
   private parseConstDecl(): VarDeclNode {
+    let typeName: string | null = null;
+    if (this.peek().type === "KEYWORD" && TYPES.has(this.peek().value)) {
+      typeName = this.advance().value;
+    }
     const token = this.expect("IDENTIFIER");
     const name = token.value;
     this.expect("OPERATOR", "=");
     const expr = this.parseExpression();
-    return { kind: "var_decl", name, typeName: null, expr, isConstant: true, line: token.line };
+    return { kind: "var_decl", name, typeName, expr, isConstant: true, line: token.line };
   }
 
   private parseAssign(): AssignNode {
@@ -532,25 +573,18 @@ class Parser {
   private parseArrayAssign(): ArrayAssignNode {
     const token = this.advance();
     const name = token.value;
+    const indices: ExprNode[] = [];
     this.expect("PUNCTUATION", "[");
-    const index = this.parseExpression();
+    indices.push(this.parseExpression());
     this.expect("PUNCTUATION", "]");
+    while (this.peek().type === "PUNCTUATION" && this.peek().value === "[") {
+      this.advance();
+      indices.push(this.parseExpression());
+      this.expect("PUNCTUATION", "]");
+    }
     this.expect("OPERATOR", "=");
     const expr = this.parseExpression();
-    return { kind: "array_assign", name, index, expr, line: token.line };
-  }
-
-  private parseExpressionToString(): string {
-    const token = this.peek();
-    if (token.type === "NUMBER") {
-      this.advance();
-      return token.value;
-    }
-    if (token.type === "IDENTIFIER") {
-      this.advance();
-      return token.value;
-    }
-    return this.parseExpression().toString();
+    return { kind: "array_assign", name, indices, expr, line: token.line };
   }
 
   private parseArgsInParens(): ExprNode[] {
@@ -757,7 +791,7 @@ class Parser {
       this.advance();
     }
 
-    return { kind: "for", varName, start, end, step, body, condition: null, line: token.line };
+    return { kind: "for", varName, start, end, step, body, condition: null, update: null, line: token.line };
   }
 
   private parseForCStyle(paraToken: Token): ForNode {
@@ -804,7 +838,7 @@ class Parser {
       this.advance();
     }
 
-    // Build body with update appended
+    // Build body WITHOUT update injected
     const body = this.parseBraceBlockOrEmpty();
 
     // Legacy: check for fimpara/fim
@@ -816,15 +850,15 @@ class Parser {
       this.advance();
     }
 
-    // Inject the update at the end of the body
-    body.push({
+    // Create a separate update node
+    const update: AssignNode = {
       kind: "assign",
       name: updateVar,
       expr: updateExpr,
       line: initLine,
-    });
+    };
 
-    return { kind: "for", varName, start, end: condition, step: null, condition, body, line: paraToken.line };
+    return { kind: "for", varName, start, end: condition, step: null, condition, update, body, line: paraToken.line };
   }
 
   private parseFunctionDecl(): FunctionDeclNode {
@@ -846,8 +880,11 @@ class Parser {
     } else if (this.peek().type === "KEYWORD") {
       funcName = this.advance().value;
     } else {
-      throw new Error(
-        `Linha ${this.peek().line}: Esperado nome de função, mas encontrado ${friendlyTokenName(this.peek().type)} "${this.peek().value}"|||Use um nome válido para a função.|||funcao minhaFuncao()\n  ...\nfim`
+      throw new ParseError(
+        this.peek().line,
+        `Esperado nome de função, mas encontrado ${friendlyTokenName(this.peek().type)} "${this.peek().value}"`,
+        'Use um nome válido para a função.',
+        'funcao minhaFuncao()\n  ...\nfim'
       );
     }
 
@@ -1014,23 +1051,22 @@ class Parser {
 
   private parsePostfix(): ExprNode {
     let expr = this.parsePrimary();
-    while (
-      this.peek().type === "PUNCTUATION" && this.peek().value === "["
-    ) {
-      this.advance();
-      const index = this.parseExpression();
-      this.expect("PUNCTUATION", "]");
-      if (expr.kind === "identifier") {
-        expr = {
+    if (expr.kind === "identifier") {
+      const indices: ExprNode[] = [];
+      while (
+        this.peek().type === "PUNCTUATION" && this.peek().value === "["
+      ) {
+        this.advance();
+        indices.push(this.parseExpression());
+        this.expect("PUNCTUATION", "]");
+      }
+      if (indices.length > 0) {
+        return {
           kind: "array_access",
           name: expr.name,
-          index,
+          indices,
           line: expr.line,
         };
-      } else {
-        throw new Error(
-          `Linha ${expr.line}: Acesso a array inválido|||Use o formato nome[indice] para acessar elementos.|||mostrar(vetor[0])`
-        );
       }
     }
     return expr;
@@ -1122,30 +1158,36 @@ class Parser {
         this.expect("PUNCTUATION", "}");
         this.skipNewlines();
         
-        // Parse else branch (required for inline conditional)
+        // Parse else branch (optional for inline conditional)
+        let elseBranch: ExprNode | null = null;
         if (this.isSenao()) {
           this.advance();
           this.skipNewlines();
           this.expect("PUNCTUATION", "{");
-          const elseBranch = this.parseExpression();
+          elseBranch = this.parseExpression();
           this.expect("PUNCTUATION", "}");
-          return {
-            kind: "conditional_expr",
-            condition,
-            thenBranch,
-            elseBranch,
-            line: token.line,
-          };
         }
+        return {
+          kind: "conditional_expr",
+          condition,
+          thenBranch,
+          elseBranch,
+          line: token.line,
+        };
       }
       
-      throw new Error(
-        `Linha ${token.line}: Expressão condicional inválida. Use: se (condição) { valor } senao { valor }`
+      throw new ParseError(
+        token.line,
+        'Expressão condicional inválida. Use: se (condição) { valor } ou se (condição) { valor } senao { valor }'
       );
     }
 
-    throw new Error(
-      `Linha ${token.line}: Inesperado ${friendlyTokenName(token.type)} "${token.value}"${getErrorHint(token.value)}`
+    const errToken = this.peek();
+    throw new ParseError(
+      errToken.line,
+      `Inesperado ${friendlyTokenName(errToken.type)} "${errToken.value}"`,
+      getErrorHint(errToken.value) || undefined,
+      getErrorExample(errToken.value) || undefined
     );
   }
 
@@ -1167,6 +1209,29 @@ class Parser {
   }
 }
 
+/**
+ * Parses tokens into an Abstract Syntax Tree (AST).
+ *
+ * Implements syntax analysis with recursive descent, validating:
+ * - General program structure (algori/programa, declarations, functions)
+ * - Variable and constant declarations
+ * - Expressions and operators
+ * - Control structures (if/else, while, for)
+ * - Functions and function calls
+ * - Arrays and array indexing
+ *
+ * @param {Token[]} tokens - Array of tokens from the tokenizer
+ * @returns {ASTNode[]} Array of nodes that form the program
+ * @throws {ParseError} If there is a syntax error
+ * @throws {ParseError} If there is an unexpected token
+ * @throws {ParseError} If there is invalid syntax or unclosed blocks
+ *
+ * @example
+ * const code = 'algori "test"\nmostrar(42)';
+ * const tokens = tokenize(code);
+ * const ast = parse(tokens);
+ * // ast contains the AST nodes for execution
+ */
 export function parse(tokens: Token[]): ASTNode[] {
   const parser = new Parser(tokens);
   return parser.parse();
