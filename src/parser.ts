@@ -482,7 +482,6 @@ class Parser {
           return this.parseArrayAssign();
         }
       }
-      }
       
       throw new ParseError(
         token.line,
@@ -490,6 +489,7 @@ class Parser {
         getErrorHint(token.value) || undefined,
         getErrorExample(token.value) || undefined
       );
+    }
   }
 
   private parseVarDecl(isConstant: boolean = false): VarDeclNode {
@@ -1127,6 +1127,22 @@ class Parser {
     if (token.type === "KEYWORD" && TYPES.has(token.value)) {
       this.advance();
       return { kind: "identifier", name: token.value, line: token.line };
+    }
+
+    // capturar() and ler() as expressions (return call_expr for use in assignments)
+    if (token.type === "KEYWORD" && (token.value === "capturar" || token.value === "ler")) {
+      this.advance();
+      if (this.peek().type === "PUNCTUATION" && this.peek().value === "(") {
+        this.advance();
+        const args: ExprNode[] = [];
+        if (this.peek().type !== "PUNCTUATION" || this.peek().value !== ")") {
+          args.push(this.parseExpression());
+        }
+        this.expect("PUNCTUATION", ")");
+        return { kind: "call_expr", callee: token.value, args, line: token.line } as CallExprNode;
+      }
+      // capturar without parentheses - return call_expr with no args
+      return { kind: "call_expr", callee: token.value, args: [], line: token.line } as CallExprNode;
     }
 
     if (token.type === "PUNCTUATION" && token.value === "(") {

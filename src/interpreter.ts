@@ -377,9 +377,12 @@ export class Interpreter {
         }
         break;
       }
-      case "leia": {
+      case "leia":
+      case "capturar":
+      case "ler": {
         const varNames = args.map((a) => (a.kind === "identifier" ? a.name : ""));
-        throw new InputRequestError("> ", varNames);
+        const promptText = varNames.length > 0 ? varNames[0] : "> ";
+        throw new InputRequestError(promptText, varNames);
       }
       default: {
         const result = this.callBuiltin(callee, args.map((a) => this.evalExpr(a)), line);
@@ -510,6 +513,12 @@ export class Interpreter {
       case "tamanho_vetor": {
         if (!Array.isArray(args[0])) throw new RuntimeError(line, 'Esperado um vetor', 'Use com um vetor.', 'inteiro vetor[3] = [1, 2, 3]\ntamanho_vetor(vetor)', this.makeContext());
         return args[0].length;
+      }
+      case "capturar":
+      case "ler": {
+        const varNames = args.filter((a): a is string => typeof a === "string");
+        const promptText = varNames.length > 0 ? varNames[0] : "> ";
+        throw new InputRequestError(promptText, varNames);
       }
       default:
         throw new RuntimeError(line, `Função '${name}' não encontrada`, 'Verifique se a função foi declarada.', 'funcao minhaFuncao()\n  ...\nfim', this.makeContext());

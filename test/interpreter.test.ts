@@ -136,6 +136,27 @@ describe("Interpreter", () => {
       interp.variables.set("x", 0);
       expect(() => interp.run(ast)).toThrow(InputRequestError);
     });
+
+    it("handles capturar() as expression without parentheses", () => {
+      const tokens = tokenize('programa { inteiro x = capturar }');
+      const ast = parse(tokens);
+      const interp = new Interpreter();
+      expect(() => interp.run(ast)).toThrow(InputRequestError);
+    });
+
+    it("handles capturar() as expression with parentheses", () => {
+      const tokens = tokenize('programa { inteiro x = capturar() }');
+      const ast = parse(tokens);
+      const interp = new Interpreter();
+      expect(() => interp.run(ast)).toThrow(InputRequestError);
+    });
+
+    it("handles ler() as expression", () => {
+      const tokens = tokenize('programa { inteiro x = ler() }');
+      const ast = parse(tokens);
+      const interp = new Interpreter();
+      expect(() => interp.run(ast)).toThrow(InputRequestError);
+    });
   });
 
   describe("control flow", () => {
