@@ -13,7 +13,7 @@ Extensão oficial do VSCode para a linguagem de programação Algori.
 
 ### Via VSIX (recomendado)
 
-1. Baixe o arquivo `algori-1.1.0.vsix`
+1. Baixe o arquivo `algori-1.1.1.vsix`
 2. Abra o VSCode
 3. Pressione `Ctrl+Shift+X` para abrir a aba de extensões
 4. Clique nos três pontos (`...`) e selecione "Instalar VSIX..."
@@ -115,7 +115,7 @@ npm install -g @vscode/vsce
 vsce package
 ```
 
-Isso gera o arquivo `algori-1.1.0.vsix` para distribuição.
+Isso gera o arquivo `algori-1.1.1.vsix` para distribuição.
 
 ## Licença
 

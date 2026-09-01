@@ -34,7 +34,7 @@ O instalador oferece uma experiência simples e intuitiva:
 │  • Conexão com a internet (para download)           │
 │                                                     │
 ├─────────────────────────────────────────────────────┤
-│  Algori v1.1.0              [← Voltar] [Próximo →] │
+│  Algori v1.1.1              [← Voltar] [Próximo →] │
 │  GPL-3.0-or-later                                    │
 └─────────────────────────────────────────────────────┘
 ```
@@ -104,7 +104,7 @@ windows-installer/
 Edite o arquivo `MainWindow.xaml.cs`:
 
 ```csharp
-private const string VERSION = "1.1.0";
+private const string VERSION = "1.1.1";
 ```
 
 ### Alterar URL de download
@@ -112,7 +112,7 @@ private const string VERSION = "1.1.0";
 Edite o arquivo `MainWindow.xaml.cs`:
 
 ```csharp
-private const string GITHUB_URL = "https://github.com/wanfranklin/algori/releases/download/v1.1.0";
+private const string GITHUB_URL = "https://github.com/wanfranklin/algori/releases/download/v1.1.1";
 ```
 
 ### Alterar diretório padrão

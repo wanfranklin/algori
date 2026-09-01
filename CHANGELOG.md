@@ -2,6 +2,19 @@
 
 Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.1.1] - 01/09/2026
+
+### Corrigido
+
+- `capturar()` como expressão agora funciona corretamente (ex: `inteiro opcao = capturar()`)
+- Fluxo de execução não é mais reiniciado após receber input com `capturar()` como expressão
+- Erro de sintaxe no parser (chave extra) corrigido
+
+### Adicionado
+
+- Suporte para `capturar()` e `ler()` como expressões em `parsePrimary()`
+- Mecanismo de "suspend/resume" para fluxo de execução com input
+
 ## [1.1.0] - 31/08/2026
 
 ### Adicionado
