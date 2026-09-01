@@ -42,10 +42,20 @@ Uso:
 
   algori <arquivo>                   Executar (atalho legado)
 
+Flags:
+  --debug                            Ativar modo debug (mostra cada instrução)
+  --timeout <ms>                     Tempo máximo de execução em ms (padrão: 0 = desligado)
+  --max-recursion <n>                Limite máximo de recursão (padrão: 100)
+  --max-loop-iterations <n>          Limite máximo de iterações por loop (padrão: 10000)
+  --max-iter <n>                     Limite máximo de passos totais (padrão: 1000000)
+  --help, -h                         Mostrar esta ajuda
+  --version, -v                      Mostrar versão
+
 Exemplos:
   algori executar meuprograma
-  algori executar meuprograma.algori
-  algori executar meuprograma.algx
+  algori executar meuprograma.algori --debug
+  algori executar meuprograma.algori --timeout 5000
+  algori executar meuprograma.algori --max-recursion 50
   algori novo ola_mundo
   algori ajuda
 `);
@@ -168,7 +178,15 @@ async function readLine(prompt: string): Promise<string> {
   });
 }
 
-async function runFile(filePath: string) {
+interface RunOptions {
+  debugMode?: boolean;
+  timeoutMs?: number;
+  maxRecursion?: number;
+  maxLoopIterations?: number;
+  maxIterations?: number;
+}
+
+async function runFile(filePath: string, options: RunOptions = {}) {
   if (!fs.existsSync(filePath)) {
     console.error(`Erro: Arquivo "${filePath}" não encontrado.`);
     process.exit(1);
@@ -197,10 +215,16 @@ async function runFile(filePath: string) {
     process.exit(1);
   }
 
-  const interpreter = new Interpreter();
+  const interpreter = new Interpreter({
+    debugMode: options.debugMode,
+    timeoutMs: options.timeoutMs,
+    maxCallStackDepth: options.maxRecursion,
+    maxLoopIterations: options.maxLoopIterations,
+    maxIterations: options.maxIterations,
+  });
 
   try {
-    interpreter.run(ast);
+    interpreter.run(ast, code);
   } catch (err) {
     if (err instanceof InputRequestError) {
       const resumeIndex = ast.findIndex((n) => n.line === interpreter.currentLine) + 1;
@@ -275,15 +299,58 @@ function formatError(err: Error): string {
 
   let output = parts[0];
   if (parts[1]) {
-    output += `\n  Dica: ${parts[1]}`;
+    output += `\n  Código: ${parts[1]}`;
   }
   if (parts[2]) {
-    output += `\n  Exemplo:\n    ${parts[2].replace(/\n/g, "\n    ")}`;
+    output += `\n  Dica: ${parts[2]}`;
+  }
+  if (parts[3]) {
+    output += `\n  Exemplo:\n    ${parts[3].replace(/\n/g, "\n    ")}`;
   }
   return output;
 }
 
 // ── CLI ──────────────────────────────────────────────────────────────────────
+
+function extractRunOptions(args: string[]): { file: string | null; options: RunOptions } {
+  let file: string | null = null;
+  const options: RunOptions = {};
+
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+    if (arg === "--debug") {
+      options.debugMode = true;
+    } else if (arg === "--timeout") {
+      const next = args[i + 1];
+      if (next && !next.startsWith("--")) {
+        options.timeoutMs = parseInt(next, 10);
+        i++;
+      }
+    } else if (arg === "--max-recursion") {
+      const next = args[i + 1];
+      if (next && !next.startsWith("--")) {
+        options.maxRecursion = parseInt(next, 10);
+        i++;
+      }
+    } else if (arg === "--max-loop-iterations") {
+      const next = args[i + 1];
+      if (next && !next.startsWith("--")) {
+        options.maxLoopIterations = parseInt(next, 10);
+        i++;
+      }
+    } else if (arg === "--max-iter") {
+      const next = args[i + 1];
+      if (next && !next.startsWith("--")) {
+        options.maxIterations = parseInt(next, 10);
+        i++;
+      }
+    } else if (!arg.startsWith("--") && !file) {
+      file = arg;
+    }
+  }
+
+  return { file, options };
+}
 
 const args = process.argv.slice(2);
 const subcommands: Record<string, string> = {
@@ -330,13 +397,13 @@ const mapped = subcommands[first];
 if (mapped) {
   switch (mapped) {
     case "executar": {
-      const file = args[1];
+      const { file, options } = extractRunOptions(args.slice(1));
       if (!file) {
         console.error("Erro: Informe o arquivo para executar.");
-        console.error("Uso: algori executar <arquivo>");
+        console.error("Uso: algori executar <arquivo> [--debug] [--timeout <ms>]");
         process.exit(1);
       }
-      await runFile(resolveFilePath(file));
+      await runFile(resolveFilePath(file), options);
       break;
     }
     case "novo": {
@@ -358,4 +425,7 @@ if (mapped) {
 }
 
 // Legado: algori <arquivo.algori> direto
-await runFile(resolveFilePath(first));
+const { file, options } = extractRunOptions(args);
+if (file) {
+  await runFile(resolveFilePath(file), options);
+}

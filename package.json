@@ -23,7 +23,8 @@
     "build:cli": "bun build src/cli.ts --compile --outfile dist/cli.js",
     "build:exe": "bun build src/cli.ts --compile --outfile dist/algori",
     "lint": "oxlint src/",
-    "test": "vitest run"
+    "test": "vitest run",
+    "coverage": "vitest run --coverage"
   },
   "keywords": [
     "algori",
@@ -35,6 +36,7 @@
   ],
   "devDependencies": {
     "@types/node": "^26.3.0",
+    "@vitest/coverage-v8": "^4.1.11",
     "oxlint": "^1.75.0",
     "typescript": "~6.0.2",
     "vitest": "^4.1.11"

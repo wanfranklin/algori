@@ -84,6 +84,36 @@ const TOKEN_MAP: Record<string, TokenType> = {
   "}": "PUNCTUATION",
 };
 
+/**
+ * Tokenizes Algori source code into a sequence of tokens.
+ *
+ * Performs lexical analysis (scanning) of the code, identifying:
+ * - Keywords (se, mostrar, funcao, etc.)
+ * - Identifiers (variable and function names)
+ * - Integer and decimal numbers
+ * - Strings between double or single quotes
+ * - Operators (+, -, *, /, ==, &&, etc.)
+ * - Punctuation symbols (parentheses, brackets, etc.)
+ * - Line breaks
+ * - Comments (// and block comments)
+ *
+ * @param {string} source - Algori source code
+ * @returns {Token[]} Array of tokens
+ * @throws {Error} If there is an unclosed block comment
+ * @throws {Error} If there is an unterminated string
+ * @throws {Error} If there is an incomplete escape sequence
+ * @throws {Error} If there is an unknown or invalid character
+ *
+ * @example
+ * const tokens = tokenize('mostrar("Ola, Mundo!")');
+ * // Returns: [
+ * //   { type: 'KEYWORD', value: 'mostrar', line: 1, col: 1 },
+ * //   { type: 'PUNCTUATION', value: '(', line: 1, col: 8 },
+ * //   { type: 'STRING', value: 'Ola, Mundo!', line: 1, col: 9 },
+ * //   { type: 'PUNCTUATION', value: ')', line: 1, col: 22 },
+ * //   { type: 'EOF', value: '', line: 1, col: 23 }
+ * // ]
+ */
 export function tokenize(source: string): Token[] {
   // Remove BOM (Byte Order Mark) if present
   if (source.charCodeAt(0) === 0xFEFF) {

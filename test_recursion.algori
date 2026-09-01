@@ -1,0 +1,13 @@
+algori "TestRecursion"
+
+// Teste de Recursion Limit
+funcao inteiro fib(inteiro n) {
+    se (n <= 1) {
+        retorne 1
+    }
+    retorne fib(n - 1) + fib(n - 2)
+}
+
+mostrar("Calculando Fibonacci...")
+inteiro resultado = fib(50)
+mostrar("Resultado: " + resultado)

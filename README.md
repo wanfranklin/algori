@@ -6,8 +6,9 @@
 
 [![Versão](https://img.shields.io/badge/v1.0.0-blue.svg)](https://github.com/wanfranklin/algori/releases)
 [![Licença](https://img.shields.io/badge/Licença-GPL--3.0--or--later-green.svg)](LICENSE)
-[![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/wanfranklin/algori/actions)
-[![Testes](https://img.shields.io/badge/testes-97%20passando-brightgreen.svg)](https://github.com/wanfranklin/algori)
+[![Build](https://img.shields.io/github/actions/workflow/status/wanfranklin/algori/ci.yml?branch=main&style=flat)](https://github.com/wanfranklin/algori/actions)
+[![Testes](https://img.shields.io/badge/testes-passando-brightgreen.svg)](https://github.com/wanfranklin/algori/actions)
+[![Coverage](https://img.shields.io/codecov/c/github/wanfranklin/algori?token=CODECOV_TOKEN)](https://codecov.io/gh/wanfranklin/algori)
 
 [Documentação](https://wanfranklin.github.io/algori/linguagem/) • [Instalação](#instalação) • [Exemplos](#exemplo) • [Guia do Professor](GUIA_PROFESSOR.md) • [Guia do Aluno](GUIA_ALUNO.md) • [Contribuindo](CONTRIBUTING.md) • [Referência da Linguagem](REFERENCIA_LINGUAGEM.md)
 
@@ -229,6 +230,14 @@ algori <arquivo>
 
 ## 📚 Como Biblioteca (npm)
 
+### Instalação
+
+```bash
+npm install @algori/core
+```
+
+### Exemplo básico
+
 ```typescript
 import { tokenize, parse, Interpreter } from '@algori/core';
 
@@ -246,6 +255,67 @@ interpreter.run(ast);
 console.log(interpreter.console);
 // [{ text: "Olá Mundo!", type: "output", ... }]
 ```
+
+### Exemplo com variáveis
+
+```typescript
+import { tokenize, parse, Interpreter } from '@algori/core';
+
+const code = `
+algori "Calculadora"
+inteiro a = 5
+inteiro b = 3
+mostrar("Soma: ", a + b)
+mostrar("Produto: ", a * b)
+`;
+
+const tokens = tokenize(code);
+const ast = parse(tokens);
+const interpreter = new Interpreter();
+interpreter.run(ast);
+
+interpreter.console.forEach(line => console.log(line.text));
+// Soma: 8
+// Produto: 15
+```
+
+### Exemplo com funções
+
+```typescript
+import { tokenize, parse, Interpreter } from '@algori/core';
+
+const code = `
+algori "Funcoes"
+
+funcao inteiro fatorial(inteiro n) {
+  se (n <= 1) retorne 1
+  retorne n * fatorial(n - 1)
+}
+
+mostrar("5! = ", fatorial(5))
+`;
+
+const interpreter = new Interpreter();
+const tokens = tokenize(code);
+const ast = parse(tokens);
+interpreter.run(ast);
+
+console.log(interpreter.console[0].text); // "5! = 120"
+```
+
+### API Pública
+
+| Função | Descrição |
+|--------|----------|
+| `tokenize(source)` | Converte código-fonte em tokens |
+| `parse(tokens)` | Converte tokens em AST (Abstract Syntax Tree) |
+| `new Interpreter()` | Cria uma instância do interpretador |
+| `interpreter.run(ast)` | Executa a AST |
+| `interpreter.console` | Array de linhas de saída |
+| `interpreter.variables` | Mapa de variáveis e seus valores |
+| `interpreter.functions` | Mapa de funções definidas |
+
+Veja a documentação completa em [Referência da Linguagem](REFERENCIA_LINGUAGEM.md).
 
 ---
 
@@ -302,22 +372,61 @@ algori/
 
 ## 🔧 Build & Desenvolvimento
 
+### Instalação de dependências
+
 ```bash
-npm install           # Instalar dependências
-npm run build         # Build da library
-npm run test          # Executar testes
-npm run lint          # Verificar código
-./scripts/build.sh    # Build do executável standalone
+npm install
 ```
+
+### Comandos disponíveis
+
+| Comando | Descrição |
+|---------|----------|
+| `npm run build` | Compila TypeScript para JavaScript |
+| `npm run test` | Executa testes com Vitest |
+| `npm run coverage` | Gera relatório de coverage |
+| `npm run lint` | Verifica código com oxlint |
+| `npm run build:cli` | Build CLI como bundle |
+| `npm run build:exe` | Build executável com Bun |
+
+### CI/CD Automático
+
+O projeto usa GitHub Actions para:
+- ✅ Executar testes em Python 18.x, 20.x, 22.x
+- ✅ Verificar linting com oxlint
+- ✅ Gerar relatório de coverage
+- ✅ Fazer upload para Codecov
+
+Os testes rodam automaticamente em:
+- Cada push para `main` ou `develop`
+- Cada pull request
+- Múltiplas plataformas (Linux, macOS, Windows)
+
+Ver status em: [GitHub Actions](https://github.com/wanfranklin/algori/actions)
 
 ### Release automática
 
-O workflow `.github/workflows/release.yml` gera automaticamente executáveis, `.deb` e `.rpm`.
+O workflow `.github/workflows/release.yml` gera automaticamente:
+- Executáveis (Windows, macOS, Linux)
+- Pacotes Debian (.deb) e RPM (.rpm)
+- Versão npm
+
+Para fazer um release:
 
 ```bash
 git tag v1.0.0
 git push origin v1.0.0
 ```
+
+---
+
+## 🤝 Contribuindo
+
+Contribuições são bem-vindas! Leia o [CONTRIBUTING.md](CONTRIBUTING.md) para:
+- Como configurar o ambiente
+- Padrões de código
+- Como rodar testes e linting
+- Como enviar uma pull request
 
 ---
 

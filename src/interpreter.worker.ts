@@ -112,7 +112,13 @@ self.onmessage = (e: MessageEvent<WorkerMessage>) => {
       try {
         const tokens = tokenize(msg.code);
         ast = parse(tokens);
-        interpreter = new Interpreter();
+        interpreter = new Interpreter({
+          debugMode: msg.debugMode ?? false,
+          timeoutMs: msg.timeoutMs ?? 0,
+          maxCallStackDepth: msg.maxRecursion ?? 100,
+          maxLoopIterations: msg.maxLoopIterations ?? 10000,
+          maxIterations: msg.maxIterations ?? 1000000,
+        });
         respond({
           type: "state_update",
           state: interpreter.getState(),

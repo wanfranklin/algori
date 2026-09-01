@@ -240,7 +240,7 @@ describe("Interpreter", () => {
     });
 
     it("throws on deep recursion", () => {
-      expectRuntimeError('programa { funcao vazio f() { f() }\nf() }', "Pilha de chamadas muito profunda");
+      expectRuntimeError('programa { funcao vazio f() { f() }\nf() }', "Profundidade máxima de recursão");
     });
 
     it("throws on infinite loop", () => {

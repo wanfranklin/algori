@@ -587,19 +587,6 @@ class Parser {
     return { kind: "array_assign", name, indices, expr, line: token.line };
   }
 
-  private parseExpressionToString(): string {
-    const token = this.peek();
-    if (token.type === "NUMBER") {
-      this.advance();
-      return token.value;
-    }
-    if (token.type === "IDENTIFIER") {
-      this.advance();
-      return token.value;
-    }
-    return this.parseExpression().toString();
-  }
-
   private parseArgsInParens(): ExprNode[] {
     this.expect("PUNCTUATION", "(");
     const args: ExprNode[] = [];
@@ -1222,6 +1209,29 @@ class Parser {
   }
 }
 
+/**
+ * Parses tokens into an Abstract Syntax Tree (AST).
+ *
+ * Implements syntax analysis with recursive descent, validating:
+ * - General program structure (algori/programa, declarations, functions)
+ * - Variable and constant declarations
+ * - Expressions and operators
+ * - Control structures (if/else, while, for)
+ * - Functions and function calls
+ * - Arrays and array indexing
+ *
+ * @param {Token[]} tokens - Array of tokens from the tokenizer
+ * @returns {ASTNode[]} Array of nodes that form the program
+ * @throws {ParseError} If there is a syntax error
+ * @throws {ParseError} If there is an unexpected token
+ * @throws {ParseError} If there is invalid syntax or unclosed blocks
+ *
+ * @example
+ * const code = 'algori "test"\nmostrar(42)';
+ * const tokens = tokenize(code);
+ * const ast = parse(tokens);
+ * // ast contains the AST nodes for execution
+ */
 export function parse(tokens: Token[]): ASTNode[] {
   const parser = new Parser(tokens);
   return parser.parse();

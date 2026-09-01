@@ -222,7 +222,7 @@ export interface ExecutionState {
 }
 
 export type WorkerMessage =
-  | { type: "run"; code: string; breakpoints?: number[] }
+  | { type: "run"; code: string; breakpoints?: number[]; debugMode?: boolean; timeoutMs?: number; maxRecursion?: number; maxLoopIterations?: number; maxIterations?: number }
   | { type: "step"; code: string; breakpoints?: number[] }
   | { type: "continue"; value?: string }
   | { type: "stop" }

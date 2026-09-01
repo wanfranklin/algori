@@ -1,0 +1,7 @@
+algori "TestTimeout"
+
+// Teste de Timeout - Loop infinito
+mostrar("Iniciando loop infinito...")
+enquanto (verdadeiro) {
+    inteiro x = 1
+}
