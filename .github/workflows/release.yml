@@ -37,7 +37,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Install Bun
         shell: bash
@@ -52,7 +52,7 @@ jobs:
         run: $HOME/.bun/bin/bun build src/cli.ts --compile --outfile dist/${{ matrix.output }}
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ matrix.artifact }}
           path: dist/${{ matrix.output }}
@@ -63,10 +63,10 @@ jobs:
     needs: build
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Download Windows executable
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: algori-windows-x64
           path: dist
@@ -123,13 +123,13 @@ jobs:
           EOF
 
       - name: Upload installer
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: algori-windows-installer
           path: dist/algori-*-setup.exe
 
       - name: Upload WinGet manifest
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: algori-winget-manifest
           path: dist/wanfranklin.algori.yaml
@@ -140,10 +140,10 @@ jobs:
     needs: build
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '8.0.x'
 
@@ -153,7 +153,7 @@ jobs:
           dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
 
       - name: Upload WPF installer
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: algori-wpf-installer
           path: packaging/windows-installer/bin/Release/net8.0-windows/win-x64/publish/AlgoriInstaller.exe
@@ -164,10 +164,10 @@ jobs:
     needs: build
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Download Linux x64
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: algori-linux-x64
           path: dist
@@ -194,7 +194,7 @@ jobs:
           dpkg-deb --build pkg algori_${VERSION#v}_amd64.deb
 
       - name: Upload .deb
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: algori-deb
           path: algori_${VERSION#v}_amd64.deb
@@ -205,13 +205,13 @@ jobs:
     needs: build
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Install rpm-build
         run: sudo apt-get update && sudo apt-get install -y rpm
 
       - name: Download Linux x64
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: algori-linux-x64
           path: dist
@@ -244,7 +244,7 @@ jobs:
           cp rpmbuild/RPMS/x86_64/algori-*.rpm .
 
       - name: Upload .rpm
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: algori-rpm
           path: algori-*.rpm
@@ -257,7 +257,7 @@ jobs:
 
     steps:
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           path: dist
 
