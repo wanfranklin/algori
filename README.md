@@ -193,6 +193,40 @@ curl -fsSL https://raw.githubusercontent.com/wanfranklin/algori/main/scripts/uni
 
 ---
 
+## 🔄 Atualizar
+
+### Via CLI (recomendado)
+
+```bash
+algori atualizar
+```
+
+Ou em inglês:
+
+```bash
+algori update
+```
+
+O comando verifica a versão mais recente no GitHub e baixa o executável automaticamente.
+
+### Por método de instalação
+
+| Método | Comando de atualização |
+|--------|----------------------|
+| **CLI** | `algori atualizar` |
+| **Homebrew** | `brew upgrade algori` |
+| **npm** | `npm update -g @algori/core` |
+| **WinGet** | `winget upgrade wanfranklin.algori` |
+| **Download direto** | Baixe a nova versão em [Releases](https://github.com/wanfranklin/algori/releases) |
+
+### Verificar versão atual
+
+```bash
+algori versao
+```
+
+---
+
 ## 💻 Uso
 
 ### Criar um programa
