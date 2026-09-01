@@ -209,11 +209,40 @@ algori update
 
 O comando verifica a versão mais recente no GitHub e baixa o executável automaticamente.
 
+### Via script de atualização
+
+#### macOS / Linux
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/wanfranklin/algori/main/scripts/update.sh | sh
+```
+
+#### Windows (PowerShell)
+
+```powershell
+irm https://raw.githubusercontent.com/wanfranklin/algori/main/scripts/update.ps1 | iex
+```
+
+O script verifica a versão instalada, compara com a mais recente e pergunta antes de atualizar.
+
+### Reinstalar (sempre baixa a versão mais recente)
+
+Os scripts de instalação também auto-detectam a versão mais recente:
+
+```bash
+# macOS / Linux
+curl -fsSL https://raw.githubusercontent.com/wanfranklin/algori/main/install.sh | sh
+
+# Windows
+irm https://raw.githubusercontent.com/wanfranklin/algori/main/install.ps1 | iex
+```
+
 ### Por método de instalação
 
 | Método | Comando de atualização |
 |--------|----------------------|
 | **CLI** | `algori atualizar` |
+| **Script** | `curl -fsSL .../update.sh \| sh` ou `irm .../update.ps1 \| iex` |
 | **Homebrew** | `brew upgrade algori` |
 | **npm** | `npm update -g @algori/core` |
 | **WinGet** | `winget upgrade wanfranklin.algori` |

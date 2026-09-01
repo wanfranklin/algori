@@ -3,13 +3,23 @@
 
 $ErrorActionPreference = "Stop"
 
-$ALGORI_VERSION = if ($env:ALGORI_VERSION) { $env:ALGORI_VERSION } else { "1.0.0" }
+$ALGORI_VERSION = if ($env:ALGORI_VERSION) { $env:ALGORI_VERSION } else { "" }
 $ALGORI_REPO = "wanfranklin/algori"
-$GITHUB_URL = "https://github.com/$ALGORI_REPO/releases/download/v$ALGORI_VERSION"
+$GITHUB_API = "https://api.github.com/repos/$ALGORI_REPO/releases/latest"
 
 function Write-Info { param([string]$Message) Write-Host "[info]  $Message" -ForegroundColor Green }
 function Write-Warn { param([string]$Message) Write-Host "[warn]  $Message" -ForegroundColor Yellow }
 function Write-Error { param([string]$Message) Write-Host "[error] $Message" -ForegroundColor Red; exit 1 }
+
+function Get-LatestVersion {
+    try {
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        $response = Invoke-RestMethod -Uri $GITHUB_API -UseBasicParsing
+        return $response.tag_name -replace '^v', ''
+    } catch {
+        return $null
+    }
+}
 
 function Get-Architecture {
     $arch = $env:PROCESSOR_ARCHITECTURE
@@ -45,6 +55,18 @@ function Add-ToPath {
 }
 
 function Install-Algori {
+    # Buscar versão mais recente se não especificada
+    if (-not $ALGORI_VERSION) {
+        Write-Info "Verificando versão mais recente..."
+        $ALGORI_VERSION = Get-LatestVersion
+        if (-not $ALGORI_VERSION) {
+            Write-Error "Não foi possível buscar a versão mais recente. Defina a variável ALGORI_VERSION manualmente."
+        }
+        Write-Info "Versão mais recente: v$ALGORI_VERSION"
+    }
+
+    $GITHUB_URL = "https://github.com/$ALGORI_REPO/releases/download/v$ALGORI_VERSION"
+
     Write-Info "Instalando Algori v$ALGORI_VERSION..."
     Write-Host ""
 
