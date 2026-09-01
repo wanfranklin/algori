@@ -87,7 +87,8 @@ jobs:
         run: choco install innosetup -y
 
       - name: Build installer
-        run: & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "packaging\windows\algori.iss"
+        run: |
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "packaging\windows\algori.iss"
 
       - name: Calculate SHA256
         id: sha256
