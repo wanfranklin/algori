@@ -28,6 +28,9 @@
 | 📝 **Tipagem estática** | `inteiro`, `texto`, `logico`, `real`, `caractere` |
 | ⚡ **Execução interativa** | Entrada via `capturar()` com prompt em tempo real |
 | 🖥️ **Multiplataforma** | macOS, Linux e Windows |
+| 🐛 **Modo Debug** | Visualize cada passo da execução com `--debug` |
+| 🛡️ **Limites de Segurança** | Proteção contra loops infinitos e recursão excessiva |
+| 📊 **Stack Traces Melhorados** | Erros com contexto completo: código, dica, call stack e tempo |
 
 ---
 
@@ -226,6 +229,16 @@ algori update
 algori <arquivo>
 ```
 
+### Flags de Execução
+
+```bash
+algori executar prog.algori --debug              # Modo debug (mostra cada instrução)
+algori executar prog.algori --timeout 5000       # Timeout em milissegundos
+algori executar prog.algori --max-recursion 50   # Limite de recursão (padrão: 100)
+algori executar prog.algori --max-loop-iterations 5000  # Limite por loop (padrão: 10.000)
+algori executar prog.algori --max-iter 100000    # Limite total de passos (padrão: 1.000.000)
+```
+
 ---
 
 ## 📚 Como Biblioteca (npm)
@@ -309,13 +322,189 @@ console.log(interpreter.console[0].text); // "5! = 120"
 |--------|----------|
 | `tokenize(source)` | Converte código-fonte em tokens |
 | `parse(tokens)` | Converte tokens em AST (Abstract Syntax Tree) |
-| `new Interpreter()` | Cria uma instância do interpretador |
-| `interpreter.run(ast)` | Executa a AST |
+| `new Interpreter(options?)` | Cria uma instância do interpretador |
+| `interpreter.run(ast, sourceCode?)` | Executa a AST |
 | `interpreter.console` | Array de linhas de saída |
 | `interpreter.variables` | Mapa de variáveis e seus valores |
 | `interpreter.functions` | Mapa de funções definidas |
+| `interpreter.debugLog` | Array de mensagens de debug (quando debugMode=true) |
+
+### Opções do Interpreter
+
+```typescript
+new Interpreter({
+  debugMode?: boolean;        // Ativa logging de debug (padrão: false)
+  timeoutMs?: number;         // Timeout em ms (0 = desligado)
+  maxCallStackDepth?: number; // Limite de recursão (padrão: 100)
+  maxLoopIterations?: number; // Limite por loop (padrão: 10.000)
+  maxIterations?: number;     // Limite total de passos (padrão: 1.000.000)
+})
+```
 
 Veja a documentação completa em [Referência da Linguagem](REFERENCIA_LINGUAGEM.md).
+
+---
+
+## 🐛 Modo Debug
+
+O modo debug permite visualizar cada passo da execução do programa.
+
+### Ativar via CLI
+
+```bash
+algori executar meuprograma.algori --debug
+```
+
+### Exemplo de saída
+
+```
+[DEBUG] Iniciando execução (5 nós, timeout: desligado)
+[DEBUG L4] print
+[DEBUG L5] var_decl
+[DEBUG L6] var_decl (minhaFuncao) [0ms]
+[DEBUG L7] var_decl (minhaFuncao) [0ms]
+[DEBUG L8] print (minhaFuncao) [0ms]
+[DEBUG] Execução concluída: 5 iterações, 0ms
+[DEBUG] Variáveis finais: {x: 10, y: 20, resultado: 30}
+```
+
+### Informações exibidas
+
+| Campo | Descrição |
+|-------|-----------|
+| `[DEBUG L{número}]` | Número da linha sendo executada |
+| `(nomeFuncao)` | Call stack atual (se dentro de funções) |
+| `[tempo]` | Tempo decorrido desde o início |
+| Variáveis finais | Estado final de todas as variáveis |
+
+### Usando como biblioteca
+
+```typescript
+import { tokenize, parse, Interpreter } from '@algori/core';
+
+const interpreter = new Interpreter({ debugMode: true });
+const tokens = tokenize(code);
+const ast = parse(tokens);
+interpreter.run(ast);
+
+// Logs de debug também ficam disponíveis em interpreter.debugLog
+console.log(interpreter.debugLog);
+```
+
+---
+
+## 🛡️ Limites de Segurança
+
+O Algori inclui proteções contra execução descontrolada.
+
+### Flags disponíveis
+
+| Flag | Padrão | Descrição |
+|------|--------|-----------|
+| `--timeout <ms>` | 0 (desligado) | Tempo máximo de execução em milissegundos |
+| `--max-recursion <n>` | 100 | Profundidade máxima de recursão |
+| `--max-loop-iterations <n>` | 10.000 | Iterações máximas por loop |
+| `--max-iter <n>` | 1.000.000 | Total de passos de execução |
+
+### Exemplos
+
+```bash
+# Timeout de 5 segundos
+algori executar prog.algori --timeout 5000
+
+# Limite de recursão em 50 chamadas
+algori executar prog.algori --max-recursion 50
+
+# Loop com no máximo 1000 iterações
+algori executar prog.algori --max-loop-iterations 1000
+
+# Combinar flags
+algori executar prog.algori --timeout 10000 --max-recursion 200
+```
+
+### Usando como biblioteca
+
+```typescript
+const interpreter = new Interpreter({
+  timeoutMs: 5000,           // 5 segundos
+  maxCallStackDepth: 50,     // 50 níveis de recursão
+  maxLoopIterations: 1000,   // 1000 iterações por loop
+  maxIterations: 500000,     // 500.000 passos totais
+});
+```
+
+### Erros de segurança
+
+Quando um limite é excedido, o interpretador lança um `RuntimeError` com contexto completo:
+
+```
+Linha 8: Profundidade máxima de recursão (100) excedida
+  Código: retorne fib(n - 1) + fib(n - 2)
+  Dica: Verifique se as chamadas recursivas têm condição de parada.
+  Em: fib → fib → fib → fib → fib → fib → fib
+  Tempo: 45ms
+```
+
+---
+
+## 📊 Stack Traces Melhorados
+
+Erros agora incluem contexto completo para diagnóstico rápido.
+
+### Informações incluídas
+
+| Campo | Descrição |
+|-------|-----------|
+| **Linha** | Número da linha com o erro |
+| **Mensagem** | Descrição do erro |
+| **Código** | Linha de código que causou o erro |
+| **Dica** | Sugestão de como corrigir |
+| **Exemplo** | Código de exemplo para resolver |
+| **Em** | Call stack completo com todas as chamadas |
+| **Tempo** | Tempo decorrido desde o início da execução |
+
+### Exemplo: Erro de recursão
+
+```
+Linha 8: Profundidade máxima de recursão (100) excedida
+  Código: retorne fib(n - 1) + fib(n - 2)
+  Dica: Verifique se as chamadas recursivas têm condição de parada.
+  Exemplo:
+    funcao inteiro fatorial(n)
+      se (n <= 1) entao
+        retorne 1
+      senao
+        retorne n * fatorial(n - 1)
+      fim
+  Em: fib → fib → fib → fib → fib → fib → fib
+  Tempo: 45ms
+```
+
+### Exemplo: Divisão por zero
+
+```
+Linha 3: Divisão por zero
+  Código: mostrar(10 / 0)
+  Dica: Verifique se o divisor é diferente de zero.
+  Exemplo:
+    se (divisor != 0) entao
+      resultado = numerador / divisor
+    fimSe
+  Tempo: 0ms
+```
+
+### Exemplo: Loop infinito
+
+```
+Linha 5: Limite de 10000 iterações excedido no 'enquanto'
+  Código: inteiro x = 1
+  Dica: Verifique se há uma condição de saída no loop.
+  Exemplo:
+    enquanto (x < 10) faca
+      x = x + 1
+    fimEnquanto
+  Tempo: 12ms
+```
 
 ---
 
@@ -339,7 +528,9 @@ Veja a documentação completa em [Referência da Linguagem](REFERENCIA_LINGUAGE
 
 ---
 
-## 🐛 Correções Recentes (v1.0.0)
+## 🐛 Correções e Melhorias Recentes (v1.0.0)
+
+### Correções de Bugs
 
 | Bug | Descrição |
 |-----|-----------|
@@ -349,6 +540,20 @@ Veja a documentação completa em [Referência da Linguagem](REFERENCIA_LINGUAGE
 | Variável local vazando | Variáveis declaradas dentro de funções não vazam mais para o escopo global |
 | Matrizes 2D | Leitura e escrita com `matriz[i][j]` funcionando com bounds check por dimensão |
 | Extensão VS Code | `console.log` substituído por output channel, tipos `node` resolvidos |
+
+### Novas Funcionalidades
+
+| Feature | Descrição |
+|---------|-----------|
+| **Modo Debug** | `--debug` mostra cada instrução, call stack e variáveis em tempo real |
+| **Timeout de execução** | `--timeout <ms>` limita tempo máximo de execução |
+| **Limite de recursão** | `--max-recursion <n>` previne stack overflow (padrão: 100) |
+| **Limite de iterações por loop** | `--max-loop-iterations <n>` previne loops infinitos (padrão: 10.000) |
+| **Limite total de passos** | `--max-iter <n>` limita execução total (padrão: 1.000.000) |
+| **Stack traces completos** | Erros incluem código, dica, exemplo, call stack e tempo |
+| **CI/CD com GitHub Actions** | Testes automáticos em PRs e pushes |
+| **Coverage de testes** | Relatório HTML com Vitest + Codecov |
+| **JSDoc completo** | Documentação nas APIs públicas para autocompletar IDE |
 
 ---
 
