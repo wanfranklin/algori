@@ -4,7 +4,6 @@ on:
   push:
     tags:
       - 'v*'
-  workflow_dispatch:
 
 permissions:
   contents: write
@@ -14,22 +13,15 @@ env:
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        node-version: [20.x, 22.x]
-
-    name: Test Node.js ${{ matrix.node-version }} (${{ matrix.os }})
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v7
 
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '22.x'
           cache: 'npm'
 
       - name: Install dependencies
@@ -38,75 +30,64 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Build
-        run: npm run build
+      - name: Typecheck
+        run: npx tsc --noEmit
 
       - name: Run tests
         run: npm run test
 
   build:
     needs: test
-    strategy:
-      matrix:
-        include:
-          - os: macos-latest
-            artifact: algori-macos-arm64
-            output: algori-macos-arm64
-          - os: macos-latest
-            artifact: algori-macos-x64
-            output: algori-macos-x64
-          - os: ubuntu-latest
-            artifact: algori-linux-x64
-            output: algori-linux-x64
-          - os: ubuntu-latest
-            artifact: algori-linux-arm64
-            output: algori-linux-arm64
-          - os: windows-latest
-            artifact: algori-windows-x64
-            output: algori-windows-x64.exe
-
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v7
 
       - name: Install Bun
-        shell: bash
         run: curl -fsSL https://bun.sh/install | bash
 
       - name: Install dependencies
-        shell: bash
         run: $HOME/.bun/bin/bun install --frozen-lockfile
 
-      - name: Build executable
-        shell: bash
-        run: $HOME/.bun/bin/bun build src/cli.ts --compile --outfile dist/${{ matrix.output }}
+      - name: Build Linux x64
+        run: $HOME/.bun/bin/bun build src/cli.ts --compile --outfile dist/algori-linux-x64
 
-      - name: Upload artifact
+      - name: Build Linux arm64
+        run: $HOME/.bun/bin/bun build src/cli.ts --compile --outfile dist/algori-linux-arm64 --target=bun-linux-arm64
+
+      - name: Build macOS arm64
+        run: $HOME/.bun/bin/bun build src/cli.ts --compile --outfile dist/algori-macos-arm64 --target=bun-darwin-arm64
+
+      - name: Build macOS x64
+        run: $HOME/.bun/bin/bun build src/cli.ts --compile --outfile dist/algori-macos-x64 --target=bun-darwin-x64
+
+      - name: Build Windows x64
+        run: $HOME/.bun/bin/bun build src/cli.ts --compile --outfile dist/algori-windows-x64.exe --target=bun-windows-x64
+
+      - name: Upload all executables
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ matrix.artifact }}
-          path: dist/${{ matrix.output }}
+          name: executables
+          path: dist/algori-*
 
   build-windows-installer:
-    runs-on: windows-latest
     needs: build
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v7
 
-      - name: Download Windows executable
+      - name: Download executables
         uses: actions/download-artifact@v8
         with:
-          name: algori-windows-x64
+          name: executables
           path: dist
 
       - name: Install Inno Setup
         run: choco install innosetup -y
 
       - name: Build installer
-        run: |
-          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "packaging\windows\algori.iss"
+        run: & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "packaging\windows\algori.iss"
 
       - name: Calculate SHA256
         id: sha256
@@ -115,88 +96,30 @@ jobs:
           $file = Get-ChildItem dist/algori-*-setup.exe | Select-Object -First 1
           $hash = (Get-FileHash -Path $file.FullName -Algorithm SHA256).Hash.ToLower()
           echo "sha256=$hash" >> $env:GITHUB_OUTPUT
-          echo "SHA256: $hash"
-
-      - name: Generate WinGet manifest
-        shell: bash
-        run: |
-          VER=${VERSION#v}
-          cat > dist/wanfranklin.algori.yaml << EOF
-          PackageIdentifier: wanfranklin.algori
-          PackageVersion: ${VER}
-          PackageLocale: pt-BR
-          Publisher: Wanfranklin Alves
-          PublisherUrl: https://github.com/wanfranklin
-          PublisherSupportUrl: https://github.com/wanfranklin/algori/issues
-          PackageName: Algori
-          PackageUrl: https://github.com/wanfranklin/algori
-          License: GPL-3.0-or-later
-          LicenseUrl: https://github.com/wanfranklin/algori/blob/main/LICENSE
-          ShortDescription: Linguagem de programacao para aprendizado de algoritmos
-          Description: >
-            Algori e uma linguagem de pseudocodigo educacional com palavras
-            reservadas em portugues para aprendizado de algoritmos e logica
-            de programacao.
-          Tags:
-            - programming-language
-            - education
-            - pseudocode
-            - portuguese
-          Installers:
-            - Architecture: x64
-              InstallerType: inno
-              InstallerUrl: https://github.com/wanfranklin/algori/releases/download/v${VER}/algori-${VER}-setup.exe
-              InstallerSha256: ${{ steps.sha256.outputs.sha256 }}
-          ManifestType: singleton
-          ManifestVersion: 1.12.0
-          EOF
 
       - name: Upload installer
         uses: actions/upload-artifact@v7
         with:
-          name: algori-windows-installer
+          name: windows-installer
           path: dist/algori-*-setup.exe
 
-      - name: Upload WinGet manifest
+      - name: Upload SHA256
         uses: actions/upload-artifact@v7
         with:
-          name: algori-winget-manifest
+          name: sha256
           path: dist/wanfranklin.algori.yaml
 
-  build-wpf-installer:
-    runs-on: windows-latest
-    needs: build
-
-    steps:
-      - uses: actions/checkout@v7
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v6
-        with:
-          dotnet-version: '8.0.x'
-
-      - name: Build WPF installer
-        run: |
-          cd packaging/windows-installer
-          dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
-
-      - name: Upload WPF installer
-        uses: actions/upload-artifact@v7
-        with:
-          name: algori-wpf-installer
-          path: packaging/windows-installer/bin/Release/net8.0-windows/win-x64/publish/AlgoriInstaller.exe
-
   build-deb:
-    runs-on: ubuntu-latest
     needs: build
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v7
 
-      - name: Download Linux x64
+      - name: Download executables
         uses: actions/download-artifact@v8
         with:
-          name: algori-linux-x64
+          name: executables
           path: dist
 
       - name: Build .deb
@@ -224,61 +147,11 @@ jobs:
       - name: Upload .deb
         uses: actions/upload-artifact@v7
         with:
-          name: algori-deb
+          name: deb-package
           path: algori_*_amd64.deb
 
-  build-rpm:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - uses: actions/checkout@v7
-
-      - name: Install rpm-build
-        run: sudo apt-get update && sudo apt-get install -y rpm
-
-      - name: Download Linux x64
-        uses: actions/download-artifact@v8
-        with:
-          name: algori-linux-x64
-          path: dist
-
-      - name: Build .rpm
-        run: |
-          VER=${VERSION#v}
-          mkdir -p rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
-          cp dist/algori-linux-x64 rpmbuild/BUILD/algori
-          chmod 755 rpmbuild/BUILD/algori
-          cat > rpmbuild/SPECS/algori.spec << EOF
-          Name:           algori
-          Version:        ${VER}
-          Release:        1%{?dist}
-          Summary:        Linguagem de programação em português
-          License:        GPLv3+
-          URL:            https://github.com/wanfranklin/algori
-          BuildArch:      x86_64
-
-          %description
-          Algori é uma linguagem de pseudocódigo educacional.
-
-          %install
-          mkdir -p %{buildroot}/usr/bin
-          install -m 755 %{_builddir}/algori %{buildroot}/usr/bin/%{name}
-
-          %files
-          /usr/bin/%{name}
-          EOF
-          rpmbuild --define "_topdir $(pwd)/rpmbuild" -bb rpmbuild/SPECS/algori.spec
-          cp rpmbuild/RPMS/x86_64/algori-*.rpm .
-
-      - name: Upload .rpm
-        uses: actions/upload-artifact@v7
-        with:
-          name: algori-rpm
-          path: algori-*.rpm
-
   release:
-    needs: [build, build-windows-installer, build-wpf-installer, build-deb, build-rpm]
+    needs: [build, build-windows-installer, build-deb]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
 
@@ -288,21 +161,15 @@ jobs:
         with:
           path: dist
 
-      - name: List files
-        run: find dist -type f
-
       - name: Create Release
         uses: softprops/action-gh-release@v2.2.2
         with:
           files: |
-            dist/algori-macos-arm64/algori-macos-arm64
-            dist/algori-macos-x64/algori-macos-x64
-            dist/algori-linux-x64/algori-linux-x64
-            dist/algori-linux-arm64/algori-linux-arm64
-            dist/algori-windows-x64/algori-windows-x64.exe
-            dist/algori-windows-installer/algori-*-setup.exe
-            dist/algori-wpf-installer/AlgoriInstaller.exe
-            dist/algori-winget-manifest/wanfranklin.algori.yaml
-            dist/algori-deb/algori_*_amd64.deb
-            dist/algori-rpm/algori-*.rpm
+            dist/executables/algori-linux-x64
+            dist/executables/algori-linux-arm64
+            dist/executables/algori-macos-arm64
+            dist/executables/algori-macos-x64
+            dist/executables/algori-windows-x64.exe
+            dist/windows-installer/algori-*-setup.exe
+            dist/deb-package/algori_*_amd64.deb
           generate_release_notes: true
