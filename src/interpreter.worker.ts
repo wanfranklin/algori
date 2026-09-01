@@ -177,6 +177,16 @@ self.onmessage = (e: MessageEvent<WorkerMessage>) => {
         const resolve = inputResolve;
         inputResolve = null;
         resolve(msg.value ?? "");
+        // Mark input as resolved and store the value for capturar() to return
+        if (interpreter) {
+          interpreter.inputResolved = true;
+          // Parse the input value
+          let parsedValue: unknown = msg.value ?? "";
+          if (msg.value === "verdadeiro" || msg.value === "true") parsedValue = true;
+          else if (msg.value === "falso" || msg.value === "false") parsedValue = false;
+          else if (!isNaN(Number(msg.value)) && msg.value !== "") parsedValue = Number(msg.value);
+          interpreter.lastInputValue = parsedValue;
+        }
       }
       if (!steppingMode && interpreter && ast.length > 0) {
         // Continue executing remaining nodes after input
@@ -233,9 +243,20 @@ self.onmessage = (e: MessageEvent<WorkerMessage>) => {
         const resolve = inputResolve;
         inputResolve = null;
         resolve(msg.value);
+        // Mark input as resolved and store the value for capturar() to return
+        if (interpreter) {
+          interpreter.inputResolved = true;
+          // Parse the input value
+          let parsedValue: unknown = msg.value;
+          if (msg.value === "verdadeiro" || msg.value === "true") parsedValue = true;
+          else if (msg.value === "falso" || msg.value === "false") parsedValue = false;
+          else if (!isNaN(Number(msg.value)) && msg.value !== "") parsedValue = Number(msg.value);
+          interpreter.lastInputValue = parsedValue;
+        }
       }
+      // Don't increment currentExecIndex - the current node (var_decl with capturar())
+      // needs to be re-executed since the value was just assigned via inputResolve
       if (!steppingMode && interpreter && ast.length > 0) {
-        currentExecIndex++;
         execAllNodes(ast);
       }
       break;

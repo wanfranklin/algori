@@ -260,6 +260,9 @@ async function handleInput(
         interpreter.variables.set(varName, parsed);
       }
     });
+    // Mark input as resolved and store the value for capturar() to return
+    interpreter.inputResolved = true;
+    interpreter.lastInputValue = parts[0] ? (isNaN(Number(parts[0])) ? parts[0] : Number(parts[0])) : null;
   } else if (input) {
     interpreter.console.push({
       id: Date.now(),

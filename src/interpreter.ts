@@ -123,6 +123,8 @@ export class Interpreter {
   private startTime: number = 0;
   private timeoutMs: number = 0;
   private sourceLines: string[] = [];
+  inputResolved: boolean = false;
+  lastInputValue: unknown = null;
 
   constructor(options?: InterpreterOptions) {
     if (options) {
@@ -516,6 +518,13 @@ export class Interpreter {
       }
       case "capturar":
       case "ler": {
+        // If input was already resolved (value assigned by worker), return the stored value
+        if (this.inputResolved && this.lastInputValue !== null) {
+          this.inputResolved = false;
+          const value = this.lastInputValue;
+          this.lastInputValue = null;
+          return value;
+        }
         const varNames = args.filter((a): a is string => typeof a === "string");
         const promptText = varNames.length > 0 ? varNames[0] : "> ";
         throw new InputRequestError(promptText, varNames);
@@ -728,6 +737,8 @@ export class Interpreter {
     this.iterationCount = 0;
     this.outputBuffer = "";
     this.currentExecIndex = 0;
+    this.inputResolved = false;
+    this.lastInputValue = null;
     this.startTime = this.timeoutMs > 0 ? Date.now() : 0;
     this.sourceLines = sourceCode ? sourceCode.split('\n') : [];
     if (this.debugMode) {
@@ -780,5 +791,7 @@ export class Interpreter {
     this.outputBuffer = "";
     this.callStack = [];
     this.nextId = 0;
+    this.inputResolved = false;
+    this.lastInputValue = null;
   }
 }
