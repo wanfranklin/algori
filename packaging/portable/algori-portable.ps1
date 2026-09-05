@@ -8,7 +8,7 @@ function Write-Warn { param([string]$Message) Write-Host "[warn]  $Message" -For
 function Write-Error { param([string]$Message) Write-Host "[error] $Message" -ForegroundColor Red }
 
 $ALGORI_VERSION = if ($env:ALGORI_VERSION) { $env:ALGORI_VERSION } else { "1.1.0" }
-$ALGORI_REPO = "wanfranklin/algori"
+$ALGORI_REPO = "AlgoriLabs/algori"
 $GITHUB_URL = "https://github.com/$ALGORI_REPO/releases/download/v$ALGORI_VERSION"
 
 Write-Host ""

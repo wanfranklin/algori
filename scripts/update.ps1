@@ -1,9 +1,9 @@
 # Algori - Atualizador para Windows
-# Uso: irm https://raw.githubusercontent.com/wanfranklin/algori/main/scripts/update.ps1 | iex
+# Uso: irm https://raw.githubusercontent.com/AlgoriLabs/algori/main/scripts/update.ps1 | iex
 
 $ErrorActionPreference = "Stop"
 
-$ALGORI_REPO = "wanfranklin/algori"
+$ALGORI_REPO = "AlgoriLabs/algori"
 $GITHUB_API = "https://api.github.com/repos/$ALGORI_REPO/releases/latest"
 
 function Write-Info { param([string]$Message) Write-Host "[info]  $Message" -ForegroundColor Green }
@@ -58,7 +58,7 @@ function Update-Algori {
     $installedVersion = Get-InstalledVersion
     if (-not $installedVersion) {
         Write-Warn "Algori não encontrado. Execute o instalador primeiro:"
-        Write-Warn "  irm https://raw.githubusercontent.com/wanfranklin/algori/main/install.ps1 | iex"
+        Write-Warn "  irm https://raw.githubusercontent.com/AlgoriLabs/algori/main/install.ps1 | iex"
         exit 1
     }
 

@@ -13,7 +13,7 @@ namespace Algori.Installer
         private int currentStep = 1;
         private string installPath = @"C:\Program Files\Algori";
         private const string VERSION = "1.1.0";
-        private const string GITHUB_URL = "https://github.com/wanfranklin/algori/releases/download/v1.1.0";
+        private const string GITHUB_URL = "https://github.com/AlgoriLabs/algori/releases/download/v1.1.0";
 
         public MainWindow()
         {

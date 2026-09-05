@@ -11,7 +11,7 @@ Obrigado por contribuir com o Algori! Este guia explica como configurar o ambien
 ## Setup
 
 ```bash
-git clone https://github.com/wanfranklin/algori.git
+git clone https://github.com/AlgoriLabs/algori.git
 cd algori
 npm install
 ```

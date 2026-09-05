@@ -112,7 +112,7 @@ private const string VERSION = "1.1.1";
 Edite o arquivo `MainWindow.xaml.cs`:
 
 ```csharp
-private const string GITHUB_URL = "https://github.com/wanfranklin/algori/releases/download/v1.1.1";
+private const string GITHUB_URL = "https://github.com/AlgoriLabs/algori/releases/download/v1.1.1";
 ```
 
 ### Alterar diretório padrão

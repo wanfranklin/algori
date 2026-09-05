@@ -3,11 +3,11 @@
   "displayName": "Algori",
   "description": "Suporte para a linguagem de programação Algori (português)",
   "version": "1.1.1",
-  "publisher": "wanfranklin",
+  "publisher": "AlgoriLabs",
   "license": "GPL-3.0-or-later",
   "repository": {
     "type": "git",
-    "url": "https://github.com/wanfranklin/algori"
+    "url": "https://github.com/AlgoriLabs/algori"
   },
   "engines": {
     "vscode": "^1.80.0"

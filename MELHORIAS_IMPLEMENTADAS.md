@@ -347,8 +347,8 @@ npm run coverage # Coverage (veja coverage/index.html)
 Você pode adicionar badges ao README.md:
 
 ```markdown
-[![CI/CD](https://github.com/wanfranklin/algori/actions/workflows/ci.yml/badge.svg)](https://github.com/wanfranklin/algori/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/wanfranklin/algori/branch/main/graph/badge.svg)](https://codecov.io/gh/wanfranklin/algori)
+[![CI/CD](https://github.com/AlgoriLabs/algori/actions/workflows/ci.yml/badge.svg)](https://github.com/AlgoriLabs/algori/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/AlgoriLabs/algori/branch/main/graph/badge.svg)](https://codecov.io/gh/AlgoriLabs/algori)
 ```
 
 ---

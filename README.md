@@ -4,11 +4,11 @@
 
 ### Linguagem de programação em português para aprendizado de algoritmos
 
-[![Versão](https://img.shields.io/badge/v1.1.1-blue.svg)](https://github.com/wanfranklin/algori/releases)
+[![Versão](https://img.shields.io/badge/v1.1.1-blue.svg)](https://github.com/AlgoriLabs/algori/releases)
 [![Licença](https://img.shields.io/badge/Licença-GPL--3.0--or--later-green.svg)](LICENSE)
-[![Testes](https://img.shields.io/badge/testes-passando-brightgreen.svg)](https://github.com/wanfranklin/algori/actions)
+[![Testes](https://img.shields.io/badge/testes-passando-brightgreen.svg)](https://github.com/AlgoriLabs/algori/actions)
 
-[Documentação](https://wanfranklin.github.io/algori/linguagem/) • [Guia do Professor](GUIA_PROFESSOR.md) • [Guia do Aluno](GUIA_ALUNO.md) • [Referência](REFERENCIA_LINGUAGEM.md)
+[Documentação](https://algorilabs.github.io/algori/linguagem/) • [Guia do Professor](GUIA_PROFESSOR.md) • [Guia do Aluno](GUIA_ALUNO.md) • [Referência](REFERENCIA_LINGUAGEM.md)
 
 </div>
 
@@ -29,24 +29,24 @@ mostrar("Olá, Mundo!")
 ### macOS / Linux
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wanfranklin/algori/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/AlgoriLabs/algori/main/install.sh | sh
 ```
 
 ### Windows
 
 ```powershell
-irm https://raw.githubusercontent.com/wanfranklin/algori/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/AlgoriLabs/algori/main/install.ps1 | iex
 ```
 
 ### Outros métodos
 
 | Método | Comando |
 |--------|---------|
-| **Homebrew** | `brew tap wanfranklin/tap && brew install algori` |
-| **WinGet** | `winget install wanfranklin.algori` |
+| **Homebrew** | `brew tap AlgoriLabs/tap && brew install algori` |
+| **WinGet** | `winget install AlgoriLabs.algori` |
 | **npm** | `npm install -g @algori/core` |
 | **Debian/Ubuntu** | `sudo dpkg -i algori_1.1.1_amd64.deb` |
-| **Download** | [GitHub Releases](https://github.com/wanfranklin/algori/releases) |
+| **Download** | [GitHub Releases](https://github.com/AlgoriLabs/algori/releases) |
 
 ---
 
@@ -62,10 +62,10 @@ algori atualizar
 
 ```bash
 # macOS / Linux
-curl -fsSL https://raw.githubusercontent.com/wanfranklin/algori/main/scripts/update.sh | sh
+curl -fsSL https://raw.githubusercontent.com/AlgoriLabs/algori/main/scripts/update.sh | sh
 
 # Windows
-irm https://raw.githubusercontent.com/wanfranklin/algori/main/scripts/update.ps1 | iex
+irm https://raw.githubusercontent.com/AlgoriLabs/algori/main/scripts/update.ps1 | iex
 ```
 
 ### Outros métodos
@@ -74,7 +74,7 @@ irm https://raw.githubusercontent.com/wanfranklin/algori/main/scripts/update.ps1
 |--------|---------|
 | **Homebrew** | `brew upgrade algori` |
 | **npm** | `npm update -g @algori/core` |
-| **WinGet** | `winget upgrade wanfranklin.algori` |
+| **WinGet** | `winget upgrade AlgoriLabs.algori` |
 
 ---
 
@@ -157,10 +157,10 @@ new Interpreter({
 
 ```bash
 # macOS / Linux
-curl -fsSL https://raw.githubusercontent.com/wanfranklin/algori/main/scripts/uninstall-unix.sh | sh
+curl -fsSL https://raw.githubusercontent.com/AlgoriLabs/algori/main/scripts/uninstall-unix.sh | sh
 
 # Windows
-irm https://raw.githubusercontent.com/wanfranklin/algori/main/scripts/uninstall-windows.ps1 | iex
+irm https://raw.githubusercontent.com/AlgoriLabs/algori/main/scripts/uninstall-windows.ps1 | iex
 ```
 
 ---

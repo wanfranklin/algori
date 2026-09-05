@@ -1,13 +1,13 @@
-PackageIdentifier: wanfranklin.algori
+PackageIdentifier: AlgoriLabs.algori
 PackageVersion: 1.1.0
 PackageLocale: pt-BR
 Publisher: Wanfranklin Alves
 PublisherUrl: https://github.com/wanfranklin
-PublisherSupportUrl: https://github.com/wanfranklin/algori/issues
+PublisherSupportUrl: https://github.com/AlgoriLabs/algori/issues
 PackageName: Algori
-PackageUrl: https://github.com/wanfranklin/algori
+PackageUrl: https://github.com/AlgoriLabs/algori
 License: GPL-3.0-or-later
-LicenseUrl: https://github.com/wanfranklin/algori/blob/main/LICENSE
+LicenseUrl: https://github.com/AlgoriLabs/algori/blob/main/LICENSE
 ShortDescription: Linguagem de programacao para aprendizado de algoritmos
 Description: >
   Algori e uma linguagem de pseudocodigo educacional com palavras
@@ -21,7 +21,7 @@ Tags:
 Installers:
   - Architecture: x64
     InstallerType: inno
-    InstallerUrl: https://github.com/wanfranklin/algori/releases/download/v1.1.0/algori-1.1.0-setup.exe
+    InstallerUrl: https://github.com/AlgoriLabs/algori/releases/download/v1.1.0/algori-1.1.0-setup.exe
     InstallerSha256: PLACEHOLDER_SETUP_EXE
 ManifestType: singleton
 ManifestVersion: 1.12.0

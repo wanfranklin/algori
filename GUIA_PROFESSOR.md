@@ -57,7 +57,7 @@ Este guia ajuda professores a configurar e usar o Algori em sala de aula.
 #### Opção 1: WinGet (recomendado para TI)
 
 ```cmd
-winget install wanfranklin.algori
+winget install AlgoriLabs.algori
 ```
 
 #### Opção 2: Instalador Silencioso (implantação em massa)
@@ -73,7 +73,7 @@ algori-1.1.1-setup.exe /VERYSILENT /NORESTART /PATH="C:\Algori"
 $computers = @("PC01", "PC02", "PC03", "PC04")
 foreach ($pc in $computers) {
     Invoke-Command -ComputerName $pc -ScriptBlock {
-        irm https://raw.githubusercontent.com/wanfranklin/algori/main/install.ps1 | iex
+        irm https://raw.githubusercontent.com/AlgoriLabs/algori/main/install.ps1 | iex
     }
 }
 ```
@@ -81,12 +81,12 @@ foreach ($pc in $computers) {
 ### macOS / Linux
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wanfranklin/algori/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/AlgoriLabs/algori/main/install.sh | sh
 ```
 
 ### Laboratório sem internet
 
-1. Baixe o executável em [GitHub Releases](https://github.com/wanfranklin/algori/releases)
+1. Baixe o executável em [GitHub Releases](https://github.com/AlgoriLabs/algori/releases)
 2. Copie para um pen drive
 3. Execute em cada máquina
 4. Adicione ao PATH do sistema
@@ -347,12 +347,12 @@ Verifique se está usando as palavras-chave corretas em português:
 
 ## Recursos Adicionais
 
-- [Documentação da Linguagem](https://wanfranklin.github.io/algori/linguagem/)
-- [GitHub do Projeto](https://github.com/wanfranklin/algori)
-- [Reportar Problemas](https://github.com/wanfranklin/algori/issues)
+- [Documentação da Linguagem](https://algorilabs.github.io/algori/linguagem/)
+- [GitHub do Projeto](https://github.com/AlgoriLabs/algori)
+- [Reportar Problemas](https://github.com/AlgoriLabs/algori/issues)
 
 ---
 
 ## Contato
 
-Para dúvidas ou sugestões, abra uma issue no [GitHub](https://github.com/wanfranklin/algori/issues).
+Para dúvidas ou sugestões, abra uma issue no [GitHub](https://github.com/AlgoriLabs/algori/issues).

@@ -4,7 +4,7 @@
 #define MyAppName "Algori"
 #define MyAppVersion "1.1.0"
 #define MyAppPublisher "Wanfranklin Alves"
-#define MyAppURL "https://github.com/wanfranklin/algori"
+#define MyAppURL "https://github.com/AlgoriLabs/algori"
 #define MyAppExeName "algori.exe"
 
 [Setup]

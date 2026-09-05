@@ -2,9 +2,9 @@
 set -eu
 
 # Algori - Atualizador para macOS/Linux
-# Uso: curl -fsSL https://raw.githubusercontent.com/wanfranklin/algori/main/scripts/update.sh | sh
+# Uso: curl -fsSL https://raw.githubusercontent.com/AlgoriLabs/algori/main/scripts/update.sh | sh
 
-ALGORI_REPO="wanfranklin/algori"
+ALGORI_REPO="AlgoriLabs/algori"
 GITHUB_API="https://api.github.com/repos/${ALGORI_REPO}/releases/latest"
 
 # Cores
@@ -108,7 +108,7 @@ main() {
   installed_version=$(get_installed_version)
   if [ -z "$installed_version" ]; then
     warn "Algori não encontrado. Execute o instalador primeiro:"
-    warn "  curl -fsSL https://raw.githubusercontent.com/wanfranklin/algori/main/install.sh | sh"
+    warn "  curl -fsSL https://raw.githubusercontent.com/AlgoriLabs/algori/main/install.sh | sh"
     exit 1
   fi
 

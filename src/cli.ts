@@ -102,7 +102,7 @@ function detectPlatform(): string {
 
 async function fetchLatestVersion(): Promise<string | null> {
   try {
-    const res = await fetch("https://api.github.com/repos/wanfranklin/algori/releases/latest");
+    const res = await fetch("https://api.github.com/repos/AlgoriLabs/algori/releases/latest");
     if (!res.ok) return null;
     const data = await res.json() as { tag_name?: string };
     return data.tag_name?.replace(/^v/, "") ?? null;
@@ -133,7 +133,7 @@ async function runUpdate() {
   console.log(`\nAtualizando de v${VERSION} para v${latest}...`);
 
   const filename = `algori-${platform}`;
-  const url = `https://github.com/wanfranklin/algori/releases/download/v${latest}/${filename}`;
+  const url = `https://github.com/AlgoriLabs/algori/releases/download/v${latest}/${filename}`;
 
   const currentBin = process.argv[1];
   const isWindows = process.platform === "win32";

@@ -5,8 +5,8 @@
 set -e
 
 VERSION=${1:-"1.1.0"}
-MANIFEST="packaging/winget/wanfranklin.algori.yaml"
-INSTALLER_URL="https://github.com/wanfranklin/algori/releases/download/v${VERSION}/algori-${VERSION}-setup.exe"
+MANIFEST="packaging/winget/AlgoriLabs.algori.yaml"
+INSTALLER_URL="https://github.com/AlgoriLabs/algori/releases/download/v${VERSION}/algori-${VERSION}-setup.exe"
 
 echo "Calculando SHA256 para v${VERSION}..."
 

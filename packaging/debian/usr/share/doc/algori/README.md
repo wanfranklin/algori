@@ -13,7 +13,7 @@ algori --update
 
 ## Documentação
 
-Acesse: https://github.com/wanfranklin/algori/tree/main/docs/linguagem
+Acesse: https://github.com/AlgoriLabs/algori/tree/main/docs/linguagem
 
 ## Licença
 

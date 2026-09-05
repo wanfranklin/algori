@@ -3,7 +3,7 @@ Version:        1.1.0
 Release:        1%{?dist}
 Summary:        Linguagem de programação em português
 License:        GPLv3+
-URL:            https://github.com/wanfranklin/algori
+URL:            https://github.com/AlgoriLabs/algori
 Source0:        %{name}-%{version}.tar.gz
 BuildArch:      x86_64
 

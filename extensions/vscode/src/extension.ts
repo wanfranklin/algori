@@ -45,7 +45,7 @@ export function activate(context: vscode.ExtensionContext) {
                 'Abrir documentação'
             ).then(action => {
                 if (action === 'Abrir documentação') {
-                    vscode.env.openExternal(vscode.Uri.parse('https://github.com/wanfranklin/algori#instalação'));
+                    vscode.env.openExternal(vscode.Uri.parse('https://github.com/AlgoriLabs/algori#instalação'));
                 }
             });
             return;

@@ -2,10 +2,10 @@
 set -eu
 
 # Algori - Instalador universal
-# Uso: curl -fsSL https://raw.githubusercontent.com/wanfranklin/algori/main/install.sh | sh
+# Uso: curl -fsSL https://raw.githubusercontent.com/AlgoriLabs/algori/main/install.sh | sh
 
 ALGORI_VERSION="${ALGORI_VERSION:-}"
-ALGORI_REPO="wanfranklin/algori"
+ALGORI_REPO="AlgoriLabs/algori"
 GITHUB_API="https://api.github.com/repos/${ALGORI_REPO}/releases/latest"
 
 # Cores

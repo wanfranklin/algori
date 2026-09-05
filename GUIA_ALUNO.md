@@ -36,7 +36,7 @@ Isso vai mostrar na tela: `Olá, Mundo!`
 Abra o **PowerShell** e digite:
 
 ```powershell
-irm https://raw.githubusercontent.com/wanfranklin/algori/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/AlgoriLabs/algori/main/install.ps1 | iex
 ```
 
 ### macOS / Linux
@@ -44,7 +44,7 @@ irm https://raw.githubusercontent.com/wanfranklin/algori/main/install.ps1 | iex
 Abra o **Terminal** e digite:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wanfranklin/algori/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/AlgoriLabs/algori/main/install.sh | sh
 ```
 
 ### Verificar se funcionou
@@ -192,7 +192,7 @@ Se aparecer uma mensagem de erro, leia com atenção. Ela diz onde está o probl
 
 ```powershell
 # Windows
-irm https://raw.githubusercontent.com/wanfranklin/algori/main/scripts/check-windows.ps1 | iex
+irm https://raw.githubusercontent.com/AlgoriLabs/algori/main/scripts/check-windows.ps1 | iex
 ```
 
 ### Aparece erro de sintaxe
@@ -225,7 +225,7 @@ mostrar("Isto vai aparecer")
 
 ## Recursos
 
-- [Documentação da Linguagem](https://wanfranklin.github.io/algori/linguagem/)
+- [Documentação da Linguagem](https://algorilabs.github.io/algori/linguagem/)
 - [Exercícios Prontos](exemplos/aula/)
 - [Guia do Professor](GUIA_PROFESSOR.md)
 
@@ -233,6 +233,6 @@ mostrar("Isto vai aparecer")
 
 ## Precisa de Ajuda?
 
-Pergunte ao seu professor ou abra uma issue no [GitHub](https://github.com/wanfranklin/algori/issues).
+Pergunte ao seu professor ou abra uma issue no [GitHub](https://github.com/AlgoriLabs/algori/issues).
 
 Bons estudos! 🚀

@@ -108,7 +108,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: sha256
-          path: dist/wanfranklin.algori.yaml
+          path: dist/AlgoriLabs.algori.yaml
 
   build-deb:
     needs: build
@@ -137,7 +137,7 @@ jobs:
           Architecture: amd64
           Depends: libc6 (>= 2.14)
           Maintainer: Wanfranklin Alves <wanfranklin@users.noreply.github.com>
-          Homepage: https://github.com/wanfranklin/algori
+          Homepage: https://github.com/AlgoriLabs/algori
           Description: Linguagem de programação em português
            Algori é uma linguagem de pseudocódigo educacional
            com palavras reservadas em português.

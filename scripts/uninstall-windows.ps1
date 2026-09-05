@@ -117,5 +117,5 @@ Write-Host " Algori foi desinstalado com sucesso!" -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 Write-Info "Obrigado por usar o Algori!"
-Write-Info "Visite: https://github.com/wanfranklin/algori"
+Write-Info "Visite: https://github.com/AlgoriLabs/algori"
 Write-Host ""

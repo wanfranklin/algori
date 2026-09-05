@@ -34,7 +34,7 @@ Priority: optional
 Architecture: ${ARCH}
 Depends: libc6 (>= 2.14)
 Maintainer: Wanfranklin Alves <wanfranklin@users.noreply.github.com>
-Homepage: https://github.com/wanfranklin/algori
+Homepage: https://github.com/AlgoriLabs/algori
 Description: Linguagem de programação em português
  Algori é uma linguagem de pseudocódigo educacional
  com palavras reservadas em português para aprendizado
